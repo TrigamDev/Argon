@@ -1,0 +1,12 @@
+/node_modules
+.env
+**/*.zip
+**/*.log
+package-lock.json
+**/*.bun
+bun.lockb
+
+/assets/avatars
+/assets/audio
+/assets/image
+/assets/video
