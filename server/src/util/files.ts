@@ -2,6 +2,7 @@ import sharp from "sharp";
 import ffmpeg from 'fluent-ffmpeg';
 import { Stream } from "stream";
 
+import { Document } from "mongoose";
 import FileModel, { File } from "../models/file";
 
 import { baseDir } from "./dir";
@@ -126,8 +127,10 @@ export async function uploadFileToDB(fileData: File) {
     }
 };
 
-export async function getFileById(id: number): Promise<File | null> {
-    try { return await FileModel.findOne({ id: id }).exec() as File } catch (err) {
+export async function getFileById(id: number) {
+    try {
+        return await FileModel.findOne({ id: id }).exec();
+    } catch (err) {
         console.error(err);
         return null;
     }

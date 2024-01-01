@@ -1,3 +1,4 @@
+import { Document } from "mongoose";
 import PostModel, { Post } from "../models/post";
 
 export async function getPosts() {
@@ -13,9 +14,13 @@ export async function createPostId() {
     return id;
 };
 
-export async function getPost(id: number) {
-    let post = await PostModel.findOne({ id: id }).exec();
-    return post;
+export async function getPostById(id: number) {
+    try {
+        return await PostModel.findOne({ id: id }).exec();
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
 };
 
 export async function uploadPostToDB(postData: Post) {
