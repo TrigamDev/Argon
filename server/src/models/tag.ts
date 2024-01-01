@@ -6,6 +6,12 @@ export interface Tag {
     safe: boolean
 }
 
+export interface FilterTag {
+    name: string
+    type: string
+    exclude: boolean
+}
+
 const tagSchema = new Schema<Tag>({
     name: { type: String, required: true },
     type: { type: String, required: true },

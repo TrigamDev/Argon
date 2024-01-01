@@ -1,9 +1,10 @@
-import { Document } from "mongoose";
 import PostModel, { Post } from "../models/post";
+import { FilterTag, Tag } from "../models/tag";
+import { assertPost, assertTagList } from "./types";
 
 export async function getPosts() {
     let posts = await PostModel.find().exec();
-    return posts;
+    return posts.map((post) => assertPost(post));
 };
 
 export async function createPostId() {
@@ -34,3 +35,19 @@ export async function uploadPostToDB(postData: Post) {
         console.log(`❗ Error saving Post #${postData.id} to the database!`);
     }
 };
+
+export async function getPostsByTags(filters: FilterTag[]) {
+    // Setup
+    let posts = await getPosts();
+    if (!filters || filters?.length === 0) return posts;
+    // Filter posts
+    let filteredPosts: Post[] = [];
+    for (let post of posts) {
+        let postHasAllTags = filters.every((filter) => {
+            let postHasTag = post.tags.some((tag) => tag.name === filter.name && tag.type === filter.type);
+            return filter.exclude ? !postHasTag : postHasTag;
+        });
+        if (postHasAllTags) filteredPosts.push(post);
+    };
+    return filteredPosts;
+}

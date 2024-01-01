@@ -1,6 +1,6 @@
 import { File } from "../models/file";
 import { Post } from "../models/post";
-import { Tag } from "../models/tag";
+import { FilterTag, Tag } from "../models/tag";
 
 export function assertFile(file: any): File {
     return {
@@ -17,10 +17,11 @@ export function assertFile(file: any): File {
 }
 
 export function assertPost(post: any): Post {
+    let tagList = post?.tags?.map((tag: any) => assertTag(tag)) as Tag[];
     return {
         fileId: post.fileId as number || 0,
         id: post.id as number || 0,
-        tags: post.tags as Tag[] || [],
+        tags: tagList || [],
         timestamp: post.timestamp as number || 0,
         favorites: post.favorites as number || 0
     } as Post;
@@ -35,4 +36,20 @@ export function assertTag(tag: any): Tag {
         type: tag.type as string || null,
         safe: safe
     } as Tag;
-}
+};
+
+export function assertTagList(tags: any[]): Tag[] {
+    return tags.map((tag) => assertTag(tag));
+};
+
+export function assertFilterTag(filter: any): FilterTag {
+    return {
+        name: filter.name as string || null,
+        type: filter.type as string || null,
+        exclude: filter.exclude as boolean || false
+    } as FilterTag;
+};
+
+export function assertFilterTagList(filters: any[]): FilterTag[] {
+    return filters.map((filter) => assertFilterTag(filter));
+};

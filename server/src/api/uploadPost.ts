@@ -17,8 +17,7 @@ export default async function uploadPost(req: Request, body: any, set: any) {
     await downloadFiles(file);
     await uploadFileToDB(file);
 
-    let tagList = tags?.map((tag: any) => assertTag(tag)) as Tag[];
-    let post = assertPost({ fileId: file.id, tags: tagList, timestamp: Date.now() } as Post);
+    let post = assertPost({ fileId: file.id, tags: tags, timestamp: Date.now() } as Post);
     post.id = await createPostId();
     await uploadPostToDB(post);
 

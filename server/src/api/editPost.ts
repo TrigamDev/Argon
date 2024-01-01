@@ -1,6 +1,6 @@
-import { Post } from "../models/post";
+import { Tag } from "../models/tag";
 import { getPostById } from "../util/posts";
-import { assertPost } from "../util/types";
+import { assertPost, assertTag } from "../util/types";
 
 export async function editPost(params: any, body: any, set: any) {
     const { id } = params;
@@ -10,7 +10,7 @@ export async function editPost(params: any, body: any, set: any) {
     if (!post) { set.status = 404; return "Post not found" }
 
     if (fileId || fileId === 0) post.fileId = fileId;
-    if (tags) post.tags = tags;
+    if (tags) post.tags = tags?.map((tag: any) => assertTag(tag)) as Tag[];;
 
     await post.save();
     set.status = 200;
