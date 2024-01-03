@@ -2,8 +2,19 @@ import { Schema, model } from "mongoose";
 
 import { Tag } from "./tag";
 
+export interface File {
+    url: string
+    thumbnailUrl: string
+    layeredUrl: string | null
+    sourceUrl: string | null
+    title: string
+    type: "image" | "video" | "audio" | "unknown"
+    extension: string
+    timestamp: number
+};
+
 export interface Post {
-    fileId: number
+    file: File
     id: number
     tags: Tag[]
     timestamp: number
@@ -11,7 +22,7 @@ export interface Post {
 };
 
 const postSchema = new Schema<Post>({
-    fileId: { type: Number, required: true },
+    file: { type: Object, required: true },
     id: { type: Number, required: true },
     tags: { type: [Object], required: false },
     timestamp: { type: Number, required: true, default: 0 },

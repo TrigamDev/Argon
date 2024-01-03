@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 import app from "./app";
+import PostModel from "./models/post";
+import { assertPost } from "./util/types";
 
 const port = process.env.PORT || 3000;
 

@@ -26,13 +26,13 @@ export async function getPostById(id: number) {
 
 export async function uploadPostToDB(postData: Post) {
     try {
-        console.log(`\n💾 Saving Post #${postData.id} to the database...`);
+        console.log(`\n💾 ⚫ Saving Post #${postData.id} to the database...`);
         const newPost = new PostModel(postData);
         await newPost.save();
-        console.log(`💾 Saved Post #${postData.id} to the database!`);
+        console.log(`💾 ✅ Saved Post #${postData.id} to the database!`);
     } catch (err) {
         console.error(err);
-        console.log(`❗ Error saving Post #${postData.id} to the database!`);
+        console.log(`💾 ❗ Error saving Post #${postData.id} to the database!`);
     }
 };
 

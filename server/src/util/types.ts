@@ -1,25 +1,23 @@
-import { File } from "../models/file";
-import { Post } from "../models/post";
+import { File, Post } from "../models/post";
 import { FilterTag, Tag } from "../models/tag";
 
 export function assertFile(file: any): File {
     return {
-        id: file.id as number || 0,
-        url: file.url as string || null,
-        thumbnailUrl: file.thumbnailUrl as string || null,
-        layeredUrl: file.layeredUrl as string || null,
-        sourceUrl: file.sourceUrl as string || null,
-        title: file.title as string || null,
-        type: file.type as string || "image",
-        extension: file.extension as string || null,
-        timestamp: file.timestamp as number || 0
+        url: file?.url as string || null,
+        thumbnailUrl: file?.thumbnailUrl as string || null,
+        layeredUrl: file?.layeredUrl as string || null,
+        sourceUrl: file?.sourceUrl as string || null,
+        title: file?.title as string || null,
+        type: file?.type as string || "image",
+        extension: file?.extension as string || null,
+        timestamp: file?.timestamp as number || 0
     } as File;
 }
 
 export function assertPost(post: any): Post {
     let tagList = post?.tags?.map((tag: any) => assertTag(tag)) as Tag[];
     return {
-        fileId: post.fileId as number || 0,
+        file: assertFile(post.file),
         id: post.id as number || 0,
         tags: tagList || [],
         timestamp: post.timestamp as number || 0,
@@ -51,5 +49,6 @@ export function assertFilterTag(filter: any): FilterTag {
 };
 
 export function assertFilterTagList(filters: any[]): FilterTag[] {
+    if (!filters || filters?.length === 0) return [];
     return filters.map((filter) => assertFilterTag(filter));
 };
