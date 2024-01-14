@@ -8,9 +8,9 @@ import { downloadFile, downloadThumbnail, downloadVideoThumbnail,
 import { getWebPath } from "../util/dir";
 import { createPostId, uploadPostToDB } from "../util/posts";
 
-export default async function uploadPost(req: Request, body: any, set: any) {
-    const { url, layeredUrl, title, tags, timestamp } = body;
-    if (!url) { set.status = 400; return "No file url provided" }
+export default async function uploadPost(req: any, res: any) {
+    const { url, layeredUrl, title, tags, timestamp } = req?.body;
+    if (!url) return res.status(400).json({ error: "No url provided" });
 
     let id = await createPostId();
     let file = await getFileInfo(req, id, url, layeredUrl, title, timestamp);
@@ -20,7 +20,7 @@ export default async function uploadPost(req: Request, body: any, set: any) {
     post.id = id;
     await uploadPostToDB(post);
 
-    return post;
+    return res.status(200).json(post);
 }
 
 async function getFileInfo(req: any, id: number, url: string, layeredUrl: string, title: string, timestamp: number): Promise<File> {
@@ -33,11 +33,11 @@ async function getFileInfo(req: any, id: number, url: string, layeredUrl: string
     file.type = getFileType(url); 
     file.extension = getFileExtension(url);
     // Urls
-    file.url = `${getWebPath(req, app)}/assets/${file.type}/${id}_${file.title}.${file.extension}`;
+    file.url = `${getWebPath(req)}/assets/${file.type}/${id}_${file.title}.${file.extension}`;
     file.thumbnailUrl = file.url.split(".").slice(0, -1) + "_thumbnail.webp";
     if (layeredUrl) {
         let layeredExtension = layeredUrl.split(".").pop();
-        file.layeredUrl = `${getWebPath(req, app)}/assets/layered/${id}_${file.title}.${layeredExtension}`;
+        file.layeredUrl = `${getWebPath(req)}/assets/layered/${id}_${file.title}.${layeredExtension}`;
     };
 
     return file;

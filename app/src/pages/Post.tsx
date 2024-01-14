@@ -1,21 +1,28 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { get } from "../util/api";
+
 import MiniNav from "../components/layout/MiniNav";
+import PostData from "../components/post/PostData";
 
 import "../css/post.css";
-import PostData from "../components/post/PostData";
 
 export default function Post() {
     const { id } = useParams();
+    const [loaded, setLoaded] = useState(false);
     const [post, setPost] = useState<any>();
     useEffect(() => {
         async function getData() {
-            let post = await get(`getpost/${id}`);
-            setPost(post);
+            let gotten = await get(`getpost/${id}`);
+            if (gotten && gotten?.id !== post?.id) {
+                setPost(gotten);
+                setLoaded(true);
+            };
         }
         getData();
-    }, []);
+    }, [id]);
+
+    if (!loaded) return (<div>Loading...</div>);
 
     return (
         <div className="post">

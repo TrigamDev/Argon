@@ -1,10 +1,9 @@
 import { getPostsByTags } from "../util/posts";
 import { assertFilterTagList } from "../util/types";
 
-export async function search(request: any, body: any, set: any) {
-    let { tags } = body;
+export async function search(req: any, res: any) {
+    let tags = req?.body?.tags;
     tags = assertFilterTagList(tags);
     const posts = await getPostsByTags(tags);
-    set.status = 200;
-    return posts;
+    return res.status(200).json(posts);
 }

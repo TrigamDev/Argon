@@ -2,12 +2,12 @@ import { Tag } from "../models/tag";
 import { getPostById } from "../util/posts";
 import { assertPost, assertTag } from "../util/types";
 
-export async function editPost(params: any, body: any, set: any) {
-    const { id } = params;
-    const { timestamp, tags } = body;
-    if (!id) { set.status = 400; return "No post id provided" }
+export async function editPost(req: any, res: any,) {
+    const { id } = req?.params;
+    const { timestamp, tags } = req?.body;
+    if (!id) return res.status(400).json({ error: "No id provided" });
     let post = await getPostById(id);
-    if (!post) { set.status = 404; return "Post not found" }
+    if (!post) return res.status(404).json({ error: "No post found" });
 
     console.log(`\n🔧 ⚫ Editing post ${post.id}...`)
     if (timestamp || timestamp === 0) post.file.timestamp = timestamp;
@@ -16,7 +16,6 @@ export async function editPost(params: any, body: any, set: any) {
     console.log(`\n💾 ⚫ Saving post ${post.id} to the database...`);
     await post.save();
     console.log(`💾 ✅ Saved post ${post.id} to the database!`);
-    set.status = 200;
     console.log(`\n🔧 ✅ Edited post ${post.id}!`)
-    return assertPost(post);
+    return res.status(200).json(assertPost(post));
 }

@@ -4,18 +4,22 @@ import "../../css/post.css";
 import { useEffect, useState } from "react";
 
 export default function PostData({ post}: { post: any }) {
+    if (!post) return (<div>Loading...</div>);
+    
     const [size, setSize] = useState(0);
     const [res, setRes] = useState({ width: 0, height: 0 });
     useEffect(() => {
         async function getData() {
+            // Size
             const size = await getImageSize(post?.file.url);
             setSize(size);
+            // Resolution
+            if (post?.file.type === 'image') setRes(getImageRes(post?.file.url));
+            else if (post?.file.type === 'video') getVideoRes(post?.file.url, setRes);
         }
         getData();
     }, []);
-    // Resolution
-    if (post?.file.type === 'image') setRes(getImageRes(post?.file.url));
-    else if (post?.file.type === 'video') getVideoRes(post?.file.url, setRes);
+    
     // Size
     const fileSize = formatFileSize(size);
     return (
@@ -26,7 +30,7 @@ export default function PostData({ post}: { post: any }) {
                 <span className="post-info-field" id="post-file-timestamp">Created: {displayTimestamp(post?.file.timestamp || 0)}</span>
                 <span className="post-info-field" id="post-timestamp">Posted: {displayTimestamp(post?.timestamp || 0)}</span>
                 <span className="post-info-field" id="post-file-res">Resolution: {res?.width || 0}x{res?.height || 0}</span>
-                <span className="post-info-field" id="post-file-size">Size: {fileSize}</span>
+                { fileSize && <span className="post-info-field" id="post-file-size">Size: {fileSize || '0b'}</span> }
                 <span className="post-info-field" id="post-file-type">File Type: {post?.file.extension.toUpperCase() || ""}</span>
             </div>
         </div>

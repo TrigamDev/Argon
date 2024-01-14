@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import Gallery from './pages/Gallery.tsx'
+import Post from './pages/Post.tsx';
 
 import "./css/global.css";
-import Post from './pages/Post.tsx';
 
 const Router = () => {
     return (

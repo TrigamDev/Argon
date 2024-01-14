@@ -1,6 +1,6 @@
-import Elysia from "elysia";
-import { cors } from "@elysiajs/cors";
-import { staticPlugin } from '@elysiajs/static'
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 import { getPost } from "./api/getPost";
 import { search } from "./api/search";
@@ -8,18 +8,20 @@ import { search } from "./api/search";
 import uploadPost from "./api/uploadPost";
 import { editPost } from "./api/editPost";
 
-const app = new Elysia();
+const app = express();
 
 // Plugins
 app.use(cors());
-app.use(staticPlugin({ assets: "./assets", prefix: "/assets" }));
+app.use('/assets', express.static('assets'));
+var jsonParser = bodyParser.json()
 
 // Get info
-app.get("/getpost/:id", ({ params }) => getPost(params) );
-app.post("/search", ({ request, body, set }) => search(request, body, set) );
+app.get("/getpost/:id", (req, res) => getPost(req, res) );
+app.post("/search", jsonParser, (req, res) => search(req, res) );
 
 // Create/edit info
-app.post("/upload", ({ request, body, set }) => uploadPost(request, body, set) );
-app.post("/editpost/:id", ({ params, body, set }) => editPost(params, body, set) );
+app.post("/upload", jsonParser, (req, res) => uploadPost(req, res) );
+app.post("/editpost/:id", jsonParser, (req, res) => editPost(req, res) );
+// app.post("/editpost/:id", ({ params, body, set }) => editPost(params, body, set) );
 
 export default app;
