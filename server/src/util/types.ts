@@ -15,7 +15,7 @@ export function assertFile(file: any): File {
 }
 
 export function assertPost(post: any): Post {
-    let tagList = post?.tags?.map((tag: any) => assertTag(tag)) as Tag[];
+    let tagList = assertTagList(post.tags);
     return {
         file: assertFile(post.file),
         id: post.id as number || 0,
@@ -26,8 +26,8 @@ export function assertPost(post: any): Post {
 };
 
 export function assertTag(tag: any): Tag {
-    var safe = tag.safe as boolean;
-    if (tag.safe === false) safe = false;
+    var safe = tag?.safe as boolean;
+    if (tag?.safe === false) safe = false;
     else safe = true;
     return {
         name: tag.name as string || null,
@@ -37,7 +37,12 @@ export function assertTag(tag: any): Tag {
 };
 
 export function assertTagList(tags: any[]): Tag[] {
-    return tags.map((tag) => assertTag(tag));
+    if (!tags || tags?.length === 0) return [];
+    let newTags = tags.map((tag) => assertTag(tag));
+    let uniqueTags = newTags.filter((tag, index) => {
+        return newTags.findIndex((t) => t.name === tag.name && t.type === tag.type) === index;
+    });
+    return uniqueTags;
 };
 
 export function assertFilterTag(filter: any): FilterTag {

@@ -8,8 +8,10 @@ export default function Image({ post }: { post: any }) {
         <div>
             {
                 post.file &&
-                <a href={`./post/${post.id}`} className={compClass}>
-                    <img src={post.file.thumbnailUrl} alt={post.file.title} title={post.file.title} className="file-img" />
+                <a href={`./post/${post.id}`}>
+                    <div className={compClass}>
+                        <img src={post.file.thumbnailUrl} alt={post.file.title} title={post.file.title} className="file-img" />
+                    </div>
                 </a>
             }
         </div>

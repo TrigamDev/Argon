@@ -1,56 +1,89 @@
-import app from "../app";
 import { File, Post } from "../models/post";
-import { Tag } from "../models/tag";
 
-import { assertFile, assertPost, assertTag } from "../util/types";
-import { downloadFile, downloadThumbnail, downloadVideoThumbnail,
-    getFileExtension, getFileName, getFileType } from "../util/files";
+import { assertFile, assertPost } from "../util/types";
+import { downloadFileFromUrl, downloadThumbnailFromUrl } from "../util/files"
+import { downloadFileFromFile, downloadThumbnailFromFile } from "../util/files";
+import { downloadVideoThumbnail, getFileExtension, getFileName, getFileType } from "../util/files";
 import { getWebPath } from "../util/dir";
 import { createPostId, uploadPostToDB } from "../util/posts";
 
 export default async function uploadPost(req: any, res: any) {
-    const { url, layeredUrl, title, tags, timestamp } = req?.body;
-    if (!url) return res.status(400).json({ error: "No url provided" });
-
+    // Recieve data
+    const { url, layeredUrl, sourceUrl, title, tags, timestamp } = req?.body;
+    const { file, layeredFile } = getFiles(req?.files);
+    if (!url && !file) return res.status(400).json({ error: "No url/file provided" });
+    
+    // Process and download files
     let id = await createPostId();
-    let file = await getFileInfo(req, id, url, layeredUrl, title, timestamp);
-    await downloadFiles(file, id, layeredUrl);
+    console.log(`\n💾 ⚫ Saving Post #${id} to the server...`)
+    let postFile = await getFileInfo(req, id, url, file, layeredUrl, layeredFile, sourceUrl, title, timestamp);
+    if (url) await downloadFilesFromUrl(postFile, id, layeredUrl, layeredFile);
+    else if (file) await downloadFilesFromFiles(postFile, id, file, layeredFile);
+    
+    // Add extra data
+    postFile.sourceUrl = sourceUrl;
+    let postTags = tags;
+    if (!postTags || postTags?.length === 0) postTags = [{ name: "untagged", type: "meta", safe: true }];
 
-    let post = assertPost({ file: file, tags: tags, timestamp: Date.now() } as Post);
+    // Upload to database
+    let post = assertPost({ file: postFile, tags: postTags, timestamp: Date.now() } as Post);
     post.id = id;
     await uploadPostToDB(post);
+    console.log(`💾 ✅ Saved Post #${id} to the server!`)
 
     return res.status(200).json(post);
 }
 
-async function getFileInfo(req: any, id: number, url: string, layeredUrl: string, title: string, timestamp: number): Promise<File> {
-    let file = assertFile({ sourceUrl: url, layeredUrl: layeredUrl,
-        title: title, timestamp: timestamp, } as File);
+async function getFileInfo(req: any, id: number, url: string, file: any, layeredUrl: string, layeredFile: any, sourceUrl: string, title: string, timestamp: number): Promise<File> {
+    let postFile = assertFile({ sourceUrl: url, layeredUrl: layeredUrl,
+        title: title, timestamp: Number(timestamp), } as File);
     // Title
-    file.title = file.title || getFileName(url) || `file_${id}`;
-    file.title = file.title.replace(/ /g, "_").replace(/[^a-zA-Z0-9-_]/g, "");
+    postFile.title = postFile.title || file?.originalname?.split('.')?.slice(0, -1)?.join('.') || getFileName(url) || `file_${id}`;
+    postFile.title = postFile.title.replace(/ /g, "_").replace(/[^a-zA-Z0-9-_]/g, "");
     // Type
-    file.type = getFileType(url); 
-    file.extension = getFileExtension(url);
+    postFile.type = file ? getFileType(file?.originalname) : getFileType(url); 
+    postFile.extension = file ? getFileExtension(file?.originalname) : getFileExtension(url);
     // Urls
-    file.url = `${getWebPath(req)}/assets/${file.type}/${id}_${file.title}.${file.extension}`;
-    file.thumbnailUrl = file.url.split(".").slice(0, -1) + "_thumbnail.webp";
+    postFile.url = `${getWebPath(req)}/assets/${postFile.type}/${id}_${postFile.title}.${postFile.extension}`;
+    postFile.thumbnailUrl = postFile.url.split(".").slice(0, -1) + "_thumbnail.webp";
     if (layeredUrl) {
         let layeredExtension = layeredUrl.split(".").pop();
-        file.layeredUrl = `${getWebPath(req)}/assets/layered/${id}_${file.title}.${layeredExtension}`;
+        postFile.layeredUrl = `${getWebPath(req)}/assets/layered/${id}_${postFile.title}.${layeredExtension}`;
     };
 
-    return file;
+    return postFile;
 }
 
-async function downloadFiles(fileData: File, id: number, layeredUrl: string) {
-    await downloadFile(fileData.sourceUrl as string, id, fileData.title, fileData.extension, fileData.type);
+async function downloadFilesFromUrl(fileData: File, id: number, layeredUrl: string, layeredFile: any) {
+    await downloadFileFromUrl(fileData.sourceUrl as string, id, fileData.title, fileData.extension, fileData.type);
     if (layeredUrl) {
         let layeredExtension = layeredUrl.split(".").pop() as string;
-        await downloadFile(layeredUrl, id, fileData.title, layeredExtension, "layered");
+        await downloadFileFromUrl(layeredUrl, id, fileData.title, layeredExtension, "layered");
     }
     if (fileData.type === "image")
-        await downloadThumbnail(fileData.sourceUrl as string, id, fileData.title, fileData.extension);
+        await downloadThumbnailFromUrl(fileData.sourceUrl as string, id, fileData.title, fileData.extension);
     else if (fileData.type === "video")
-        await downloadVideoThumbnail(fileData.sourceUrl as string, id, fileData.title, fileData.extension);
+        await downloadVideoThumbnail(id, fileData.title, fileData.extension);
+};
+
+async function downloadFilesFromFiles(fileData: File, id: number, file: any, layeredFile: any) {
+    await downloadFileFromFile(file, id, fileData.title, fileData.extension, fileData.type);
+    if (layeredFile) {
+        let layeredExtension = layeredFile.originalname.split(".").pop() as string;
+        await downloadFileFromFile(layeredFile, id, fileData.title, layeredExtension, "layered");
+    }
+    if (fileData.type === "image")
+        await downloadThumbnailFromFile(file, id, fileData.title, fileData.extension);
+    else if (fileData.type === "video")
+        await downloadVideoThumbnail(id, fileData.title, fileData.extension);
+};
+
+function getFiles(files: any[]) {
+    let file: any = undefined;
+    let layeredFile: any = undefined;
+    files.forEach((f: any) => {
+        if (f.fieldname === "file") file = f;
+        else if (f.fieldname === "layeredFile") layeredFile = f;
+    });
+    return { file, layeredFile };
 }

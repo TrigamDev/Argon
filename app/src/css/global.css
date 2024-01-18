@@ -16,4 +16,9 @@ body {
     background-color: var(--background);
     color: var(--text);
     overflow-x: hidden;
+    height: 100vh;
+}
+
+#root {
+    height: 100%;
 }

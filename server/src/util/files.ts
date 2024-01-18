@@ -9,16 +9,19 @@ const videoTypes = [ "mp4", "webm", "mov", "avi" ];
 const audioTypes = [ "mp3", "wav", "ogg", "flac" ];
 
 export function getFileExtension(url: string): string {
+    if (!url) return "";
     return url.split(".").pop()?.split('?')[0] || "";
 };
 
 export function getFileName(url: string): string {
+    if (!url) return "";
     let split = url.split("/");
     let name = split[split.length - 1];
     return name.split(".").slice(0, -1).join(".");
 };
 
 export function getFileType(url: string): "image" | "video" | "audio" | "unknown" {
+    if (!url) return "unknown";
     let extension = getFileExtension(url);
     if (imageTypes.includes(extension)) return "image";
     if (videoTypes.includes(extension)) return "video";
@@ -41,30 +44,44 @@ function typeEmoji(type: string): string {
     return "❓";
 };
 
-export async function downloadFile(url: string, id: number, name: string, extension: string, type: string) {
+export async function downloadFileFromUrl(url: string, id: number, name: string, extension: string, type: string) {
     console.log(`\n${typeEmoji(type)} ⚫ Downloading ${id}_${name}.${extension}...`);
     let fetched = await fetchImageUrl(url);
     writeFile(fetched, id, name, extension, type);
     console.log(`${typeEmoji(type)} ✅ Downloaded ${id}_${name}.${extension}!`)
 };
 
-export async function downloadThumbnail(url: string, id: number, name: string, extension: string) {
+export async function downloadFileFromFile(file: any, id: number, name: string, extension: string, type: string) {
+    console.log(`\n${typeEmoji(type)} ⚫ Downloading ${id}_${name}.${extension}...`);
+    writeFile(file.buffer, id, name, extension, type);
+    console.log(`${typeEmoji(type)} ✅ Downloaded ${id}_${name}.${extension}!`)
+}
+
+export async function downloadThumbnailFromUrl(url: string, id: number, name: string, extension: string) {
     console.log(`\n🖼️  ⚫ Generating thumbnail for ${id}_${name}.${extension}...`);
     let fetched = await fetchImageUrl(url);
     let compressed = await compressImage(fetched);
     // Save thumbnail
     await writeFile(compressed, id, `${name}_thumbnail`, "webp", "image");
     console.log(`🖼️  ✅ Generated thumbnail for ${id}_${name}.${extension}!`)
-}
+};
 
-export async function downloadVideoThumbnail(url: string, id: number, name: string, extension: string) {
+export async function downloadThumbnailFromFile(file: any, id: number, name: string, extension: string) {
+    console.log(`\n🖼️  ⚫ Generating thumbnail for ${id}_${name}.${extension}...`);
+    let compressed = await compressImage(file.buffer);
+    // Save thumbnail
+    await writeFile(compressed, id, `${name}_thumbnail`, "webp", "image");
+    console.log(`🖼️  ✅ Generated thumbnail for ${id}_${name}.${extension}!`)
+};
+
+export async function downloadVideoThumbnail (id: number, name: string, extension: string) {
     console.log(`\n🖼️  ⚫ Generating thumbnail for ${id}_${name}.${extension}...`);
     let frame = await extractVideoFrame(`${id}_${name}.${extension}`);
     let compressed = await compressImage(frame);
     // Save thumbnail
     await writeFile(compressed, id, `${name}_thumbnail`, "webp", "video");
     console.log(`🖼️  ✅ Generated thumbnail for ${id}_${name}.${extension}!`)
-}
+};
 
 export async function writeFile(data: Buffer, id: number, name: string, extension: string, type: string) {
     let baseFile = Bun.file(`${baseDir}/assets/${type}/${id}_${name}.${extension}`);

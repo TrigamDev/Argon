@@ -13,21 +13,41 @@ export default function Post() {
     const [post, setPost] = useState<any>();
     useEffect(() => {
         async function getData() {
-            let gotten = await get(`getpost/${id}`);
-            if (gotten && gotten?.id !== post?.id) {
-                setPost(gotten);
-                setLoaded(true);
-            };
+            if (!id) return;
+            let postId = parseInt(id);
+            updatePost(postId);
+            setLoaded(true);
         }
         getData();
     }, [id]);
+    useEffect(() => {
+        function loadImg() {
+            if (!post || post.file.type !== 'image') return;
+            let fileImg = document.getElementById("file-real") as HTMLImageElement;
+            if (!fileImg) return;
+
+            let preloader = new Image();
+            preloader.src = post.file.url;
+            preloader.onload = () => {
+                fileImg.src = preloader.src;
+            };
+        };
+        loadImg();
+    }, [post]);
+
+    async function updatePost(inId?: number) {
+        let postId = inId || id;
+        let gotten = await get(`getpost/${postId}`);
+        console.log(gotten)
+        setPost(gotten);
+    }
 
     if (!loaded) return (<div>Loading...</div>);
 
     return (
         <div className="post">
             <div id="left">
-                <MiniNav/>
+                <MiniNav post={ post } updatePost={updatePost} />
                 <div id="content">
                     { post && <PostData post={post}/> }
                 </div>
@@ -35,7 +55,7 @@ export default function Post() {
             <div id="right">
                 <div className="post-file">
                     { post && post.file && post.file.type === 'image' &&
-                        <img src={post.file.url} alt={post.file.title} title={post.file.title} className="file-img"/> }
+                        <img id="file-real" src={post.file.thumbnailUrl} alt={post.file.title} title={post.file.title} className="file-img"/> }
                     { post && post.file && post.file.type === 'video' &&
                         <video src={post.file.url} controls className="file-img"></video> }
                 </div>

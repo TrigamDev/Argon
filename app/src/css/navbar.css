@@ -39,6 +39,7 @@
     width: 35px;
     height: 35px;
     flex-shrink: 0;
+    user-select: none;
     /* Style */
     transform: scale(0.85);
     transition: 0.15s ease-in-out;
@@ -66,7 +67,9 @@
 .navbar #search .search-bar {
     /* Layout */
     width: 150px;
+    height: 100%;
     align-self: stretch;
+    position: relative;
     /* Style */
     border-radius: 20px;
     background-color: var(--secondary);
@@ -98,4 +101,52 @@
     align-self: stretch;
     /* Style */
     background-color: var(--primary);
+}
+
+.visually-hidden {
+    display: none;
+}
+
+.awesomplete {
+    height: 100%;
+}
+
+#awesomplete_list_1 {
+    /* Layout */
+    position: absolute;
+    z-index: 100;
+    padding-left: 0;
+    padding: 10px 0px;
+    border-radius: 10px;
+    /* Style */
+    background-color: var(--secondary);
+}
+
+.suggestion {
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 3px 20px;
+    /* Style */
+    font-size: 1rem;
+    font-weight: 100;
+}
+
+.suggestion .label {
+    /* Style */
+    font-size: 1rem;
+    font-weight: 500 !important;
+}
+
+.suggestion[aria-selected="true"] {
+    /* Style */
+    background-color: var(--primary);
+}
+
+.tag-name {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
