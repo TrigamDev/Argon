@@ -84,12 +84,12 @@
 
 .navbar #search:hover .search-bar {
     /* Layout */
-    width: 850px;
+    width: 70vw;
 }
 
 .navbar #search .search-bar:focus {
     /* Layout */
-    width: 850px;
+    width: 70vw;
 }
 
 .mininav {
@@ -130,7 +130,7 @@
     padding: 3px 20px;
     /* Style */
     font-size: 1rem;
-    font-weight: 100;
+    font-weight: 400;
 }
 
 .suggestion .label {
@@ -149,4 +149,30 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+#argon {
+    /* Layout */
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 5px;
+    margin-left: 15px;
+    user-select: none;
+    font-family: var(--font);
+}
+
+#argon #title {
+    /* Style */
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+#argon #version {
+    /* Style */
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 2.2rem;
 }

@@ -4,6 +4,7 @@ import { Tag } from "./tag";
 
 export interface File {
     url: string
+    musicCoverUrl: string | null
     thumbnailUrl: string
     layeredUrl: string | null
     sourceUrl: string | null

@@ -6,11 +6,13 @@ import MiniNav from "../components/layout/MiniNav";
 import PostData from "../components/post/PostData";
 
 import "../css/post.css";
+import Visualizer from "../components/post/Visualizer";
 
 export default function Post() {
     const { id } = useParams();
     const [loaded, setLoaded] = useState(false);
     const [post, setPost] = useState<any>();
+    
     useEffect(() => {
         async function getData() {
             if (!id) return;
@@ -38,9 +40,14 @@ export default function Post() {
     async function updatePost(inId?: number) {
         let postId = inId || id;
         let gotten = await get(`getpost/${postId}`);
-        console.log(gotten)
         setPost(gotten);
     }
+
+    function setTime(time: number) {
+        let posted = { ...post };
+        posted.file.time = time;
+        setPost(posted);
+    };
 
     if (!loaded) return (<div>Loading...</div>);
 
@@ -58,6 +65,9 @@ export default function Post() {
                         <img id="file-real" src={post.file.thumbnailUrl} alt={post.file.title} title={post.file.title} className="file-img"/> }
                     { post && post.file && post.file.type === 'video' &&
                         <video src={post.file.url} controls className="file-img"></video> }
+                    { post && post.file && post.file.type === 'audio' &&
+                        <Visualizer post={post} bars={false} setTime={setTime} />
+                    }
                 </div>
             </div>
         </div>

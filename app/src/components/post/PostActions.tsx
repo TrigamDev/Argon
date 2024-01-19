@@ -10,7 +10,7 @@ export default function PostActions({ post }: { post: any }) {
                     <img src="/icons/open_in_new_tab.svg" alt="Open in New Tab" title="Open in New Tab"/>
                 </a>
             }
-            { post?.file?.url &&
+            { post?.file?.url && post?.file?.type === 'image' &&
                 <div className="post-action" id="post-action-copy" onClick={() => { copyPostMedia(post) }}>
                     <img src="/icons/copy.svg" alt="Copy" title="Copy"/>
                 </div>

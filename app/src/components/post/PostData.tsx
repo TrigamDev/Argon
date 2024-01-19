@@ -10,6 +10,7 @@ export default function PostData({ post}: { post: any }) {
     
     const [size, setSize] = useState(0);
     const [res, setRes] = useState({ width: 0, height: 0 });
+    const [duration, setDuration] = useState("");
     useEffect(() => {
         async function getData() {
             // Size
@@ -21,6 +22,16 @@ export default function PostData({ post}: { post: any }) {
         }
         getData();
     }, []);
+
+    useEffect(() => {
+        // Duration
+        const durSecs = moment.duration(post?.file?.time ?? 0, "s");
+        const durationLabel = [
+            durSecs.minutes(),
+            durSecs.seconds()
+        ].map(v => v.toString().padStart(2, '0')).join(':');
+        setDuration(durationLabel);
+    }, [post?.file?.time]);
     
     // Size
     const fileSize = formatFileSize(size);
@@ -35,7 +46,8 @@ export default function PostData({ post}: { post: any }) {
                     <span className="post-info-field" id="post-file-timestamp">Created: {displayTimestamp(post?.file?.timestamp)}</span>
                 }
                 { post?.timestamp && <span className="post-info-field" id="post-timestamp">Posted: {displayTimestamp(Number(post?.timestamp))}</span> }
-                { post?.file?.url && <span className="post-info-field" id="post-file-res">Resolution: {res?.width || 0}x{res?.height || 0}</span> }
+                { post?.file?.url && post?.file?.type !== "audio" && <span className="post-info-field" id="post-file-res">Resolution: {res?.width || 0}x{res?.height || 0}</span> }
+                { post?.file?.url && post?.file?.type === "audio" && <span className="post-info-field" id="post-file-length">Duration: {duration || 0}</span> }
                 { post?.file?.url && fileSize && <span className="post-info-field" id="post-file-size">Size: {fileSize || '0b'}</span> }
                 { post?.file?.extension && <span className="post-info-field" id="post-file-type">File Type: {post?.file?.extension.toUpperCase() || ""}</span> }
                 { post?.file?.sourceUrl && <span className="post-info-field" id="post-source">Source: <a href={post?.file?.sourceUrl} target="_blank">{new URL(post?.file?.sourceUrl).hostname}</a></span> }

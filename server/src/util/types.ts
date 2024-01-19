@@ -4,6 +4,7 @@ import { FilterTag, Tag } from "../models/tag";
 export function assertFile(file: any): File {
     return {
         url: file?.url as string || null,
+        musicCoverUrl: file?.musicCoverUrl as string || null,
         thumbnailUrl: file?.thumbnailUrl as string || null,
         layeredUrl: file?.layeredUrl as string || null,
         sourceUrl: file?.sourceUrl as string || null,

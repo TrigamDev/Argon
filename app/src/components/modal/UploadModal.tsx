@@ -4,12 +4,14 @@ import { upload } from '../../util/api';
 
 import "../../css/modal.css";
 
-export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpen: boolean, closeModal: () => void, updatePosts: () => void }) {
+export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpen: boolean, closeModal: () => void, updatePosts: CallableFunction }) {
     Modal.setAppElement('#root');
     const [modalIsOpen] = useState(isOpen);
 
     const [url, setUrl] = useState('');
     const [file, setFile] = useState<File | null>();
+    const [coverUrl, setCoverUrl] = useState('');
+    const [coverFile, setCoverFile] = useState<File | null>();
     const [layeredUrl, setLayeredUrl] = useState('');
     const [layeredFile, setLayeredFile] = useState<File | null>();
     const [sourceUrl, setSourceUrl] = useState('');
@@ -25,8 +27,10 @@ export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpe
         
         let postData = new FormData();
         if (url) postData.append('url', url);
-        if (layeredUrl) postData.append('layeredUrl', layeredUrl);
         if (file) postData.append('file', file);
+        if (coverUrl) postData.append('musicCoverUrl', coverUrl);
+        if (coverFile) postData.append('musicCoverFile', coverFile);
+        if (layeredUrl) postData.append('layeredUrl', layeredUrl);
         if (layeredFile) postData.append('layeredFile', layeredFile);
         postData.append('sourceUrl', sourceUrl);
         postData.append('title', title);
@@ -51,21 +55,17 @@ export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpe
 
     return (
         <div onPaste={handlePaste}>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="Edit Modal"
-                overlayClassName="modal-overlay"
-                className="modal"
-                id="upload-modal"
-            >
+            <Modal isOpen={modalIsOpen} onRequestClose={closeModal}
+            contentLabel="Edit Modal" overlayClassName="modal-overlay" className="modal" id="upload-modal">
                 <div id="left" className='side'>
                     <span id="title">Upload Post</span>
                     <div id="post-input-data">
+                        {/* Title */}
                         <div id="post-title" className='post-data-elem'>
                             <span className="label">Title</span>
                             <input type="text" id="title-input" className="modal-text-input" placeholder="Post Title" onChange={e => setTitle(e.target.value)}/>
                         </div>
+                        {/* Timestamp */}
                         <div id="post-timestamp" className='post-data-elem'>
                             <span className="label">Timestamp</span>
                             <input type="datetime-local" id="timestamp-input" className="modal-text-input" placeholder="Timestamp" onChange={updateTimestamp}/>
@@ -74,11 +74,13 @@ export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpe
                                 { isDiscordSource && <input type="button" id="discord-time" className='small-button' value="Get From Discord Id" onClick={() => updateTimestamp(null, getTimestampFromDiscordSource())}/> }
                             </div>
                         </div>
+                        {/* SourceUrl */}
                         <div id="post-source" className='post-data-elem'>
                             <span className="label">Source URL</span>
                             <input type="text" id="source-input" className="modal-text-input" placeholder="Source URL" onChange={updateSourceUrl}/>
                         </div>
-                            <div id="layered-file" className='file-upload-section post-data-elem'>
+                        { /* Project File */ }
+                        <div id="layered-file" className='file-upload-section post-data-elem'>
                             <span id="layered-file-label" className='label'>Project File</span>
                             <div id="layered-file-url-container" className={'post-data-elem ' + (layeredFile ? 'hidden' : '')}>
                                 <input type="text" id="layered-file-url" className="modal-text-input" placeholder="Project File URL" onChange={updateLayeredFileUrl}/>
@@ -96,15 +98,23 @@ export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpe
                     </div>
                 </div>
                 <div id="right" className='side'>
+                    { /* Main File */ }
                     <div id="main-file" className='file-upload-section'>
                         <span id="main-file-label" className='label'>File</span>
                         <div id="file-url-container" className={(file ? 'hidden' : '')}>
                             <input type="text" id="file-url" className="modal-text-input" placeholder="File URL" onChange={updateFileUrl}/>
                         </div>
-                        <div id="upload-preview" className={(url ? 'hidden ' : '') + (file ? 'selected' : 'empty')}>
-                            { file && fileType === 'image' && <img id="preview" className='file preview-file'/> }
-                            { file && fileType === 'video' && <video id="preview" className='file preview-file' controls/> }
-                        </div>
+                        { fileType !== 'audio' &&
+                            <div id="upload-preview" className={'img-preview ' + (url ? 'hidden ' : '') + (file ? 'selected' : 'empty')}>
+                                { file && fileType === 'image' && <img id="preview" className='file preview-file'/> }
+                                { file && fileType === 'video' && <video id="preview" className='file preview-file' controls/> }
+                            </div>
+                        }
+                        { fileType === 'audio' &&
+                            <div id="upload-preview" className={'img-preview audio ' + (url ? 'hidden ' : '') + (file ? 'selected' : 'empty')}>
+                                { file && <audio id="preview" className='file preview-file audio-preview' controls/> }
+                            </div>
+                        }
                         <div id="file-controls" className={'button-bros ' + (url ? 'hidden' : '')}>
                             <input type="file" id="upload-file-bad" onChange={updateFile} style={{ display: "none" }}></input>
                             <input type="button" id="upload-file" className="file-button" value="Upload File"
@@ -112,6 +122,25 @@ export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpe
                             <input type="button" id="clear-file" className="file-button" value="Clear File" onClick={clearFile}/>
                         </div>
                     </div>
+                    { /* Cover File */ }
+                    { fileType === 'audio' &&
+                    <div id="cover-file" className='file-upload-section cover-upload'>
+                        <span id="cover-file-label" className='label'>Cover Image</span>
+                        <div id="cover-file-url-container" className={(coverFile ? 'hidden' : '')}>
+                            <input type="text" id="cover-file-url" className="modal-text-input" placeholder="Cover Image URL" onChange={updateCoverUrl}/>
+                        </div>
+                        <div id="cover-upload-preview" className={'img-preview ' + (coverUrl ? 'hidden ' : '') + (coverFile ? 'selected' : 'empty')}>
+                            { coverFile && <img id="cover-preview" className='file preview-file'/> }
+                        </div>
+                        <div id="cover-file-controls" className={'button-bros ' + (coverUrl ? 'hidden' : '')}>
+                            <input type="file" id="cover-upload-file-bad" onChange={updateCoverFile} style={{ display: "none" }}></input>
+                            <input type="button" id="cover-upload-file" className="file-button" value="Upload Cover"
+                                onClick={() => document.getElementById('cover-upload-file-bad')?.click()}/>
+                            <input type="button" id="cover-clear-file" className="file-button" value="Clear Cover" onClick={() => setCoverFile(null)}/>
+                        </div>
+                    </div>
+                    }
+                    { /* Buttons */ }
                     <div id="buttons">
                         <img id="close" className="modal-button" src="/icons/upload.svg" title="Cancel" onClick={closeModal}/>
                         <img id="save" className="modal-button" src="/icons/save.svg" title="Save Changes" onClick={uploadPost}/>
@@ -145,6 +174,21 @@ export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpe
 
     async function updateLayeredFileUrl(e: any) {
         setLayeredUrl(e.target.value);
+    };
+
+    function updateCoverFile(e: any, coverFile?: any) {
+        let selectedFile = e?.target?.files[0] || coverFile;
+        setCoverFile(selectedFile);
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('cover-preview')?.setAttribute('src', e.target?.result as string);
+        }
+        reader.readAsDataURL(selectedFile);
+    };
+
+    async function updateCoverUrl(e: any) {
+        setCoverUrl(e.target.value);
     };
 
     function updateTimestamp(e: any, timestamp?: number) {

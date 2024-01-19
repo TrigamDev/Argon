@@ -1,0 +1,52 @@
+.page-foot {
+    /* Layout */
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    user-select: none;
+    /* Style */
+    background-color: var(--primary);
+}
+
+.pagination {
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    list-style-type: none;
+    padding: 0;
+    gap: 8px;
+}
+
+ul.pagination li a {
+    /* Layout */
+    border-radius: 7px;
+    padding: 6px 18px;
+    cursor: pointer;
+    /* Style */
+    background-color: var(--accent);
+    font-family: var(--font);
+    font-size: 18px;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+ul.pagination li.selected a {
+    /* Style */
+    background-color: var(--accent-light);
+    color: white;
+    font-weight: 800;
+}
+
+ul.pagination li.disabled a {
+    color: grey;
+    background-color: var(--secondary);
+}
+
+ul.pagination li.disable,
+ul.pagination li.disabled a {
+    cursor: default;
+}

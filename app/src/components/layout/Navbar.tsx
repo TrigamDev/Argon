@@ -3,12 +3,7 @@ import "../../css/navbar.css";
 import Search from "./Search";
 import UploadModal from "../modal/UploadModal";
 
-/*
-<div id="hamburger-button" className="nav-button">
-    <img src="/icons/hamburger.svg" alt="hamburger" className="nav-icon"/>
-</div>
-*/
-export default function Navbar({ onSearch, updatePosts }: { onSearch: (query: string) => void, updatePosts: () => void } ) {
+export default function Navbar({ updatePosts }: { updatePosts: CallableFunction } ) {
     const [modalIsOpen, setIsOpen] = useState(false);
     const toggleModal = () => {
         setIsOpen(!modalIsOpen);
@@ -20,6 +15,10 @@ export default function Navbar({ onSearch, updatePosts }: { onSearch: (query: st
                 <div id="upload-button" className="nav-button" onClick={toggleModal}>
                     <img src="/icons/upload.svg" alt="upload" className="nav-icon"/>
                 </div>
+                <div id="argon">
+                    <span id="title">Argon</span>
+                    <span id="version">v0.1</span>
+                </div>
                 <UploadModal
                     isOpen={modalIsOpen}
                     closeModal={closeModal}
@@ -29,7 +28,7 @@ export default function Navbar({ onSearch, updatePosts }: { onSearch: (query: st
             </div>
             <div id="right">
                 <Search
-                    onSearch={onSearch}
+                    onSearch={(query: string) => { updatePosts(query, true); }}
                     onChange={() => {}}
                     id="search"
                 />

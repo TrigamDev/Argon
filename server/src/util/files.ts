@@ -57,20 +57,20 @@ export async function downloadFileFromFile(file: any, id: number, name: string, 
     console.log(`${typeEmoji(type)} ✅ Downloaded ${id}_${name}.${extension}!`)
 }
 
-export async function downloadThumbnailFromUrl(url: string, id: number, name: string, extension: string) {
+export async function downloadThumbnailFromUrl(url: string, id: number, name: string, extension: string, type?: string) {
     console.log(`\n🖼️  ⚫ Generating thumbnail for ${id}_${name}.${extension}...`);
     let fetched = await fetchImageUrl(url);
     let compressed = await compressImage(fetched);
     // Save thumbnail
-    await writeFile(compressed, id, `${name}_thumbnail`, "webp", "image");
+    await writeFile(compressed, id, `${name}_thumbnail`, "webp", type || "image");
     console.log(`🖼️  ✅ Generated thumbnail for ${id}_${name}.${extension}!`)
 };
 
-export async function downloadThumbnailFromFile(file: any, id: number, name: string, extension: string) {
+export async function downloadThumbnailFromFile(file: any, id: number, name: string, extension: string, type?: string) {
     console.log(`\n🖼️  ⚫ Generating thumbnail for ${id}_${name}.${extension}...`);
     let compressed = await compressImage(file.buffer);
     // Save thumbnail
-    await writeFile(compressed, id, `${name}_thumbnail`, "webp", "image");
+    await writeFile(compressed, id, `${name}_thumbnail`, "webp", type || "image");
     console.log(`🖼️  ✅ Generated thumbnail for ${id}_${name}.${extension}!`)
 };
 

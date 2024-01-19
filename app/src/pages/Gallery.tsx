@@ -1,47 +1,52 @@
 import { useEffect, useState } from "react";
+
 import ImageGrid from "../components/gallery/ImageGrid"
 import Navbar from "../components/layout/Navbar"
 
-import "../css/gallery.css";
 import { post } from "../util/api";
 import { tagStringToTag } from "../util/tag";
 
-async function search(tags: any[]) {
+import "../css/gallery/gallery.css";
+import Paginate from "../components/layout/Paginate";
+
+async function search(page?: number, tags?: any[], sort?: string) {
     let searched = await post('search', {
-        tags: tags
+        page: page || 1,
+        tags: tags || [],
+        sort: sort || 'newest'
     });
-    let sorted = searched.sort((a: any, b: any) => {
-        return b.file.timestamp - a.file.timestamp;
-    });
-    return sorted;
+    return searched;
 }
 
 export default function Gallery() {
     const [posts, setPosts] = useState<any[]>([]);
+    const [page, setPage] = useState(1);
+    const [pages, setPages] = useState(1);
+
     useEffect(() => {
         updatePosts();
-    }, []);
+    }, [page]);
 
-    async function updatePosts() {
-        let posts = await search([]);
-        setPosts(posts);
-    }
-
-    async function handleSearch(query: string) {
-        let tags = getTagsFromQuery(query);
-        let posts = await search(tags ?? []);
-        setPosts(posts);
+    async function updatePosts(query?: string, clearPage?: boolean) {
+        let tags = getTagsFromQuery(query || '');
+        let searched = await search(page, tags);
+        setPosts(searched.posts);
+        setPages(searched.pages);
+        if (clearPage) setPage(1);
     }
 
     return (
         <div id="gallery">
             <Navbar
-                onSearch={handleSearch}
                 updatePosts={updatePosts}
             />
             <div id="content">
                 <ImageGrid posts={posts}/>
             </div>
+            <Paginate
+                pages={pages}
+                onPageChange={setPage}
+            />
         </div>
     )
 }

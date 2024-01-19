@@ -1,4 +1,4 @@
-import "../../css/gallery.css";
+import "./ImageGrid.css";
 
 export default function Image({ post }: { post: any }) {
 
@@ -10,7 +10,12 @@ export default function Image({ post }: { post: any }) {
                 post.file &&
                 <a href={`./post/${post.id}`}>
                     <div className={compClass}>
-                        <img src={post.file.thumbnailUrl} alt={post.file.title} title={post.file.title} className="file-img" />
+                        { post?.file?.type !== 'audio' &&
+                            <img src={post.file.thumbnailUrl} alt={post.file.title} title={post.file.title} className="file-img" />
+                        }
+                        { post?.file?.type === 'audio' &&
+                            <img src={post.file.thumbnailUrl ?? '/default_music.png'} alt={post.file.title} title={post.file.title} className="file-img" />
+                        }
                     </div>
                 </a>
             }

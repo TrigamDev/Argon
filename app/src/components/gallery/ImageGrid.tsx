@@ -1,6 +1,6 @@
 import Image from './Image';
 
-import "../../css/gallery.css";
+import "./ImageGrid.css";
 
 export default function ImageGrid({ posts }: { posts: any[] }) {
     return (
