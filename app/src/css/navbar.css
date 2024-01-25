@@ -84,12 +84,12 @@
 
 .navbar #search:hover .search-bar {
     /* Layout */
-    width: 70vw;
+    width: 60vw;
 }
 
 .navbar #search .search-bar:focus {
     /* Layout */
-    width: 70vw;
+    width: 60vw;
 }
 
 .mininav {
@@ -128,20 +128,27 @@
     justify-content: space-between;
     gap: 25px;
     padding: 3px 20px;
+    user-select: none;
+    cursor: pointer;
     /* Style */
     font-size: 1rem;
     font-weight: 400;
+}
+
+.suggestion:hover {
+    /* Style */
+    background-color: var(--primary);
+}
+
+.suggestion[aria-selected="true"] {
+    /* Style */
+    background-color: var(--primary);
 }
 
 .suggestion .label {
     /* Style */
     font-size: 1rem;
     font-weight: 500 !important;
-}
-
-.suggestion[aria-selected="true"] {
-    /* Style */
-    background-color: var(--primary);
 }
 
 .tag-name {
@@ -159,7 +166,10 @@
     gap: 5px;
     margin-left: 15px;
     user-select: none;
+    cursor: pointer;
     font-family: var(--font);
+    /* Style */
+    text-decoration: none;
 }
 
 #argon #title {

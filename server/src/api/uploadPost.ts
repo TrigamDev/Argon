@@ -44,15 +44,15 @@ async function getFileInfo(req: any, id: number, url: string, file: any, musicCo
     postFile.type = file ? getFileType(file?.originalname) : getFileType(url); 
     postFile.extension = file ? getFileExtension(file?.originalname) : getFileExtension(url);
     // File
-    postFile.url = `${getWebPath(req)}/assets/${postFile.type}/${id}_${postFile.title}.${postFile.extension}`;
+    postFile.url = `${getWebPath(req)}/files/${postFile.type}/${id}_${postFile.title}.${postFile.extension}`;
     // Music Cover
-    if (musicCoverUrl || musicCoverFile) postFile.musicCoverUrl = `${getWebPath(req)}/assets/audio/${id}_${postFile.title}.${getFileExtension(musicCoverUrl || musicCoverFile?.originalname)}`;
+    if (musicCoverUrl || musicCoverFile) postFile.musicCoverUrl = `${getWebPath(req)}/files/audio/${id}_${postFile.title}.${getFileExtension(musicCoverUrl || musicCoverFile?.originalname)}`;
     // Thumbnail
-    postFile.thumbnailUrl = postFile.url.split(".").slice(0, -1) + "_thumbnail.webp";
+    postFile.thumbnailUrl = postFile.url.split(".").slice(0, -1).join('.') + "_thumbnail.webp";
     // Layered
     if (layeredUrl) {
         let layeredExtension = layeredUrl.split(".").pop();
-        postFile.layeredUrl = `${getWebPath(req)}/assets/layered/${id}_${postFile.title}.${layeredExtension}`;
+        postFile.layeredUrl = `${getWebPath(req)}/files/layered/${id}_${postFile.title}.${layeredExtension}`;
     };
 
     return postFile;

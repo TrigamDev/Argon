@@ -322,7 +322,7 @@
     outline: none;
     border: none;
     border-radius: 10px;
-    color: var(--white);
+    color: var(--text);
     font-family: var(--font);
     font-weight: 600;
     font-size: large;
@@ -423,7 +423,7 @@
     outline: none;
     border: none;
     border-radius: 10px;
-    color: var(--white);
+    color: var(--text);
     font-family: var(--font);
     font-weight: 600;
     font-size: 13px;

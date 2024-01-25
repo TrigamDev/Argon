@@ -3,7 +3,6 @@ import ReactPaginate from "react-paginate";
 import "./Paginate.css";
 
 export default function Paginate({ pages, onPageChange }: { pages: number, onPageChange: CallableFunction }) {
-    console.log(pages)
     return (
         <div className="page-foot">
             <ReactPaginate

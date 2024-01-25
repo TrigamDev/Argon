@@ -2,23 +2,23 @@ import { useState } from "react";
 import "../../css/navbar.css";
 import Search from "./Search";
 import UploadModal from "../modal/UploadModal";
+import Hamburger from "./Hamburger";
 
-export default function Navbar({ updatePosts }: { updatePosts: CallableFunction } ) {
+export default function Navbar({ updatePosts, updateSettings }: { updatePosts: CallableFunction, updateSettings: CallableFunction } ) {
     const [modalIsOpen, setIsOpen] = useState(false);
-    const toggleModal = () => {
-        setIsOpen(!modalIsOpen);
-    }
+    const toggleModal = () => { setIsOpen(!modalIsOpen); }
     const closeModal = () => setIsOpen(false);
+
     return (
         <div className="navbar">
             <div id="left">
                 <div id="upload-button" className="nav-button" onClick={toggleModal}>
                     <img src="/icons/upload.svg" alt="upload" className="nav-icon"/>
                 </div>
-                <div id="argon">
+                <a id="argon" href="">
                     <span id="title">Argon</span>
-                    <span id="version">v0.1</span>
-                </div>
+                    <span id="version">v0.2</span>
+                </a>
                 <UploadModal
                     isOpen={modalIsOpen}
                     closeModal={closeModal}
@@ -35,9 +35,7 @@ export default function Navbar({ updatePosts }: { updatePosts: CallableFunction 
                 <div id="bookmark-button" className="nav-button">
                     <img src="/icons/bookmark.svg" alt="bookmark" className="nav-icon"/>
                 </div>
-                <div id="settings-button" className="nav-button">
-                    <img src="/icons/settings.svg" alt="settings" className="nav-icon"/>
-                </div>
+                <Hamburger updateSettings={updateSettings}/>
             </div>
         </div>
     )

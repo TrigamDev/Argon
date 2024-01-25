@@ -20,7 +20,7 @@ export default function EditModal({ postToEdit, isOpen, closeModal, updatePost }
     };
 
     async function savePost() {
-        await post(`/editpost/${postToEdit?.id}`, {
+        await post(`editpost/${postToEdit?.id}`, {
             timestamp: postTimestamp,
             tags: postTags,
             sourceUrl: postSourceUrl
@@ -32,7 +32,7 @@ export default function EditModal({ postToEdit, isOpen, closeModal, updatePost }
     async function deletePost(e: any) {
         e.preventDefault();
         if (window.confirm("Are you sure you want to delete this post?")) {
-            await post(`/deletepost/${postToEdit?.id}`, {});
+            await post(`deletepost/${postToEdit?.id}`, {});
             closeModal();
             window.location.href = '/';
         }

@@ -37,7 +37,7 @@ ul.pagination li a {
 ul.pagination li.selected a {
     /* Style */
     background-color: var(--accent-light);
-    color: white;
+    color: var(--text);
     font-weight: 800;
 }
 

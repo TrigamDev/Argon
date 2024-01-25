@@ -15,9 +15,10 @@ export function getTagIcon(tag: any) {
 export function tagStringToTag(tagString: string) {
     const match = tagString.match(/^(.*)_\((.*)\)$/);
     if (!match) return;
-    const name = match[1];
+    const safe = !match[1].startsWith('!');
+    const name = match[1].replace(/^!/, '');
     const type = match[2];
-    return { name, type };
+    return { name, type, safe };
 }
 
 export function tagStringToTags(tagString: string) {
@@ -25,5 +26,5 @@ export function tagStringToTags(tagString: string) {
 }
 
 export function tagToTagString(tag: any) {
-    return `${tag.name}_(${tag.type})`;
+    return `${tag.safe ? '' : '!'}${tag.name}_(${tag.type})`;
 }

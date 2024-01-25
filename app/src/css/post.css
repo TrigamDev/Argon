@@ -109,7 +109,7 @@ body {
 
 #post-data a {
     /* Style */
-    color: var(--white);
+    color: var(--text);
 }
 
 #post-tags {

@@ -23,25 +23,43 @@ export default function Gallery() {
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
 
-    useEffect(() => {
-        updatePosts();
-    }, [page]);
+    const [tags, setTags] = useState<any[]>([]);
+    const [sort, setSort] = useState('newest');
+    const [blurNSFW, setBlurNSFW] = useState(true);
+    const [blurSuggestive, setBlurSuggestive] = useState(true);
+    const [blurUntagged, setBlurUntagged] = useState(false);
 
-    async function updatePosts(query?: string, clearPage?: boolean) {
-        let tags = getTagsFromQuery(query || '');
-        let searched = await search(page, tags);
+    useEffect(() => {
+        update();
+    }, [page, sort]);
+
+    async function update(query?: string, clearPage?: boolean) {
+        let isSearch = query !== undefined;
+        let tagged = getTagsFromQuery(query || '');
+        if (isSearch) setTags(tagged);
+        // Search
+        let searched = await search(page, (isSearch ? tagged : tags) || [], sort);
         setPosts(searched.posts);
+        // Page
         setPages(searched.pages);
         if (clearPage) setPage(1);
     }
 
+    function updateSettings(settings: any) {
+        if (settings.sort) setSort(settings.sort);
+        if (settings.blurNSFW !== undefined) setBlurNSFW(settings.blurNSFW);
+        if (settings.blurSuggestive !== undefined) setBlurSuggestive(settings.blurSuggestive);
+        if (settings.blurUntagged !== undefined) setBlurUntagged(settings.blurUntagged);
+    };
+
     return (
         <div id="gallery">
             <Navbar
-                updatePosts={updatePosts}
+                updatePosts={update}
+                updateSettings={updateSettings}
             />
             <div id="content">
-                <ImageGrid posts={posts}/>
+                <ImageGrid posts={posts} settings={{ blurNSFW, blurSuggestive, blurUntagged }}/>
             </div>
             <Paginate
                 pages={pages}
@@ -52,7 +70,7 @@ export default function Gallery() {
 }
 
 function getTagsFromQuery(query: string) {
-    if (!query || query === '') return;
+    if (!query || query === '') return [];
     query.trim();
     let tags = query.split(' ').map((tag: string) => {
         if (tag === '') return;

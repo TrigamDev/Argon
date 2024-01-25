@@ -48,7 +48,7 @@ export default function PostInfo({ post, editMode, onUpdate }: { post?: any, edi
                         return tagToTagString(tag);
                     }).join(' ')}
                     hideButton={true}
-                    excludeExcluding={true}
+                    excludeExcluding={false}
                     big={true}
                     id="tags"
                 />
