@@ -1,14 +1,14 @@
-import { getPostsByTags } from "../util/posts";
+import { getPostsByTags, paginate } from "../util/posts";
 import { assertFilterTagList } from "../util/types";
 
 export async function search(req: any, res: any) {
+    // Info
     const { page, pageSize, sort, tags } = req?.body;
-    const posts = await getPostsByTags(assertFilterTagList(tags));
-    let sorted = posts.sort(getSorted(sort));
     let currentPage = page || 1;
     let sizePage = pageSize || 50;
-    let paged = sorted.slice((currentPage - 1) * sizePage, currentPage * sizePage);
-    return res.status(200).json({ posts: paged, pages: Math.ceil(sorted.length / sizePage) });
+    // Get posts, sort, paginate
+    let posts = paginate(await getPostsByTags(assertFilterTagList(tags)), currentPage, sizePage, sort);
+    return res.status(200).json(posts);
 };
 
 export function getSorted(sortType: string) {

@@ -15,7 +15,7 @@ export default function PostInfo({ post, editMode, onUpdate }: { post?: any, edi
     function updateTags(tagString: string) {
         onUpdate({
             ...post,
-            tags: tagStringToTags(tagString)
+            tags: tagStringToTags(tagString.toLowerCase())
         })
     }
     function updateSource(e: any) {

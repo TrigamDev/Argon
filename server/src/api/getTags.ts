@@ -14,5 +14,10 @@ export async function getTags(req: any, res: any) {
             if (!found) tags.push({ name: tag.name, type: tag.type, count: 1 });
         }
     };
+    tags = tags.sort((a, b) => {
+        if (a.count > b.count) return -1;
+        else if (a.count < b.count) return 1;
+        else return a.name.localeCompare(b.name);
+    });
     return res.status(200).json(tags);
 }

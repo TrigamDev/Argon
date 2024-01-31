@@ -1,7 +1,5 @@
 .page-foot {
     /* Layout */
-    position: absolute;
-    bottom: 0;
     width: 100vw;
     display: flex;
     justify-content: center;

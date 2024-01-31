@@ -3,7 +3,8 @@ import Modal from 'react-modal';
 import { post } from '../../util/api';
 
 import PostInfo from './PostInfo';
-import "../../css/modal.css";
+
+import "./Modal.css";
 
 export default function EditModal({ postToEdit, isOpen, closeModal, updatePost }: { postToEdit: any, isOpen: boolean, closeModal: () => void , updatePost: () => void}) {
     Modal.setAppElement('#root');

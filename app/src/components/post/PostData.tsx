@@ -1,6 +1,5 @@
 import moment from "moment";
 
-import "../../css/post.css";
 import { useEffect, useState } from "react";
 import PostTags from "./PostTags";
 import PostActions from "./PostActions";

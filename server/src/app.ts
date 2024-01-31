@@ -6,6 +6,7 @@ import multer from "multer";
 import { getPost } from "./api/getPost";
 import { search } from "./api/search";
 import { getTags } from "./api/getTags";
+import { postList } from "./api/postList";
 
 import uploadPost from "./api/uploadPost";
 import editPost from "./api/editPost";
@@ -41,6 +42,7 @@ const fileSizeError = (err: any, req: any, res: any, next: any) => {
 app.get("/api/getpost/:id", (req, res) => getPost(req, res) );
 app.post("/api/search", jsonParser, (req, res) => search(req, res) );
 app.get("/api/gettags", (req, res) => getTags(req, res));
+app.post("/api/postlist", jsonParser, (req, res) => postList(req, res));
 
 // Create/edit info
 app.post("/api/upload", upload.any(), fileSizeError, (req: any, res: any) => uploadPost(req, res) );

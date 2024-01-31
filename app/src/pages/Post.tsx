@@ -4,14 +4,17 @@ import { get } from "../util/api";
 
 import MiniNav from "../components/layout/MiniNav";
 import PostData from "../components/post/PostData";
-
-import "../css/post.css";
 import Visualizer from "../components/post/Visualizer";
+import { isMobile } from "../util/user";
+
+import "./Post.css";
 
 export default function Post() {
     const { id } = useParams();
     const [loaded, setLoaded] = useState(false);
     const [post, setPost] = useState<any>();
+
+    const mobile = isMobile();
     
     useEffect(() => {
         async function getData() {
@@ -53,12 +56,15 @@ export default function Post() {
 
     return (
         <div className="post">
-            <div id="left">
-                <MiniNav post={ post } updatePost={updatePost} />
-                <div id="content">
-                    { post && <PostData post={post}/> }
+            { !mobile && 
+                <div id="left">
+                    <MiniNav post={ post } updatePost={updatePost} />
+                    <div id="content">
+                        { post && <PostData post={post}/> }
+                    </div>
                 </div>
-            </div>
+            }
+            { mobile && <MiniNav post={ post } updatePost={updatePost} /> }
             <div id="right">
                 <div className="post-file">
                     { post && post.file && post.file.type === 'image' &&
@@ -70,6 +76,13 @@ export default function Post() {
                     }
                 </div>
             </div>
+            { mobile &&
+                <div id="left">
+                    <div id="content">
+                        { post && <PostData post={post}/> }
+                    </div>
+                </div>
+            }
         </div>
     )
 }

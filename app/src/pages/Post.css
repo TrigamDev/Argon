@@ -3,11 +3,26 @@ body {
     overflow: hidden;
 }
 
+@media screen and (max-width: 1080px) {
+    body {
+        /* Layout */
+        overflow: auto;
+    }
+}
+
 .post {
     /* Layout */
     display: flex;
     align-items: center;
     height: 100vh;
+    overflow-x: hidden;
+}
+
+@media screen and (max-width: 1080px) {
+    .post {
+        /* Layout */
+        flex-direction: column;
+    }
 }
 
 .post #left {
@@ -23,6 +38,14 @@ body {
     background-color: var(--primary);
 }
 
+@media screen and (max-width: 1080px) {
+    .post #left {
+        /* Layout */
+        width: 100%;
+        height: auto;
+    }
+}
+
 .post #right {
     /* Layout */
     display: flex;
@@ -32,6 +55,14 @@ body {
     justify-content: center;
     align-items: center;
     flex: 1 0 0;
+}
+
+@media screen and (max-width: 1080px) {
+    .post #right {
+        /* Layout */
+        padding: 20px;
+        min-height: 60vh;
+    }
 }
 
 .post-file {

@@ -13,7 +13,7 @@ export function getTagIcon(tag: any) {
 }
 
 export function tagStringToTag(tagString: string) {
-    const match = tagString.match(/^(.*)_\((.*)\)$/);
+    const match = tagString?.match(/^(.*)_\((.*)\)$/);
     if (!match) return;
     const safe = !match[1].startsWith('!');
     const name = match[1].replace(/^!/, '');

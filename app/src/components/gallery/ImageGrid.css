@@ -1,17 +1,17 @@
 #image-grid {
     /* Layout */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
+    justify-content: space-evenly;
     gap: 1vmax;
     flex: 1 1 auto;
     align-self: stretch;
     flex-wrap: wrap;
     min-height: 0;
-    height: 100%;
-    margin-top: 20px;
-    margin-bottom: 150px;
+    height: auto;
+    overflow: visible;
+    margin: 20px 0;
+    /* Style */
+    border-radius: 15px;
 }
 
 #image-grid .file {
@@ -20,12 +20,19 @@
     transform: scale(1);
     border-radius: 15px;
     /* Layout */
-    width: 17vmax;
-    height: 17vmax;
+    width: 15vmax;
+    height: 15vmax;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+@media screen and (max-width: 1000px) {
+    #image-grid .file {
+        width: 35vw;
+        height: 35vw;
+    }
 }
 
 #image-grid .file:hover {

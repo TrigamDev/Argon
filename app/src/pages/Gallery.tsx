@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 
 import ImageGrid from "../components/gallery/ImageGrid"
 import Navbar from "../components/layout/Navbar"
+import Paginate from "../components/layout/Paginate";
 
 import { post } from "../util/api";
 import { tagStringToTag } from "../util/tag";
 
-import "../css/gallery/gallery.css";
-import Paginate from "../components/layout/Paginate";
+import "./Gallery.css";
 
 async function search(page?: number, tags?: any[], sort?: string) {
     let searched = await post('search', {
         page: page || 1,
+        pageSize: 60,
         tags: tags || [],
         sort: sort || 'newest'
     });
@@ -22,6 +23,7 @@ export default function Gallery() {
     const [posts, setPosts] = useState<any[]>([]);
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
+    const [listBookmarks, setListBookmarks] = useState(false);
 
     const [tags, setTags] = useState<any[]>([]);
     const [sort, setSort] = useState('newest');
@@ -31,18 +33,34 @@ export default function Gallery() {
 
     useEffect(() => {
         update();
-    }, [page, sort]);
+        document.getElementById('content')?.scroll({ top: 0, behavior: 'smooth' });
+    }, [page, sort, listBookmarks]);
 
     async function update(query?: string, clearPage?: boolean) {
         let isSearch = query !== undefined;
         let tagged = getTagsFromQuery(query || '');
         if (isSearch) setTags(tagged);
         // Search
-        let searched = await search(page, (isSearch ? tagged : tags) || [], sort);
-        setPosts(searched.posts);
+        let searched;
+        if (!listBookmarks) searched = await search(page, (isSearch ? tagged : tags) || [], sort);
+        else searched = await bookmarked();
+        setPosts(searched?.posts ?? []);
         // Page
-        setPages(searched.pages);
+        setPages(searched?.pages ?? 1);
         if (clearPage) setPage(1);
+    }
+
+    async function bookmarked() {
+        let bookmarks = localStorage.getItem('bookmarks');
+        bookmarks = JSON.parse(bookmarks as string);
+        if (!bookmarks) return;
+        let bookPosts = await post('postlist', {
+            ids: bookmarks,
+            page: page,
+            pageSize: 60,
+            sort: sort
+        });
+        return bookPosts;
     }
 
     function updateSettings(settings: any) {
@@ -57,6 +75,7 @@ export default function Gallery() {
             <Navbar
                 updatePosts={update}
                 updateSettings={updateSettings}
+                toggleBookmarks={() => setListBookmarks(!listBookmarks)}
             />
             <div id="content">
                 <ImageGrid posts={posts} settings={{ blurNSFW, blurSuggestive, blurUntagged }}/>

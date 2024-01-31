@@ -4,6 +4,7 @@
     padding: 10px 15px;
     justify-content: space-between;
     align-items: center;
+    max-width: 100vw;
     /* Style */
     background-color: var(--primary);
 }

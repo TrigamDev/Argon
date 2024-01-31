@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 import { upload } from '../../util/api';
 
-import "../../css/modal.css";
+import "./Modal.css";
 
 export default function UploadModal({ isOpen, closeModal, updatePosts }: { isOpen: boolean, closeModal: () => void, updatePosts: CallableFunction }) {
     Modal.setAppElement('#root');

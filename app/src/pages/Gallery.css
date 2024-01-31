@@ -1,0 +1,24 @@
+#gallery {
+    /* Layout */
+    position: relative;
+    height: 100%;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#content {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: flex-start;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+@media screen and (max-width: 1000px) {
+    #content {
+        padding: 10px;
+    }
+}

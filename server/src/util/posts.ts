@@ -1,3 +1,4 @@
+import { getSorted } from "../api/search";
 import PostModel, { Post } from "../models/post";
 import { FilterTag, Tag } from "../models/tag";
 import { assertPost, assertTagList } from "./types";
@@ -50,4 +51,11 @@ export async function getPostsByTags(filters: FilterTag[]) {
         if (postHasAllTags) filteredPosts.push(post);
     };
     return filteredPosts;
+}
+
+export function paginate(posts: Post[], page: number, limit: number, sortType: string) {
+    let sorted = posts.sort(getSorted(sortType));
+    let paged = limit === -1 ? sorted : sorted.slice((page - 1) * limit, page * limit);
+    let pageCount = Math.ceil(sorted.length / limit);
+    return { posts: paged, pages: limit === -1 ? 1 : pageCount };
 }

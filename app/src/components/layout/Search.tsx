@@ -4,7 +4,7 @@ import { get } from "../../util/api";
 import Awesomplete from "awesomplete";
 import { getTagIcon, tagStringToTag } from "../../util/tag";
 
-export default function Search({ onSearch, onChange, initValue, hideButton, excludeExcluding, big, id }: { onSearch: CallableFunction, onChange: CallableFunction, initValue?: string, hideButton?: boolean, excludeExcluding?: boolean, big?: boolean, id?: string }) {
+export default function Search({ onSearch, onChange, initValue, hideButton, excludeExcluding, big, id, buttonFirst }: { onSearch: CallableFunction, onChange: CallableFunction, initValue?: string, hideButton?: boolean, excludeExcluding?: boolean, big?: boolean, id?: string, buttonFirst?: boolean}) {
     const [tags, setTags] = useState<any[]>([]);
     const [query, setQuery] = useState<string>('');
     const excludeRef = useRef(false);
@@ -32,12 +32,14 @@ export default function Search({ onSearch, onChange, initValue, hideButton, excl
             maxItems: 10,
             autoFirst: true,
             item: function(text, input) {
+                input = input.toLowerCase();
                 let current = input.split(' ')[input.split(' ').length - 1];
                 excludeRef.current = current.startsWith('!');
                 const match = input.match(/[^ ]*$/);
                 return suggestionItem(text, match?.[0] || '');
             },
             filter: function(text: any, input) {
+                input = input.toLowerCase();
                 let filter = Awesomplete.FILTER_CONTAINS(text, input.match(/[^ !]*$/)?.[0] || '');
                 if (excludeExcluding) filter = filter = Awesomplete.FILTER_CONTAINS(text, input.match(/[^ ]*$/)?.[0] || '');
                 if (input.includes(text.value)) return false;
@@ -63,9 +65,10 @@ export default function Search({ onSearch, onChange, initValue, hideButton, excl
 
     return (
         <form id={ id ?? 'search' } onSubmit={handleSubmit}>
+            { !hideButton && buttonFirst && <input type="image" id="search-button" src="/icons/search.svg" className="nav-button nav-icon"/>}
             { !big && <input type="text" placeholder="Search" className="search-bar" onChange={handleChange}/> }
             { big && <textarea placeholder="Search" className="search-bar" defaultValue={initValue} spellCheck="false" onChange={handleChange}/> }
-            { !hideButton && <input type="image" id="search-button" src="/icons/search.svg" className="nav-button nav-icon"/> }
+            { !hideButton && !buttonFirst && <input type="image" id="search-button" src="/icons/search.svg" className="nav-button nav-icon"/> }
         </form>
     );
 

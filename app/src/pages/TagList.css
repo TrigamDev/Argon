@@ -1,0 +1,82 @@
+body {
+    overflow: auto;
+}
+
+#content {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    height: 100%;
+    padding: 30px 20px;
+}
+
+#tag-list {
+    /* Layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.tagbox {
+    /* Layout */
+    margin: 25px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Style */
+    background-color: var(--primary);
+    border-radius: 25px;
+}
+
+.tagbox .label {
+    /* Layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    /* Style */
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.tagbox .label .icon {
+    /* Style */
+    width: 30px;
+    height: 30px;
+}
+
+.tags-actually {
+    /* Layout */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    /* Style */
+    color: var(--text);
+    background-color: var(--secondary);
+    border-radius: 20px;
+    list-style-type: none;
+}
+
+.tags-actually .tag {
+    /* Layout */
+    display: flex;
+    height: 35px;
+    padding: 0px 17.5px;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    /* Style */
+    border-radius: 17.5px;
+    background-color: var(--primary);
+}
