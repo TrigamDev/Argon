@@ -1,37 +1,39 @@
-import mongoose from "mongoose";
+import Elysia, { Context, t } from "elysia"
+import { staticPlugin } from "@elysiajs/static"
+import { cors } from "@elysiajs/cors"
 
-import app from "./app";
-import PostModel from "./models/post";
+import { Database } from "bun:sqlite"
 
-const port = process.env.PORT || 3000;
+import { log, Category, Status } from "./util/debug"
+import uploadPost from "./endpoints/uploadPost"
 
-mongoose.connect(process.env.MONGO_URI!, {
-    dbName: 'data'
-}).then(async () => {
-    console.log("💾 Connected to MongoDB");
-    app.listen(port, () => {
-        console.log(`💠 Server listening to port ${port}`)
-    });
-    // await fix();
-}).catch((err) => { console.log(err) });
+const db = new Database()
 
-async function fix() {
-    // fetch all posts
-    let posts = PostModel.find({});
-    console.log(`Fixing ${await posts.countDocuments()} posts`)
-    // iterate over posts
-    for await (const post of posts) {
-        let shouldFix = false;
-        console.log(`Fixing post #${post.id}`)
-        
+const app = new Elysia()
+	// Plugins
+	.use(staticPlugin({ assets: "assets", prefix: "/" }))
+	.use(cors())
 
-        
-        if (!shouldFix) continue;
-        await PostModel.findOneAndUpdate({ id: post.id }, {
-            // tags: post.tags
-        }, { new: true });
+	// Middleware
 
-        console.log(`Fixed post #${post.id}`)
-    }
-    console.log(`Fixed ${await posts.countDocuments()} posts`);
-}
+	// Parse
+	.onParse(({ request }, contentType) => {
+		switch (contentType) {
+			case "multipart/form-data": return request.formData()
+		}
+	})
+
+	// Routes
+	.post("/post/upload", (context: Context) => uploadPost(context, db), {
+		type: 'multipart/form-data',
+		body: t.Partial( t.Object({
+			fileUrl: t.String({ format: "uri"}),
+			timestamp: t.Numeric(),
+			tags: t.String(),
+			sourceUrl: t.String(),
+		}) )
+	})
+
+	.listen(process.env.PORT || 3000)
+
+log(Category.server, Status.success, `Argon server running on ${app.server?.port}!`)

@@ -1,0 +1,17 @@
+node_modules
+package-lock.json
+bun.lockb
+
+.env
+
+.next/
+out/
+build
+
+npm-debug.log*
+
+*.zip
+*.tar.gz
+*.tgz
+*.log
+*.bun
