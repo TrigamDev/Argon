@@ -15,3 +15,5 @@ npm-debug.log*
 *.tgz
 *.log
 *.bun
+
+server/assets

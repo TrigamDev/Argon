@@ -1,5 +1,13 @@
 export enum Category {
-	server = '📡'
+	server = '📡',
+	database = '🗄️ ',
+	image = '🖼️',
+	video = '🎥',
+	audio = '🔊',
+	project = '📄',
+	unknown = '❓',
+	upload = '📤',
+	download = '📥'
 }
 
 export enum Status {
@@ -9,6 +17,6 @@ export enum Status {
 	loading = "🕒"
 }
 
-export function log(category: Category, status: Status, message: string) {
-	console.log(`${category} ${status}ㅤ${message}`)
+export function log(category: Category, status: Status, message: string, newLine: boolean = false) {
+	console.log(`${newLine ? '\n' : ''}${category} ${status}ㅤ${message}`)
 }
