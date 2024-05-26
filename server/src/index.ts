@@ -2,8 +2,26 @@ import Elysia, { Context, t } from "elysia"
 import { staticPlugin } from "@elysiajs/static"
 import { cors } from "@elysiajs/cors"
 
+import { Database } from "bun:sqlite"
+import { createTables, getSQLiteVersion } from "./util/database"
+
 import { log, Category, Status } from "./util/debug"
+
 import uploadPost from "./endpoints/post/upload"
+import getPost from "./endpoints/post/get"
+import search from "./endpoints/search"
+
+// Database shit
+const db = new Database("argon.db")
+
+let version = getSQLiteVersion(db)
+log(Category.database, Status.loading, `SQLite version: ${version}`)
+
+db.exec(`
+	PRAGMA foreign_keys = ON;
+	PRAGMA journal_mode = WAL;
+`)
+createTables(db)
 
 const app = new Elysia()
 	// Plugins
@@ -20,7 +38,7 @@ const app = new Elysia()
 	})
 
 	// Routes
-	.post("/post/upload", async (context: Context) => await uploadPost(context, /*db*/), {
+	.post("/post/upload", async (context: Context) => await uploadPost(context, db), {
 		type: 'multipart/form-data',
 		body: t.Partial( t.Object({
 			fileUrl: t.String({ format: "uri" }),
@@ -29,7 +47,9 @@ const app = new Elysia()
 			sourceUrl: t.String(),
 		}) )
 	})
+	.get("/post/:id", async (context: Context) => getPost(context, db) )
+	.post("/search", async (context: Context) => search(context, db) )
 
 	.listen(process.env.PORT || 3000)
 
-log(Category.server, Status.success, `Argon server running on ${app.server?.port}!`)
+log(Category.server, Status.success, `Argon server running on ${app.server?.port}!`, true)

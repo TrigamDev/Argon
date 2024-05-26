@@ -1,15 +1,16 @@
 import { Context } from "elysia"
 
+import Database from "bun:sqlite"
+import { getLastPostId, insertPost } from "../../util/database"
+
 import type Post from "../../data/post"
 import type File from "../../data/file"
 import type Tag from "../../data/tag"
 
-import { insertPost } from "../../util/database"
-
-import { baseDir, getWebPath } from "../../util/dir"
+import { getWebPath } from "../../util/dir"
 import { FileData, compressImage, downloadFile, fetchFileUrl, getBufferFromBlob, getFileExtension, getFileName, getFileType } from "../../util/files";
 
-export default async function uploadPost(context: Context, /*db: Mongoose*/) {
+export default async function uploadPost(context: Context, db: Database) {
 	// Input
 	let input = parseInput(context.body as FormData)
 	if (!input.file && !input.fileUrl) {
@@ -17,16 +18,17 @@ export default async function uploadPost(context: Context, /*db: Mongoose*/) {
 		return { error: "No file provided" }
 	}
 	const assetsPath = `${getWebPath(context)}/assets`
+
 	// Fetch files
 	if (input.fileUrl) input.file = await fetchFileUrl(input.fileUrl)
 	if (input.thumbnailUrl) input.thumbnailFile = await fetchFileUrl(input.thumbnailUrl)
 	if (input.projectUrl) input.projectFile = await fetchFileUrl(input.projectUrl)
 	
-	let postId = 0
+	let postId = getLastPostId(db) + 1
 
 	// Download files
 	let mainPath = await downloadMainFile(postId, input.file, input.fileUrl, !(input.thumbnailFile || input.thumbnailUrl))
-	let thumbnailPath = await downloadThumbnail(postId, input.thumbnailFile, input.file, input.fileUrl) // actually there should always be one but :shrug:
+	let thumbnailPath = await downloadThumbnail(postId, input.thumbnailFile, input.file, input.fileUrl)
 	let projectPath = await downloadProjectFile(postId, input.projectFile, input.projectUrl)
 
 	if (!mainPath) {
@@ -62,7 +64,7 @@ export default async function uploadPost(context: Context, /*db: Mongoose*/) {
 	} as Post
 
 	// Save to database
-	await insertPost(post)
+	insertPost(post, db)
 
 	return post
 }

@@ -17,3 +17,7 @@ npm-debug.log*
 *.bun
 
 server/assets
+
+*.db
+*.db-shm
+*.db-wal
