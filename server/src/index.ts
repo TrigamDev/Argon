@@ -48,7 +48,20 @@ const app = new Elysia()
 		}) )
 	})
 	.get("/post/:id", async (context: Context) => getPost(context, db) )
-	.post("/search", async (context: Context) => search(context, db) )
+	.post("/search", async (context: Context) => search(context, db), {
+		type: 'json',
+		body: t.Partial( t.Object({
+			tags: t.Array( t.Partial( t.Object({
+				name: t.String(),
+				type: t.String(),
+				exclude: t.Boolean()
+			}) ) ),
+			page: t.Object({
+				number: t.Numeric(),
+				size: t.Numeric()
+			})
+		}) )
+	} )
 
 	.listen(process.env.PORT || 3000)
 

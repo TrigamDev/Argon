@@ -3,14 +3,24 @@ import { Context } from "elysia"
 import { Sorts, searchPostsByTag } from "../util/database"
 
 export default function search(context: Context, db: Database) {
-	// let query = (context.query as any).q
-	// if (!query) {
-	// 	context.set.status = 400
-	// 	return { error: "No query provided" }
-	// }
-	let posts = searchPostsByTag([
-		{ name: 'trigam', type: 'artist', exclude: false}
-	], Sorts.timestamp, db)
-	//let posts = searchPosts(query, db)
+	let query = context.body as any
+	
+	let posts = searchPostsByTag(
+		parseTags(query.tags), Sorts.timestamp,
+		query.page?.size ?? 50, query.page?.number ?? 1,
+	db)
+
 	return posts
+}
+
+function parseTags(tags: any[]) {
+	let parsedTags = []
+	for (let tag of tags) {
+		parsedTags.push({
+			name: tag.name ?? "",
+			type: tag.type ?? "",
+			exclude: tag.exclude ?? false
+		})
+	}
+	return parsedTags
 }
