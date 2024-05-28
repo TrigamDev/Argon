@@ -55,6 +55,7 @@ export default async function uploadPost(context: Context, db: Database) {
 		type: getFileType(mainPath),
 		extension: getFileExtension(mainPath)
 	} as File
+	
 	// Construct post object
 	let post = {
 		id: postId,
@@ -142,6 +143,14 @@ function parseInput(input: FormData): PostInput {
 	let tags = input.get("tags") as string | Tag[]
 	if (typeof tags === "string") tags = JSON.parse(tags) as Tag[]
 
+	// Verify tags
+	tags = tags.map(tag => {
+		if (!tag.name) tag.name = "unknown"
+		if (!tag.type) tag.type = "unknown"
+		if (tag.safe === undefined) tag.safe = true
+		return tag
+	})
+
 	// Parse timestamp
 	let timestamp = input.get("timestamp") as string | number
 	if (typeof timestamp === "string") timestamp = parseInt(timestamp)
@@ -183,7 +192,7 @@ interface PostInput {
 	projectUrl?: string
 	projectFile?: Blob
 	timestamp?: string | number
-	tags?: string | Tag[]
+	tags?: Tag[]
 	sourceUrl?: string
 	title: string
 }

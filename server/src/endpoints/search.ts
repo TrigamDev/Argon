@@ -4,6 +4,7 @@ import { Sorts, searchPostsByTag } from "../util/database"
 
 export default function search(context: Context, db: Database) {
 	let query = context.body as any
+	if (!query.tags) query.tags = []
 	
 	let posts = searchPostsByTag(
 		parseTags(query.tags), Sorts.timestamp,

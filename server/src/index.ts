@@ -10,6 +10,7 @@ import { log, Category, Status } from "./util/debug"
 import uploadPost from "./endpoints/post/upload"
 import getPost from "./endpoints/post/get"
 import search from "./endpoints/search"
+import deletePost from "./endpoints/post/delete"
 
 // Database shit
 const db = new Database("argon.db")
@@ -38,6 +39,7 @@ const app = new Elysia()
 	})
 
 	// Routes
+	// Posts
 	.post("/post/upload", async (context: Context) => await uploadPost(context, db), {
 		type: 'multipart/form-data',
 		body: t.Partial( t.Object({
@@ -48,6 +50,9 @@ const app = new Elysia()
 		}) )
 	})
 	.get("/post/:id", async (context: Context) => getPost(context, db) )
+	.post("/post/delete/:id", (context: Context) => deletePost(context, db) )
+
+	// Search
 	.post("/search", async (context: Context) => search(context, db), {
 		type: 'json',
 		body: t.Partial( t.Object({
@@ -56,10 +61,10 @@ const app = new Elysia()
 				type: t.String(),
 				exclude: t.Boolean()
 			}) ) ),
-			page: t.Object({
+			page: t.Partial ( t.Object({
 				number: t.Numeric(),
 				size: t.Numeric()
-			})
+			}) )
 		}) )
 	} )
 

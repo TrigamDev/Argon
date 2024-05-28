@@ -164,8 +164,16 @@ export function getPostById(id: number, db: Database): Post | null {
 
 }
 
+/**
+ * Searches for posts by tags
+ * @param { SearchTag[] } tags A list of tags to search for 
+ * @param { Sorts } sort How to sort the results 
+ * @param { number } pageSize How large each page should be 
+ * @param { number } pageNumber Which page to get 
+ * @param { Database } db The database to search in 
+ * @returns { Post[] } A list of posts that match the search criteria
+ */
 export function searchPostsByTag(tags: SearchTag[], sort: Sorts, pageSize: number, pageNumber: number, db: Database): Post[] {
-
 	// Get tag IDs
 	let searchTagIds: number[] = []
 	let excludeTagIds: number[] = []
@@ -189,7 +197,7 @@ export function searchPostsByTag(tags: SearchTag[], sort: Sorts, pageSize: numbe
 	if (excluding && !searching) searchQuery += ` WHERE tags NOT LIKE '%:${excludeTagIds[0]}:%' ${excludeTagIds.slice(1).map(id => `AND tags NOT LIKE '%:${id}:%'`).join(" ")}`
 	if (excluding && searching) searchQuery += ` AND tags NOT LIKE '%:${excludeTagIds[0]}:%' ${excludeTagIds.slice(1).map(id => `AND tags NOT LIKE '%:${id}:%'`).join(" ")}`
 	searchQuery += ` LIMIT ${pageNumber - 1},${pageSize}`
-	
+
 	results = db.query(searchQuery).all()
 	
 	// Parse results
@@ -229,6 +237,16 @@ export function searchPostsByTag(tags: SearchTag[], sort: Sorts, pageSize: numbe
 	return posts
 }
 
+/**
+ * Deletes a post by its ID
+ * @param { number } id The ID of the post to delete 
+ * @param { Database } db The database to delete the post from 
+ */
+export function deletePostById(id: number, db: Database) {
+	db.query("DELETE FROM posts WHERE id = ?").run(id)
+	deleteFileById(id, db)
+}
+
 
 
 //
@@ -255,6 +273,15 @@ export function getFileById(id: number, db: Database): File | null {
 	}
 }
 
+/**
+ * Deletes a file by its post ID
+ * @param { number } id The ID of the file to delete 
+ * @param { Database } db The database to delete the file from 
+ */
+export function deleteFileById(id: number, db: Database) {
+	db.query("DELETE FROM files WHERE postId = ?").run(id)
+}
+
 
 //
 //	Tags
@@ -270,7 +297,7 @@ export function insertTag(tag: Tag, db: Database) {
 	if (result) {
 		db.query("UPDATE tags SET usages = usages + 1 WHERE tagId = ?").run(result.tagId)
 	} else {
-		db.query("INSERT INTO tags (type, name, safe, usages) VALUES (?, ?, ?, ?)").run(tag.type, tag.name, tag.safe, 1)
+		db.query("INSERT INTO tags (type, name, safe, usages) VALUES (?, ?, ?, ?)").run(tag.type, tag.name, tag.safe ?? true, 1)
 	}
 }
 
@@ -308,25 +335,68 @@ export function getTagById(id: number, db: Database): Tag | null {
 }
 
 /**
- * Converts an array of tags to an array of tag IDs
- * @param { Tag[] } tags An array of tags to convert to IDs 
- * @param { Database } db The database to convert the tags to IDs with 
- * @returns { number[] } An array of tag IDs corresponding to the tags
+ * Deletes a tag by its ID
+ * @param { number } id The ID of the tag to delete 
+ * @param { Database } db The database to delete the tag from 
  */
-export function tagsToIds(tags: Tag[], db: Database): number[] {
-	return tags.map(tag => {
-		let result: any = db.query("SELECT tagId FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
-		return result ? result.tagId : -1
+export function deleteTagById(id: number, db: Database) {
+	db.query("DELETE FROM tags WHERE tagId = ?").run(id)
+}
+
+/**
+ * Increases the usages of tags in the database
+ * @param { Tag[] } tags The tags to increase usages of 
+ * @param { Database } db The database to increase usages in
+ */
+export function increaseTagUsages(tags: Tag[], db: Database) {
+	tags.map(tag => {
+		let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
+		if (result) db.query("UPDATE tags SET usages = usages + 1 WHERE tagId = ?").run(result.tagId)
 	})
 }
 
 /**
- * Converts an array of tag IDs to an array of tags
- * @param { number[] } ids An array of tag IDs to convert to tags
- * @param { Database } db The database to convert the IDs to tags with
+ * Decreases the usages of tags in the database
+ * @param { Tag[] } tags The tags to decrease usages of 
+ * @param { Database } db The database to decrease usages in 
+ */
+export function decreaseTagUsages(tags: Tag[], db: Database) {
+	tags.map(tag => {
+		let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag?.name, tag?.type)
+		if (result) {
+			// If tag is only used once, delete it
+			if (result.usages <= 1) deleteTagById(result.tagId, db)
+			else db.query("UPDATE tags SET usages = usages - 1 WHERE tagId = ?").run(result?.tagId)
+		}
+	})
+}
+
+/**
+ * Encodes tags into a string to be used with the database
+ * @param { Tag[] } tags The tags to encode 
+ * @param { Database } db The database to encode the tags with
+ * @returns { string } A database-encoded tag string
+ */
+export function encodeTags(tags: Tag[], db: Database): string {
+	// Get array of tag IDs
+	let ids = tags.map(tag => {
+		let result: any = db.query("SELECT tagId FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
+		return result ? result.tagId : -1
+	})
+	// Encode IDs
+	return `:${ids.join(":")}:`
+}
+
+/**
+ * Decodes a database-encoded tag string into an array of tags
+ * @param { string } encoded The encoded tag string to decode
+ * @param { Database } db The database to decode the tags with 
  * @returns { Tag[] } An array of tags
  */
-export function idsToTags(ids: number[], db: Database): Tag[] {
+export function decodeTags(encoded: string, db: Database): Tag[] {
+	// Get array of tag IDs
+	let ids = encoded.split(":").map(id => parseInt(id)).filter(id => !isNaN(id))
+	// Get tags from IDs
 	return ids.map(id => {
 		let result: any = db.query("SELECT * FROM tags WHERE tagId = ?").get(id)
 		return {
@@ -335,14 +405,4 @@ export function idsToTags(ids: number[], db: Database): Tag[] {
 			safe: Boolean(result.safe)
 		}
 	})
-}
-
-export function encodeTags(tags: Tag[], db: Database): string {
-	let ids = tagsToIds(tags, db)
-	return `:${ids.join(":")}:`
-}
-
-export function decodeTags(encoded: string, db: Database): Tag[] {
-	let ids = encoded.split(":").map(id => parseInt(id)).filter(id => !isNaN(id))
-	return idsToTags(ids, db)
 }
