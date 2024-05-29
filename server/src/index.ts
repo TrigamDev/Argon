@@ -11,6 +11,7 @@ import uploadPost from "./endpoints/post/upload"
 import getPost from "./endpoints/post/get"
 import search from "./endpoints/search"
 import deletePost from "./endpoints/post/delete"
+import getTagList from "./endpoints/tag/list"
 
 // Database shit
 const db = new Database("argon.db")
@@ -67,6 +68,9 @@ const app = new Elysia()
 			}) )
 		}) )
 	} )
+
+	// Tags
+	.get("/tags/list", (context: Context) => getTagList(context, db) )
 
 	.listen(process.env.PORT || 3000)
 

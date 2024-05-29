@@ -319,6 +319,23 @@ export function getTag(tag: Tag, db: Database): Tag | null {
 }
 
 /**
+ * Gets all tags from the database
+ * @param { Database } db The database to get tags from 
+ * @returns { Tag[] } An array of tags
+ */
+export function getTags(db: Database): Tag[] {
+	let results: any[] = db.query("SELECT * FROM tags").all()
+	return results.map(result => {
+		return {
+			name: result.name,
+			type: result.type,
+			safe: Boolean(result.safe),
+			usages: result.usages
+		} as Tag
+	})
+}
+
+/**
  * Gets a tag by its ID
  * @param { number } id The ID of the tag to get 
  * @param { Database } db The database to get the tag from 
