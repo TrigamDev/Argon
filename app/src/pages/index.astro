@@ -1,0 +1,14 @@
+---
+import Page from '../layouts/Page.astro'
+import Navbar from '../components/layout/navbar/Navbar.astro'
+import Gallery from '../components/gallery/Gallery'
+
+import '../globals.css'
+---
+
+<Page title="Argon">
+	<Navbar/>
+	<main>
+		<Gallery client:load/>
+	</main>
+</Page>

@@ -1,0 +1,38 @@
+---
+export const prerender = false
+
+import { getPostById } from "../../util/api"
+
+import Page from "../../layouts/Page.astro"
+import PostFile from "../../components/post/file/PostFile.tsx"
+
+import PostNav from "../../components/post/PostNav.astro"
+import PostData from "../../components/post/PostData.tsx"
+import PostActions from "../../components/post/PostActions.tsx"
+import PostTags from "../../components/post/PostTags.tsx"
+
+import "./post.css"
+import "../../globals.css"
+
+const { id } = Astro.params
+const post = await getPostById(Astro.request, Number(id))
+---
+
+<Page title={post?.file.title ?? "Argon"}>
+	<div class="post">
+		<div id="left">
+			{ post && <PostNav post={ post }/> }
+			
+			<div id="post-content">
+				{ post &&
+					<PostData post={ post } client:load />
+					<PostActions post={ post } client:load />
+					<PostTags tags={ post.tags } client:load/>
+				}
+			</div>
+		</div>
+		<div id="right">
+			{ post && <PostFile post={ post } client:load /> }
+		</div>
+	</div>
+</Page>

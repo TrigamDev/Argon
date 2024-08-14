@@ -1,0 +1,42 @@
+.post-tags {
+	/* Layout */
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: center;
+	align-self: stretch;
+	gap: 10px;
+
+	padding: 16px;
+
+	/* Style */
+	background-color: var(--secondary);
+	border-radius: 25px;
+}
+
+.post-tag {
+	/* Layout */
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	height: 35px;
+	padding: 0px 17.5px;
+
+	user-select: none;
+	
+	/* Style */
+	cursor: pointer;
+
+	background-color: var(--primary);
+	border-radius: 17.5px;
+
+	transform: scale(1);
+	transition: 0.25s;
+}
+
+.post-tag:hover {
+	/* Style */
+	transform: scale(1.1);
+	background-color: var(--primary-light);
+}

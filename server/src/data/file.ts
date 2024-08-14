@@ -5,6 +5,13 @@ export default interface File {
 	sourceUrl: string
 	timestamp: number
 	title: string
-	type: "image" | "video" | "audio" | "unknown"
+	type: FileType
 	extension: string
+}
+
+export enum FileType {
+	image = "image",
+	video = "video",
+	audio = "audio",
+	unknown = "unknown"
 }

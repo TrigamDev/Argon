@@ -78,6 +78,20 @@ export function getSQLiteVersion(db: Database): string {
 	return result['version']
 }
 
+/**
+ * Clears everything from the database
+ * @param { Database } db The database to clear posts from
+ */
+export function clearDatabase(db: Database) {
+	log(Category.database, Status.loading, "Clearing database...", true)
+
+	db.query("DELETE FROM posts").run()
+	db.query("DELETE FROM files").run()
+	db.query("DELETE FROM tags").run()
+
+	log(Category.database, Status.success, "Database cleared!")
+}
+
 //
 //	Post
 //
@@ -86,8 +100,8 @@ export function getSQLiteVersion(db: Database): string {
  * @param { Post } post The post to insert
  * @param { Database } db The database to insert the post into
  */
-export async function insertPost(post: Post, db: Database) {
-	log(Category.database, Status.loading, `Saving post #${post.id}...`, true)
+export function insertPost(post: Post, db: Database) {
+	log(Category.database, Status.loading, `Saving Post #${post.id}...`, true)
 
 	// Insert tags
 	post.tags.forEach(tag => insertTag(tag, db))
@@ -104,21 +118,61 @@ export async function insertPost(post: Post, db: Database) {
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`).run(post.id, post.file.url, post.file.thumbnailUrl, post.file.projectUrl, post.file.sourceUrl, post.file.timestamp, post.file.title, post.file.type, post.file.extension)
 	
-	log(Category.database, Status.success, `Saved post #${post.id}!`)
+	log(Category.database, Status.success, `Saved Post #${post.id}!`)
 }
 
-/**
- * Clears all posts from the database
- * @param { Database } db The database to clear posts from
- */
-export function clearPosts(db: Database) {
-	log(Category.database, Status.loading, "Clearing posts...", true)
+export function editPostByID(id: number, db: Database, data: {
+	tags?: Tag[], file: {
+		timestamp?: number,
+		title?: string,
+		sourceUrl?: string,
+	}
+}): Post | null {
+	log(Category.database, Status.loading, `Editing Post #${id}...`, true)
 
-	db.query("DELETE FROM posts").run()
-	db.query("DELETE FROM files").run()
-	db.query("DELETE FROM tags").run()
+	let post = getPostById(id, db)
+	if (!post) {
+		log(Category.database, Status.error, `Post #${id} does not exist!`)
+		return null
+	}
+	if (!data.tags && !data.file.timestamp && !data.file.title) {
+		log(Category.database, Status.error, `No data provided to edit Post #${id}!`)
+		return null
+	}
 
-	log(Category.database, Status.success, "Posts cleared!")
+	let tagsNeedEditing = (data.tags && data.tags !== post.tags)
+
+	if (tagsNeedEditing) {
+		// Get tag differences
+		let oldTags = post.tags ?? []
+		let newTags = data.tags ?? []
+		let tagsToAdd = newTags.filter(tag => !oldTags.some(oldTag => oldTag?.name === tag?.name && oldTag?.type === tag?.type))
+		let tagsToRemove = oldTags.filter(tag => !newTags.some(newTag => newTag?.name === tag?.name && newTag?.type === tag?.type))
+
+		// Handle tags
+		tagsToAdd.map(tag => insertTag(tag, db))
+		tagsToRemove.map(tag => decreaseTagUsages([tag], db))
+
+		// Final tags
+		let tags = newTags.filter(tag => !tagsToRemove.some(removeTag => removeTag?.name === tag?.name && removeTag?.type === tag?.type))
+
+		// Update post
+		db.query("UPDATE posts SET tags = ? WHERE id = ?").run(encodeTags(tags, db), id)
+	}
+
+	// Update file
+	db.query(`
+		UPDATE files
+		SET timestamp = ?, title = ?, sourceUrl = ?
+		WHERE postId = ?
+	`).run(
+		data.file.timestamp ?? post.file.timestamp,
+		data.file.title ?? post.file.title,
+		data.file.sourceUrl ?? post.file.sourceUrl,
+	id)
+
+	log(Category.database, Status.success, `Edited Post #${id}!`)
+	return getPostById(id, db)
 }
 
 /**
@@ -138,27 +192,30 @@ export function getLastPostId(db: Database): number {
  * @returns { Post | null } The post if it exists, otherwise null
  */
 export function getPostById(id: number, db: Database): Post | null {
-	let result: any = db.query(`
+	let post: any = db.query(`
 		SELECT * FROM posts
-		JOIN files ON posts.id = files.postId
 		WHERE id = ?
 	`).get(id)
+	let file: any = db.query(`
+		SELECT * FROM files
+		WHERE postId = ?
+	`).get(id)
 
-	if (!result) return null
+	if (!post || !file) return null
 	
 	return {
-		id: result.id,
-		timestamp: result.timestamp,
-		tags: decodeTags(result.tags, db),
+		id: post.id,
+		timestamp: post.timestamp,
+		tags: decodeTags(post.tags, db),
 		file: {
-			url: result.url,
-			thumbnailUrl: result.thumbnailUrl,
-			projectUrl: result.projectUrl,
-			sourceUrl: result.sourceUrl,
-			timestamp: result.timestamp,
-			title: result.title,
-			type: result.type,
-			extension: result.extension
+			url: file.url,
+			thumbnailUrl: file.thumbnailUrl,
+			projectUrl: file.projectUrl,
+			sourceUrl: file.sourceUrl,
+			timestamp: file.timestamp,
+			title: file.title,
+			type: file.type,
+			extension: file.extension
 		}
 	}
 

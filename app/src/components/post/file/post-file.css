@@ -1,0 +1,31 @@
+.post-file-container {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	flex: 1 0 0;
+	align-self: stretch;
+}
+
+.post-file-container .post-file {
+	/* Layout */
+	width: 90%;
+	height: 90%;
+
+	object-fit: contain;
+	
+	/* Style */
+	transform: scale(0.95);
+	transition: 0.25s;
+}
+
+.post-file-container .post-file:hover {
+	/* Style */
+	transform: scale(1);
+}
+
+.post-file-container .post-file.hidden {
+	/* Style */
+	display: none;
+}

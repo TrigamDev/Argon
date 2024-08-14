@@ -7,6 +7,8 @@ bun.lockb
 .next/
 out/
 build
+.astro/
+dist/
 
 npm-debug.log*
 

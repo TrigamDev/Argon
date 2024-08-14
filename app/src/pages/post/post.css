@@ -1,0 +1,80 @@
+body {
+	/* Layout */
+	overflow: hidden;
+}
+@media screen and (max-width: 1080px) {
+	body {
+		/* Layout */
+		overflow: auto;
+	}
+}
+
+.post {
+	/* Layout */
+	display: flex;
+	align-items: center;
+
+	height: 100vh;
+}
+@media screen and (max-width: 1080px) {
+	.post {
+		/* Layout */
+		flex-direction: column-reverse;
+	}
+}
+
+/* Left */
+.post #left {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-shrink: 0;
+
+	width: 30%;
+	height: 100%;
+	max-height: 100vh;
+
+	/* Style */
+	background-color: var(--primary);
+}
+@media screen and (max-width: 1080px) {
+	.post #left {
+		/* Layout */
+		width: 100%;
+		height: auto;
+		max-height: max-content;
+		overflow-y: visible;
+	}
+}
+
+.post #left #post-content {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 2.5vh;
+
+	width: 90%;
+	padding: 0 15px;
+}
+
+/* Right */
+.post #right {
+	/* Layout */
+	display: flex;
+	flex: 1 0 0;
+	justify-content: center;
+	align-items: center;
+
+	width: 100%;
+	height: 100%;
+	padding: 80px;
+}
+@media screen and (max-width: 1080px) {
+	.post #right {
+		/* Layout */
+		padding: 20px;
+		min-height: 60vh;
+	}
+}

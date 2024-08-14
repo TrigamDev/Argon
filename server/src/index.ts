@@ -2,8 +2,10 @@ import Elysia, { Context, t } from "elysia"
 import { staticPlugin } from "@elysiajs/static"
 import { cors } from "@elysiajs/cors"
 
+import logger from "./logger"
+
 import { Database } from "bun:sqlite"
-import { createTables, getSQLiteVersion } from "./util/database"
+import { clearDatabase, createTables, getSQLiteVersion } from "./util/database"
 
 import { log, Category, Status } from "./util/debug"
 
@@ -12,6 +14,8 @@ import getPost from "./endpoints/post/get"
 import search from "./endpoints/search"
 import deletePost from "./endpoints/post/delete"
 import getTagList from "./endpoints/tag/list"
+import editPost from "./endpoints/post/edit"
+import { clearFiles } from "./util/files"
 
 // Database shit
 const db = new Database("argon.db")
@@ -24,13 +28,15 @@ db.exec(`
 	PRAGMA journal_mode = WAL;
 `)
 createTables(db)
+clearDatabase(db)
+await clearFiles()
 
 const app = new Elysia()
 	// Plugins
 	.use(staticPlugin({ assets: "assets", prefix: "/assets" }))
 	.use(cors())
+	.use(logger())
 
-	// Middleware
 
 	// Parse
 	.onParse(({ request }, contentType) => {
@@ -45,11 +51,42 @@ const app = new Elysia()
 		type: 'multipart/form-data',
 		body: t.Partial( t.Object({
 			fileUrl: t.String({ format: "uri" }),
+			file: t.File(),
+
+			thumbnailUrl: t.String({ format: "uri" }),
+			thumbnailFile: t.File(),
+
+			projectUrl: t.String({ format: "uri" }),
+			projectFile: t.File(),
+
 			timestamp: t.Numeric(),
 			tags: t.String(),
+
 			sourceUrl: t.String(),
+
+			title: t.String()
 		}) )
 	})
+	.post("/post/edit/:id", (context: Context) => editPost(context, db), {
+		type: 'multipart/form-data',
+		body: t.Partial( t.Object({
+			fileUrl: t.String({ format: "uri" }),
+			file: t.File(),
+
+			thumbnailUrl: t.String({ format: "uri" }),
+			thumbnailFile: t.File(),
+
+			projectUrl: t.String({ format: "uri" }),
+			projectFile: t.File(),
+
+			timestamp: t.Numeric(),
+			tags: t.String(),
+
+			sourceUrl: t.String(),
+
+			title: t.String()
+		}) )
+	} )
 	.get("/post/:id", async (context: Context) => getPost(context, db) )
 	.post("/post/delete/:id", (context: Context) => deletePost(context, db) )
 

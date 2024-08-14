@@ -1,0 +1,48 @@
+.gallery-file {
+	/* Layout */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	width: 15vmax;
+	height: 15vmax;
+
+	/* Style */
+	cursor: pointer;
+	border-radius: 15px;
+	transform: scale(1);
+	transition: 0.25s;
+}
+
+/* Responsive */
+@media screen and (max-width: 1000px) {
+	.gallery-file {
+		width: 35vw;
+		height: 35vw;
+	}
+}
+
+.gallery-file:hover {
+	/* Style */
+	transform: scale(1.1);
+}
+
+.gallery-file .file {
+	/* Layout */
+	max-width: 100%;
+	max-height: 100%;
+
+	/* Style */
+	border-radius: 15px;
+	transition: 0.35s;
+}
+
+.gallery-file.blur .file {
+	/* Style */
+	filter: blur(2vmin);
+}
+
+.gallery-file.blur .file:hover {
+	/* Style */
+	filter: blur(0vmin);
+}

@@ -8,10 +8,10 @@ export default function search(context: Context, db: Database) {
 	
 	let posts = searchPostsByTag(
 		parseTags(query.tags), Sorts.timestamp,
-		query.page?.size ?? 50, query.page?.number ?? 1,
+		query.page?.size ?? 60, query.page?.number ?? 1,
 	db)
 
-	return posts
+	return posts ?? []
 }
 
 function parseTags(tags: any[]) {

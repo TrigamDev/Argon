@@ -1,0 +1,99 @@
+/*
+	Navbar
+*/
+
+.navbar {
+	/* Layout */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 15px;
+	max-width: 100vw;
+	/* Style */
+	background-color: var(--primary);
+}
+
+.navbar #left {
+	/* Layout */
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 10px;
+}
+
+.navbar #right {
+	/* Layout */
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 10px;
+}
+
+/*
+	Nav Buttons
+*/
+.navbar .nav-button {
+	/* Layout */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+	height: 40px;
+	/* Style */
+	cursor: pointer;
+}
+
+.navbar .nav-button .nav-icon {
+	/* Layout */
+	width: 35px;
+	height: 35px;
+	flex-shrink: 0;
+	user-select: none;
+	/* Style */
+	transform: scale(0.85);
+	transition: 0.15s ease-in-out;
+}
+
+.navbar .nav-button:hover .nav-icon {
+	/* Style */
+	transform: scale(1);
+}
+
+.navbar .nav-button:active .nav-icon {
+	/* Style */
+	transform: scale(0.9);
+}
+
+/*
+	Title
+*/
+.navbar #argon {
+    /* Layout */
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 5px;
+
+    margin-left: 15px;
+    user-select: none;
+
+    /* Style */
+    font-family: var(--font);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navbar #argon #title {
+    /* Style */
+    color: var(--text);
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.navbar #argon #version {
+    /* Style */
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 2.2rem;
+}

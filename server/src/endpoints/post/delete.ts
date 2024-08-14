@@ -1,7 +1,8 @@
-import Database from "bun:sqlite";
-import { Context } from "elysia";
-import { decodeTags, decreaseTagUsages, deleteFileById, deletePostById, getPostById } from "../../util/database";
-import { Category, Status, log } from "../../util/debug";
+import Database from "bun:sqlite"
+import { Context } from "elysia"
+import { decreaseTagUsages, deletePostById, getPostById } from "../../util/database"
+import { Category, Status, log } from "../../util/debug"
+import { deleteFile, getFileExtension, getFileName } from "../../util/files"
 
 export default function deletePost(context: Context, db: Database) {
 	// Input
@@ -18,15 +19,31 @@ export default function deletePost(context: Context, db: Database) {
 		return { error: "Post not found" }
 	}
 
-	log(Category.database, Status.loading, `Deleting post #${post.id}...`, true)
+	log(Category.database, Status.loading, `Deleting Post #${post.id}...`, true)
 
 	// Decrease tag usages
 	decreaseTagUsages(post.tags, db)
 
-	// Delete post
-	deletePostById(post.id, db)
-	deleteFileById(post.id, db)
+	// Delete files
+	deleteFile(post.id, {
+		name: getFileName(post.file.url).split('_').slice(1).join('_'),
+		extension: post.file.extension,
+		type: post.file.type
+	})
+	deleteFile(post.id, {
+		name: getFileName(post.file.thumbnailUrl).split('_').slice(1).join('_'),
+		extension: 'webp',
+		type: 'thumbnail'
+	})
+	if (post.file.projectUrl) deleteFile(post.id, {
+		name: getFileName(post.file.projectUrl).split('_').slice(1).join('_'),
+		extension: getFileExtension(post.file.projectUrl),
+		type: 'project'
+	})
 
-	log(Category.database, Status.success, `Deleted post #${post.id}!`)
+	// Delete posts from database
+	deletePostById(post.id, db)
+
+	log(Category.database, Status.success, `Deleted Post #${post.id}!`)
 	return { success: true }
 }

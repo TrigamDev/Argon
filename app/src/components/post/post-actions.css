@@ -1,0 +1,48 @@
+.post-actions {
+	/* Layout */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	align-self: stretch;
+
+	padding: 12px 10%;
+
+	/* Style */
+	background-color: var(--accent);
+	border-radius: 100px;
+}
+
+.post-action {
+	/* Layout */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	width: 32px;
+	height: 32px;
+
+	/* Style */
+	cursor: pointer;
+}
+
+.post-action-icon {
+	/* Layout */
+	flex-shrink: 0;
+	width: 100%;
+	height: 100%;
+
+	user-select: none;
+
+	/* Style */
+	transition: 0.25s;
+}
+
+.post-action:hover .post-action-icon {
+	/* Style */
+	transform: scale(1.15);
+}
+
+.post-action:active .post-action-icon {
+	/* Style */
+	transform: scale(1.05);
+}

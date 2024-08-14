@@ -1,6 +1,6 @@
-import Database from "bun:sqlite";
-import { Context } from "elysia";
-import { getPostById } from "../../util/database";
+import Database from "bun:sqlite"
+import { Context } from "elysia"
+import { getPostById } from "../../util/database"
 
 export default function getPost(context: Context, db: Database) {
 	let id: number = parseInt((context.params as any).id)

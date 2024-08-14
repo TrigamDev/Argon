@@ -7,7 +7,8 @@ export enum Category {
 	project = '📄',
 	unknown = '❓',
 	upload = '📤',
-	download = '📥'
+	download = '📥',
+	webhook = '🪝'
 }
 
 export enum Status {

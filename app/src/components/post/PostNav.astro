@@ -1,0 +1,32 @@
+---
+import type { Post } from '../../util/types'
+
+import './post-nav.css'
+
+interface Props {
+	post: Post
+}
+const { post } = Astro.props
+---
+
+<div class="post-nav">
+	<!-- Home -->
+	<a href="../../" id="home-button" class="nav-button">
+		<img class="nav-icon" src="/icons/nav/home.svg" alt="Home" />
+	</a>
+
+	<!-- Bookmark -->
+	<a href="#" id="bookmark-button" class="nav-button">
+		<img class="nav-icon" src="/icons/nav/bookmark.svg" alt="Bookmark" />
+	</a>
+
+	<!-- Report -->
+	<a href=`/post/${post.id}/report` id="report-button" class="nav-button">
+		<img class="nav-icon" src="/icons/nav/report.svg" alt="Report" />
+	</a>
+	
+	<!-- Edit -->
+	<a href=`/post/${post.id}/edit` id="edit-button" class="nav-button">
+		<img class="nav-icon" src="/icons/nav/edit.svg" alt="Edit" />
+	</a>
+</div>

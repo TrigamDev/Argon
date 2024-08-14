@@ -8,7 +8,8 @@ import type File from "../../data/file"
 import type Tag from "../../data/tag"
 
 import { getWebPath } from "../../util/dir"
-import { FileData, compressImage, downloadFile, fetchFileUrl, getBufferFromBlob, getFileExtension, getFileName, getFileType } from "../../util/files";
+import { FileData, compressImage, downloadFile, fetchFileUrl, getBufferFromBlob, getFileExtension, getFileName, getFileType } from "../../util/files"
+import { notifPostUpload } from "../../util/webhook"
 
 export default async function uploadPost(context: Context, db: Database) {
 	// Input
@@ -28,6 +29,10 @@ export default async function uploadPost(context: Context, db: Database) {
 
 	// Download files
 	let mainPath = await downloadMainFile(postId, input.file, input.fileUrl, !(input.thumbnailFile || input.thumbnailUrl))
+	if (!mainPath) {
+		context.set.status = 500
+		return { error: "Failed to download main file" }
+	}
 	let thumbnailPath = await downloadThumbnail(postId, input.thumbnailFile, input.file, input.fileUrl)
 	let projectPath = await downloadProjectFile(postId, input.projectFile, input.projectUrl)
 
@@ -66,6 +71,7 @@ export default async function uploadPost(context: Context, db: Database) {
 
 	// Save to database
 	insertPost(post, db)
+	notifPostUpload(post)
 
 	return post
 }
@@ -81,9 +87,9 @@ export default async function uploadPost(context: Context, db: Database) {
  * @param { boolean } makethumbnail Whether to make a thumbnail of the file
  * @returns { Promise<string | null> } The path of the downloaded file
  */
-async function downloadMainFile(postId: number, file: Blob | undefined, url?: string, makethumbnail: boolean = true): Promise<string | null> {
+export async function downloadMainFile(postId: number, file: Blob | undefined, url?: string, makethumbnail: boolean = true): Promise<string | null> {
 	if (!file) return null
-	let name = getFileName(file.name ?? url)
+	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(file.name ?? url)
 	let type = getFileType(`${name}.${extension}`)
 
@@ -91,7 +97,10 @@ async function downloadMainFile(postId: number, file: Blob | undefined, url?: st
 	
 	// Thumbnail
 	let thumbnailType = (type === "image" || type === "video")
-	if (thumbnailType && makethumbnail) await downloadThumbnail(postId, file, file, url)
+	if (thumbnailType && makethumbnail) {
+		let thumbnail = await downloadThumbnail(postId, file, file, url)
+		if (!thumbnail) return null
+	}
 
 	return `${type}/${postId}_${name}.${extension}`
 }
@@ -104,11 +113,17 @@ async function downloadMainFile(postId: number, file: Blob | undefined, url?: st
  * @param { Blob | undefined } nameUrl The Url of the main file, to get the name from (fallback)
  * @returns { Promise<string | null> } The path of the downloaded thumbnail
  */
-async function downloadThumbnail(postId: number, file: Blob | undefined, nameFile: Blob | undefined, nameUrl?: string): Promise<string | null> {
+export async function downloadThumbnail(postId: number, file: Blob | undefined, nameFile: Blob | undefined, nameUrl?: string): Promise<string | null> {
 	if (!file || !nameFile) return null
-	let name = getFileName(nameFile.name ?? nameUrl ?? file.name)
+
+	// Get data
+	let name = getFileName(nameFile.name ?? nameUrl ?? file.name).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(nameFile.name ?? nameUrl ?? file.name)
-	let thumbnail = await compressImage(await getBufferFromBlob(file))
+	Object.defineProperty(file, 'name', { value: `${name}.${extension}` })
+
+	// Compress
+	let thumbnail = await compressImage(postId, file, getFileType(`${name}.${extension}`))
+	if (!thumbnail) return null
 
 	await downloadFile(postId, thumbnail, { name, extension, type: 'thumbnail' } as FileData)
 	return `thumbnail/${postId}_${name}.webp`
@@ -121,9 +136,9 @@ async function downloadThumbnail(postId: number, file: Blob | undefined, nameFil
  * @param { string } url The Url the project file is located at
  * @returns { Promise<string | null> } The path of the downloaded project file
  */
-async function downloadProjectFile(postId: number, file: Blob | undefined, url?: string): Promise<string | null> {
+export async function downloadProjectFile(postId: number, file: Blob | undefined, url?: string): Promise<string | null> {
 	if (!file) return null
-	let name = getFileName(file.name ?? url)
+	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(file.name ?? url)
 
 	await downloadFile(postId, file, { name, extension, type: 'project' } as FileData)
@@ -138,18 +153,19 @@ async function downloadProjectFile(postId: number, file: Blob | undefined, url?:
  * @param { FormData } input
  * @returns { PostInput }
  */
-function parseInput(input: FormData): PostInput {
+export function parseInput(input: FormData): PostInput {
 	// Parse tags
-	let tags = input.get("tags") as string | Tag[]
-	if (typeof tags === "string") tags = JSON.parse(tags) as Tag[]
+	let tags = input.get("tags") as string | Tag[] | undefined
+	if (typeof tags === "string" && tags !== "") tags = JSON.parse(tags) as Tag[]
 
 	// Verify tags
-	tags = tags.map(tag => {
+	if (tags) tags = tags?.map(tag => {
 		if (!tag.name) tag.name = "unknown"
 		if (!tag.type) tag.type = "unknown"
 		if (tag.safe === undefined) tag.safe = true
 		return tag
-	})
+	}) ?? [] as Tag[]
+	if (tags === "") tags = undefined
 
 	// Parse timestamp
 	let timestamp = input.get("timestamp") as string | number
@@ -164,7 +180,7 @@ function parseInput(input: FormData): PostInput {
 		projectUrl: input.get("projectUrl") as string,
 		projectFile: input.get("projectFile") as Blob,
 		timestamp: timestamp ?? 0,
-		tags: tags,
+		tags: tags as Tag[] ?? undefined,
 		sourceUrl: input.get("sourceUrl") as string,
 		title: input.get("title") as string,
 	}
@@ -184,7 +200,7 @@ function getTitle(input: PostInput, path: string | undefined): string {
 	return name ?? 'file'
 }
 
-interface PostInput {
+export interface PostInput {
 	fileUrl?: string
 	file?: Blob
 	thumbnailUrl?: string
@@ -194,5 +210,5 @@ interface PostInput {
 	timestamp?: string | number
 	tags?: Tag[]
 	sourceUrl?: string
-	title: string
+	title?: string
 }
