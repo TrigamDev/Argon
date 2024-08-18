@@ -3,14 +3,11 @@
 :root {
     --text: #EDE3EF;
     --background: #170D19;
-    --primary: #A83FA3;
-	--primary-light: #c25bc2;
-    --secondary: #892E85;
-    --secondary-dark: #6d226f;
-    --accent: #CE3BEB;
-    --accent-light: #dc59f7;
+    --primary: #BC32B4;
+    --secondary: #881A81;
+    --accent: #DD56D5;
+	--accent-light: #fb73f2;
     --disabled: #4d194e;
-    --disabled-dark: #3c143c;
     --font: 'Poppins', sans-serif;
 }
 

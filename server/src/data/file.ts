@@ -1,4 +1,4 @@
-export default interface File {
+export default interface ArgonFile {
 	url: string
 	thumbnailUrl: string
 	projectUrl: string

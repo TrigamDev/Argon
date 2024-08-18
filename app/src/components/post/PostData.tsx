@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react"
-import moment, { type unitOfTime } from "moment"
+import moment from "moment"
 
 import { useStore } from "@nanostores/react"
 import { dimensions, size, duration } from "../../stores/file"

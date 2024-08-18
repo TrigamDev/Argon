@@ -3,13 +3,19 @@ import { Context } from "elysia"
 import Database from "bun:sqlite"
 import { getLastPostId, insertPost } from "../../util/database"
 
+import { readFile } from 'fs/promises'
+
 import type Post from "../../data/post"
-import type File from "../../data/file"
+import type ArgonFile from "../../data/file"
+import { FileType } from "../../data/file"
 import type Tag from "../../data/tag"
+import { BunFile } from "bun"
 
 import { getWebPath } from "../../util/dir"
-import { FileData, compressImage, downloadFile, fetchFileUrl, getBufferFromBlob, getFileExtension, getFileName, getFileType } from "../../util/files"
+import { FileData, compressImage, downloadFile, fetchFileUrl, getBufferFromBlob, getFileExtension, getFileFromBlob, getFileFromBuffer, getFileFromBunFile, getFileName, getFilePath, getFileType } from "../../util/files"
 import { notifPostUpload } from "../../util/webhook"
+import { Category, log, Status } from "../../util/debug"
+
 
 export default async function uploadPost(context: Context, db: Database) {
 	// Input
@@ -19,47 +25,48 @@ export default async function uploadPost(context: Context, db: Database) {
 		return { error: "No file provided" }
 	}
 	const assetsPath = `${getWebPath(context)}/assets`
+	let postId = getLastPostId(db) + 1
+
+	log(Category.database, Status.loading, `Posting Post #${postId}...`, true, true, false)
 
 	// Fetch files
 	if (input.fileUrl) input.file = await fetchFileUrl(input.fileUrl)
 	if (input.thumbnailUrl) input.thumbnailFile = await fetchFileUrl(input.thumbnailUrl)
 	if (input.projectUrl) input.projectFile = await fetchFileUrl(input.projectUrl)
-	
-	let postId = getLastPostId(db) + 1
+
+	let mainFile: File | null
+	let thumbnailFile: File | null = null
+	let projectFile: File | null = null
+
+	if (input.file) mainFile = await getFileFromBlob(input.file, getFilePath(postId, input.file, input.fileUrl))
+	else { context.set.status = 400; return { error: "No file provided" } }
+	if (input.thumbnailFile) thumbnailFile = await getFileFromBlob(input.thumbnailFile, getFilePath(postId, input.file, input.fileUrl))
+	if (input.projectFile) projectFile = await getFileFromBlob(input.projectFile, getFilePath(postId, input.file, input.fileUrl))
 
 	// Download files
-	let mainPath = await downloadMainFile(postId, input.file, input.fileUrl, !(input.thumbnailFile || input.thumbnailUrl))
+	let mainPath = await downloadMainFile(postId, mainFile, input.fileUrl, !(input.thumbnailFile || input.thumbnailUrl))
 	if (!mainPath) {
 		context.set.status = 500
 		return { error: "Failed to download main file" }
 	}
-	let thumbnailPath = await downloadThumbnail(postId, input.thumbnailFile, input.file, input.fileUrl)
-	let projectPath = await downloadProjectFile(postId, input.projectFile, input.projectUrl)
+	let thumbnailPath = await downloadThumbnail(postId, thumbnailFile ?? mainFile, mainFile, input.fileUrl)
+	let projectPath = await downloadProjectFile(postId, projectFile, input.projectUrl)
 
-	if (!mainPath) {
-		context.set.status = 500
-		return { error: "Failed to download main file" }
-	}
+	if (!mainPath) { context.set.status = 500; return { error: "Failed to download main file" } }
 
-	// Get thumbnail path if not provided
-	if (!thumbnailPath && mainPath) {
-		let split = mainPath.split('/')
-		split[0] = 'thumbnail'
-		split[1] = split[1].replace(/\..+$/, '.webp')
-		thumbnailPath = split.join('/')
-	}
+	if (!thumbnailPath) thumbnailPath = await copyDefaultThumbnail(postId, mainFile, assetsPath)
 	
 	// Construct file object
 	let file = {
 		url: `${assetsPath}/${mainPath}`,
-		thumbnailUrl: `${assetsPath}/${thumbnailPath}`,
+		thumbnailUrl: thumbnailPath ? `${assetsPath}/${thumbnailPath}` : undefined,
 		projectUrl: projectPath ? `${assetsPath}/${projectPath}` : undefined,
 		sourceUrl: input.sourceUrl ?? undefined,
 		timestamp: input.timestamp ?? 0,
 		title: getTitle(input, input.fileUrl),
 		type: getFileType(mainPath),
 		extension: getFileExtension(mainPath)
-	} as File
+	} as ArgonFile
 	
 	// Construct post object
 	let post = {
@@ -72,6 +79,8 @@ export default async function uploadPost(context: Context, db: Database) {
 	// Save to database
 	insertPost(post, db)
 	notifPostUpload(post)
+
+	log(Category.database, Status.success, `Posted Post #${postId}!`, true, false, true)
 
 	return post
 }
@@ -87,22 +96,14 @@ export default async function uploadPost(context: Context, db: Database) {
  * @param { boolean } makethumbnail Whether to make a thumbnail of the file
  * @returns { Promise<string | null> } The path of the downloaded file
  */
-export async function downloadMainFile(postId: number, file: Blob | undefined, url?: string, makethumbnail: boolean = true): Promise<string | null> {
+export async function downloadMainFile(postId: number, file: File, url?: string, makethumbnail: boolean = true): Promise<string | null> {
 	if (!file) return null
 	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(file.name ?? url)
 	let type = getFileType(`${name}.${extension}`)
 
 	await downloadFile(postId, file, { name, extension, type } as FileData)
-	
-	// Thumbnail
-	let thumbnailType = (type === "image" || type === "video")
-	if (thumbnailType && makethumbnail) {
-		let thumbnail = await downloadThumbnail(postId, file, file, url)
-		if (!thumbnail) return null
-	}
-
-	return `${type}/${postId}_${name}.${extension}`
+	return `${type}/${name}.${extension}`
 }
 
 /**
@@ -113,20 +114,19 @@ export async function downloadMainFile(postId: number, file: Blob | undefined, u
  * @param { Blob | undefined } nameUrl The Url of the main file, to get the name from (fallback)
  * @returns { Promise<string | null> } The path of the downloaded thumbnail
  */
-export async function downloadThumbnail(postId: number, file: Blob | undefined, nameFile: Blob | undefined, nameUrl?: string): Promise<string | null> {
+export async function downloadThumbnail(postId: number, file: File | null, nameFile: File | null, nameUrl?: string): Promise<string | null> {
 	if (!file || !nameFile) return null
 
 	// Get data
 	let name = getFileName(nameFile.name ?? nameUrl ?? file.name).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(nameFile.name ?? nameUrl ?? file.name)
-	Object.defineProperty(file, 'name', { value: `${name}.${extension}` })
 
 	// Compress
 	let thumbnail = await compressImage(postId, file, getFileType(`${name}.${extension}`))
 	if (!thumbnail) return null
 
 	await downloadFile(postId, thumbnail, { name, extension, type: 'thumbnail' } as FileData)
-	return `thumbnail/${postId}_${name}.webp`
+	return `thumbnail/${name}.webp`
 }
 
 /**
@@ -136,13 +136,36 @@ export async function downloadThumbnail(postId: number, file: Blob | undefined, 
  * @param { string } url The Url the project file is located at
  * @returns { Promise<string | null> } The path of the downloaded project file
  */
-export async function downloadProjectFile(postId: number, file: Blob | undefined, url?: string): Promise<string | null> {
+export async function downloadProjectFile(postId: number, file: File | null, url?: string): Promise<string | null> {
 	if (!file) return null
 	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(file.name ?? url)
 
 	await downloadFile(postId, file, { name, extension, type: 'project' } as FileData)
-	return `project/${postId}_${name}.${extension}`
+	return `project/${name}.${extension}`
+}
+
+export async function copyDefaultThumbnail(postId: number, file: File | null, assetsPath: string): Promise<string | null> {
+	if (!file) return null
+
+	// Get data
+	let name = getFileName(file.name).replace(/[^a-zA-Z\d]/g, '_')
+	let extension = getFileExtension(file.name)
+	let fileType: FileType = getFileType(`${name}.${extension}`)
+	
+	let defaultFile: Blob | null = null
+	switch (fileType) {
+		case FileType.audio: defaultFile = await fetchFileUrl(`${assetsPath}/default/audio.png`)
+	}
+	if (!defaultFile) return null
+
+	let filed: File = await getFileFromBlob(defaultFile) as File
+
+	let thumbnail = await compressImage(postId, filed, FileType.image, 100)
+	if (!thumbnail) return null
+	
+	await downloadFile(postId, thumbnail, { name, extension: 'webp', type: 'thumbnail' } as FileData)
+	return `thumbnail/${name}.webp`
 }
 
 //

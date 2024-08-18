@@ -6,6 +6,7 @@ import type { Post } from "../../../util/types"
 
 import "./post-file.css"
 import VideoPlayer from "./VideoPlayer"
+import Visualizer from "./Visualizer"
 
 export const prerender = false
 
@@ -14,16 +15,14 @@ export default function PostFile({ post }: Props) {
 
 	// Load file
 	useEffect(() => {
-		if (post.file.type === 'image') {
-			loadImageData(post)
-		}
+		if (post.file.type === 'image') loadImageData(post)
 	}, [ post ])
 
 	// Load file size
 	useEffect(() => {
 		async function loadFileSize() {
 			const fileSize = await getFileSize(post.file.url)
-			if (fileSize) size.set(fileSize)
+			if (fileSize && !isNaN(fileSize)) size.set(fileSize)
 		}
 		loadFileSize()
 	}, [ post ])
@@ -40,6 +39,11 @@ export default function PostFile({ post }: Props) {
 			{ /* Video */ }
 			{ post && post.file && post.file.type === 'video' &&
 				<VideoPlayer post={post} />
+			}
+
+			{ /* Audio */ }
+			{ post && post.file && post.file.type === 'audio' &&
+				<Visualizer post={post} bars={true}/>
 			}
 		</div>
 	)

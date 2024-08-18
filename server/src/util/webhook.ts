@@ -1,12 +1,17 @@
 import Post from "../data/post";
 import { Category, log, Status } from "./debug";
+import config from "../../argonConfig"
 
 export async function notifPostUpload(post: Post) {
-	log(Category.webhook, Status.loading, `Sending upload notification for post #${post.id}...	`)
-	let payload = uploadPayload(post)
-	webhookSend(payload, () => {
-		log(Category.webhook, Status.success, `Sent upload notification for post #${post.id}!`)
-	})
+	for (let webhookConfig of [config.publicWebhook, config.privateWebhook]) {
+		if (webhookConfig.notifications.postUpload) {
+			log(Category.webhook, Status.loading, `Sending upload notification for post #${post.id}...	`)
+			let payload = uploadPayload(post)
+			webhookSend(webhookConfig.url, payload, () => {
+				log(Category.webhook, Status.success, `Sent upload notification for post #${post.id}!`)
+			})
+		}
+	}
 }
 
 export async function notifPostDelete(post: Post) {
@@ -18,11 +23,15 @@ export async function notifPostEdit(post: Post) {
 }
 
 export async function notifError(error: Error) {
-	log(Category.webhook, Status.loading, `Sending error notification...`)
-	let payload = errorPayload(error)
-	webhookSend(payload, () => {
-		log(Category.webhook, Status.success, `Sent error notification!`)
-	})
+	for (let webhookConfig of [config.publicWebhook, config.privateWebhook]) {
+		if (webhookConfig.notifications.error) {
+			log(Category.webhook, Status.loading, `Sending error notification...`)
+			let payload = errorPayload(error)
+			webhookSend(webhookConfig.url, payload, () => {
+				log(Category.webhook, Status.success, `Sent error notification!`)
+			})
+		}
+	}
 }
 
 export function uploadPayload(post: Post) {
@@ -62,19 +71,16 @@ export function errorPayload(error: Error) {
 	}
 }
 
-export async function webhookSend(payload: Object, callback: CallableFunction) {
-	let webhookUrl = process.env.WEBHOOK_URL
-	if (webhookUrl) {
-        const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify(payload),
-        })
-		const body = await response.json()
-		if (response.ok) callback()
-		else log(Category.webhook, Status.error, JSON.stringify(body, null, 4))
-    } else { log(Category.webhook, Status.error, `No webhook Url found!`) }
+export async function webhookSend(url: string, payload: Object, callback: CallableFunction) {
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Origin': '*',
+		},
+		body: JSON.stringify(payload),
+	})
+	const body = await response.json()
+	if (response.ok) callback()
+	else log(Category.webhook, Status.error, JSON.stringify(body, null, 4))
 }

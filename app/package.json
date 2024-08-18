@@ -16,6 +16,7 @@
     "@nanostores/react": "^0.7.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@wavesurfer/react": "^1.0.7",
     "astro": "4.13.3",
     "moment": "^2.30.1",
     "nanostores": "^0.10.3",

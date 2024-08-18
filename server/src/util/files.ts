@@ -8,6 +8,8 @@ import { FileType } from "../data/file"
 import { baseDir } from "./dir"
 import { Category, Status, log } from "./debug"
 import { notifError } from "./webhook"
+import { BunFile } from "bun"
+import FileNotFoundError from "../errors/FileNotFoundError"
 
 const imageTypes = [ "png", "jpg", "jpeg", "gif", "webp", "svg" ]
 const videoTypes = [ "mp4", "webm", "mov", "avi" ]
@@ -25,6 +27,14 @@ const audioTypes = [ "mp3", "wav", "ogg", "flac" ]
 export function getFileExtension(url: string): string {
 	if (!url) return ""
 	return url.split(".").pop()?.split('?')[0] || ""
+}
+
+export function getFilePath(postId: number, file: Blob | undefined, url?: string): string | null {
+	if (!file) return null
+	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
+	let extension = getFileExtension(file.name ?? url)
+
+	return `${postId}_${name}.${extension}`
 }
 
 /**
@@ -78,14 +88,16 @@ export async function fetchFileUrl(url: string): Promise<Blob> {
  * @param { number } resolution The resolution of the image
  * @returns { Promise<Buffer> } The compressed image
  */
-export async function compressImage(postId: number, file: Blob, fileType: FileType, quality: number = 75, resolution: number = 250): Promise<Buffer | null> {
+export async function compressImage(postId: number, file: File, fileType: FileType, quality: number = 75, resolution: number = 250): Promise<Buffer | null> {
 	let fileBuffer: Buffer = await getBufferFromBlob(file)
 	if (fileType === FileType.video) fileBuffer = await extractVideoFrame(postId, file)
+	if (fileType === FileType.audio) return null
 	try {
 		let compressed = await sharp(fileBuffer).webp({ quality }).resize(resolution, resolution, { fit: "inside" }).toBuffer()
 		return compressed
-	} catch (error) {
+	} catch (error: any) {
 		log(Category.download, Status.error, `Failed to compress image: ${error}`, true)
+		await notifError(error)
 		return null
 	}
 }
@@ -96,18 +108,26 @@ export async function extractVideoFrame(postId: number, file: Blob): Promise<Buf
 	let extension = getFileExtension(file.name)
 	let now = Date.now()
 
-	const path = `${baseDir}/assets/video/${postId}_${name}.${extension}`
-	const tempPath = `${baseDir}/assets/temp/${now}_${postId}_${name}.webp`
+	const path = `${baseDir}/assets/video/${name}.${extension}`
+	const tempPath = `${baseDir}/assets/temp/${now}_${name}.webp`
 	
 	// Create temp directory
 	let tempDirExists = await exists(`${baseDir}/assets/temp`)
 	if (!tempDirExists)
 		await mkdir(`${baseDir}/assets/temp`)
 	
-	log(Category.download, Status.loading, `Extracting video frame for ${postId}_${name}.${extension}...`, true)
+	log(Category.download, Status.loading, `Extracting video frame for ${name}.${extension}...`, true)
 
 	return new Promise(async (resolve, reject) => {
-		if (await doesFileExist(path)) {
+		let fileExists: boolean = await doesFileExist(path)
+		if (!fileExists) {
+			let error: FileNotFoundError = new FileNotFoundError(path, `Could not find file or directory:\n\`${path}\``)
+			log(Category.download, Status.error, error.message)
+			notifError(error)
+			return reject(error)
+		}
+
+		try {
 			// Command
 			FfmpegCommand(path)
 				.outputOptions([
@@ -121,6 +141,9 @@ export async function extractVideoFrame(postId: number, file: Blob): Promise<Buf
 					notifError(error)
 					reject(error)
 				})
+				.on('progress', async (progress) => {
+					log(Category.download, Status.loading, `Extracting video frame (${progress.percent}%)`)
+				})
 				.on('end', async () => {
 					log(Category.download, Status.success, `Extracted video frame for ${name}.${extension}!`)
 
@@ -130,26 +153,12 @@ export async function extractVideoFrame(postId: number, file: Blob): Promise<Buf
 					unlink(tempPath)
 				})
 				.run()
+		} catch (error: any){
+			log(Category.download, Status.error, error.message)
+			notifError(error)
+			reject(error)
 		}
 	})
-}
-
-export function getStreamFromBuffer(buffer: Buffer): Readable {
-	let stream = new PassThrough()
-	stream.write(buffer)
-	stream.end()
-	return stream
-}
-
-/**
- * Converts a Blob to a Buffer
- * @param { Blob | Buffer } blob The blob to convert
- * @returns { Promise<Buffer> } The converted buffer
- */
-export async function getBufferFromBlob(blob: Blob | Buffer): Promise<Buffer> {
-	if (!blob || (blob instanceof Blob && !blob.arrayBuffer)) return Buffer.of();
-	if (blob instanceof Buffer) return blob
-	return Buffer.from(await blob.arrayBuffer())
 }
 
 /**
@@ -160,7 +169,7 @@ export async function getBufferFromBlob(blob: Blob | Buffer): Promise<Buffer> {
  */
 export async function writeFile(data: Buffer, id: number, fileData: FileData) {
 	let fileType = fileData.type ?? getFileType(`${fileData.name}.${fileData.extension}`)
-	let path = `${baseDir}/assets/${fileType}/${id}_${fileData.name}.${fileData.extension}`
+	let path = `${baseDir}/assets/${fileType}/${fileData.name}.${fileData.extension}`
 	await Bun.write(path, data)
 }
 
@@ -211,7 +220,7 @@ export async function deleteFile(postId: number, fileData: FileData) {
 	log(Category.database, Status.loading, `Deleting File for Post #${postId}...`, true)
 	
 	let fileType = fileData.type ?? getFileType(`${fileData.name}.${fileData.extension}`)
-	let path = `${baseDir}/assets/${fileType}/${postId}_${fileData.name}.${fileData.extension}`
+	let path = `${baseDir}/assets/${fileType}/${fileData.name}.${fileData.extension}`
 	await unlink(path)
 
 	log(Category.database, Status.success, `Deleted File for Post #${postId}!`)
@@ -223,13 +232,58 @@ export async function deleteFile(postId: number, fileData: FileData) {
 export async function clearFiles() {
 	for (let fileType of [ "image", "video", "audio", "thumbnail", "project", "temp", "unknown" ]) {
 		let path = `${baseDir}/assets/${fileType}`
-		let exists = await lstat(path).then(() => true).catch(() => false)
+		let exists = await doesFileExist(path)
+		console.log(path, exists)
 		if (exists) {
-			rm(path, { recursive: true, force: true }).then(() => {
-				log(Category.download, Status.success, `Cleared ${fileType} files!`)
-			})
+			try {
+				rm(path, { recursive: true, force: true }).then(() => {
+					log(Category.download, Status.success, `Cleared ${fileType} files!`)
+				})
+			} catch (error: any) {
+				log(Category.download, Status.error, error.message)
+				notifError(error)
+			}
 		}
 	}
+}
+
+//
+//	File Conversions
+//
+
+export function getStreamFromBuffer(buffer: Buffer): Readable {
+	let stream = new PassThrough()
+	stream.write(buffer)
+	stream.end()
+	return stream
+}
+
+/**
+ * Converts a Blob to a Buffer
+ * @param { Blob | Buffer } blob The blob to convert
+ * @returns { Promise<Buffer> } The converted buffer
+ */
+export async function getBufferFromBlob(blob: Blob | Buffer): Promise<Buffer> {
+	if (!blob || (blob instanceof Blob && !blob.arrayBuffer)) return Buffer.of();
+	if (blob instanceof Buffer) return blob
+	return Buffer.from(await blob.arrayBuffer())
+}
+
+export async function getFileFromBunFile(file: BunFile, name?: string): Promise<File | null> {
+	let exists: boolean = await file.exists()
+	if (!exists) return null
+	let arrayBuffer: ArrayBuffer = await file.arrayBuffer()
+	let fileBuffer: Buffer = await getBufferFromBlob(Buffer.from(arrayBuffer))
+	return new File([fileBuffer], file.name ?? name ?? 'file')
+}
+
+export function getFileFromBuffer(buffer: Buffer, name?: string | null): File {
+	return new File([buffer], name ?? '')
+}
+
+export async function getFileFromBlob(blob: Blob, name?: string | null): Promise<File> {
+	let buffer: Buffer = Buffer.from(await blob.arrayBuffer())
+	return getFileFromBuffer(buffer, name)
 }
 
 export interface FileData {

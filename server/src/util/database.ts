@@ -3,8 +3,8 @@ import Database from "bun:sqlite"
 import { Category, Status, log } from "./debug"
 
 import type Post from "../data/post"
-import Tag from "../data/tag"
-import File from "../data/file"
+import type Tag from "../data/tag"
+import type ArgonFile from "../data/file"
 
 export interface SearchTag {
 	name: string
@@ -315,7 +315,7 @@ export function deletePostById(id: number, db: Database) {
  * @param { Database } db The database to get the file from 
  * @returns The file if it exists, otherwise null
  */
-export function getFileById(id: number, db: Database): File | null {
+export function getFileById(id: number, db: Database): ArgonFile | null {
 	let result: any = db.query("SELECT * FROM files WHERE postId = ?").get(id)
 	if (!result) return null
 	return {

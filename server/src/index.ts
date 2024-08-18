@@ -37,6 +37,7 @@ const app = new Elysia()
 	.use(cors())
 	.use(logger())
 
+	// 130MB upload limit?
 
 	// Parse
 	.onParse(({ request }, contentType) => {
