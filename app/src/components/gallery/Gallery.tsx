@@ -2,6 +2,7 @@ import { useEffect } from "react"
 
 import { useStore } from "@nanostores/react"
 import { postList, pageSize, currentPage, filterTags, sort } from "../../stores/postList"
+import { handleNSFW, handleSuggestive, handleUntagged, animations, tagSuggestions } from "@argon/stores/options"
 
 import { getPosts } from "../../util/api"
 import type { Post } from "../../util/types"

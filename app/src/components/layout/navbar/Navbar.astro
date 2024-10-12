@@ -1,17 +1,86 @@
 ---
-import './navbar.css'
+import { Astronav, MenuItems, Dropdown, DropdownItems, StickyHeader } from 'astro-navbar'
+
+import NavToggle from '@argon/components/layout/navbar/NavToggle.astro'
+import OptionsMenu from '@argon/components/layout/navbar/options/OptionsMenu.tsx'
+
+import '@argon/globals.css'
+import '@argon/components/layout/navbar/navbar.css'	
+import '@argon/components/layout/navbar/nav-button.css'
+
 ---
 
-<div class="navbar">
-	<div id="left">
-		<a id="argon" href=".">
-			<span id="title">Argon</span>
-			<span id="version">v1.0</span>
-		</a>
-	</div>
-	<div id="right">
-		<div id="bookmarks-button" class="nav-button" onclick="">
-			<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="nav-icon"/>
+<StickyHeader transition:persist>
+	<Astronav>
+		<div class="navbar">
+			<ul id="nav-info">
+				<li class="nav-button-container">
+					<Dropdown class="group more-dropdown">
+						<button id="more-button" class="nav-button">
+							<img src="/icons/nav/hamburger.svg" alt="More" class="nav-icon"/>
+						</button>
+						<DropdownItems class="nav-dropdown-items-container">
+							<ul>
+								<li>Setting 1</li>
+								<li>Setting 2</li>
+								<li>Setting 3</li>
+								<li>Setting 4</li>
+							</ul>
+						</DropdownItems>
+					</Dropdown>
+				</li>
+				<li>
+					<a class="logo" href="." tabindex="-1">
+						<span id="text-mark">Argon</span>
+						<span id="website-version">v1.0</span>
+					</a>
+				</li>
+				<li>
+					<NavToggle class="nav-items-toggle"/>
+				</li>
+			</ul>
+			<MenuItems class="nav-items hidden">
+				<ul class="nav-buttons">
+					<li class="nav-button-container">
+						<button id="upload-button" class="nav-button" onclick="">
+							<img src="/icons/nav/upload.svg" alt="Upload" class="nav-icon"/>
+						</button>
+					</li>
+					<li class="nav-button-container">
+						<button id="bookmarks-button" class="nav-button" onclick="">
+							<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="nav-icon"/>
+						</button>
+					</li>
+					<li class="nav-button-container">
+						<Dropdown class="group settings-dropdown">
+							<button id="settings-button" class="nav-button">
+								<img src="/icons/nav/settings.svg" alt="Settings" class="nav-icon"/>
+							</button>
+							<DropdownItems class="nav-dropdown-items-container">
+								<OptionsMenu client:load/>
+							</DropdownItems>
+						</Dropdown>
+					</li>
+				</ul>
+			</MenuItems>
 		</div>
-	</div>
-</div>
+	</Astronav>
+</StickyHeader>
+
+<script>
+
+// function parseOptions() {
+// 	const list = document.getElementById('options-list')
+// 	if (!list) return
+
+// 	for (let option of options) {
+// 		if (option.type == OptionType.Toggle) {
+// 			let listElem = document.createElement('li')
+// 			let toggle = document.createElement('Toggle')
+// 			toggle.id = option.label.toLowerCase().replace(/ /g, '-')
+// 			toggle.label = option.label
+
+// 		}
+// 	}
+// }
+</script>

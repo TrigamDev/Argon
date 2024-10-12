@@ -28,16 +28,15 @@ db.exec(`
 	PRAGMA journal_mode = WAL;
 `)
 createTables(db)
-clearDatabase(db)
-await clearFiles()
+// clearDatabase(db)
+// await clearFiles()
 
 const app = new Elysia()
 	// Plugins
 	.use(staticPlugin({ assets: "assets", prefix: "/assets" }))
 	.use(cors())
-	.use(logger())
+	// .use(logger())
 
-	// 130MB upload limit?
 
 	// Parse
 	.onParse(({ request }, contentType) => {

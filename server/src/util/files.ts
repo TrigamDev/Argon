@@ -233,7 +233,6 @@ export async function clearFiles() {
 	for (let fileType of [ "image", "video", "audio", "thumbnail", "project", "temp", "unknown" ]) {
 		let path = `${baseDir}/assets/${fileType}`
 		let exists = await doesFileExist(path)
-		console.log(path, exists)
 		if (exists) {
 			try {
 				rm(path, { recursive: true, force: true }).then(() => {

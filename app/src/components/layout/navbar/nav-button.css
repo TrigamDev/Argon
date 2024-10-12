@@ -1,0 +1,124 @@
+.nav-button-container {
+	/* Display */
+	display: flex;
+
+	/* Layout */
+	width: 100%;
+	margin: 0;
+}
+
+.nav-button {
+	/* Display */
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	
+	/* Layout */
+	width: 56px;
+    height: 56px;
+	scale: 0.95;
+	padding: 12px;
+
+	/* Style */
+	cursor: pointer;
+	transform: scale(0.8);
+
+	/* Color */
+	color: white;
+	background-color: transparent;
+
+	/* Border */
+	outline: none;
+	border: none;
+	border-radius: 12px;
+
+	/* Text */
+	font-family: var(--font);
+	font-size: 20px;
+	font-weight: 600;
+	text-decoration: none;
+
+	/* Animation */
+	transition: 0.15s;
+}
+
+.nav-button:hover {
+	/* Color */
+	background-color: var(--accent);
+
+	/* Layout */
+	transform: scale(1);
+
+	/* Style */
+	scale: 1;
+}
+
+.nav-button:focus {
+	/* Color */
+	background-color: var(--accent);
+
+	/* Layout */
+	transform: scale(1);
+
+	/* Border */
+	border: var(--text) solid 2px;
+}
+
+.nav-button:active {
+	/* Layout */
+	transform: scale(0.9);
+}
+
+.nav-button .twemoji .emoji {
+	/* Layout */
+	width: 24px;
+	height: 24px;
+}
+
+/* Dropdown */
+
+.astronav-dropdown {
+	/* Layout */
+	padding: 0;
+
+	/* Style */
+	list-style: none;
+}
+
+.nav-button-container .nav-dropdown-items-container {
+	/* Display */
+	position: absolute;
+
+	/* Layout */
+	padding: 16px;
+	margin-top: 26px;
+
+	/* Style */
+	border-radius: 32px;
+
+	/* Color */
+	background-color: var(--primary);
+}
+
+.nav-dropdown-items-container ul {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	/* Layout */
+	padding: 0;
+
+	/* Style */
+	list-style: none;
+}
+
+.settings-dropdown .nav-dropdown-items-container {
+	/* Layout */
+	right: 16px;
+}
+
+.more-dropdown .nav-dropdown-items-container {
+	/* Layout */
+	left: 16px;
+}

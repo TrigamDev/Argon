@@ -1,18 +1,18 @@
 ---
 export const prerender = false
 
-import { getPostById } from "../../util/api"
+import { getPostById } from "@argon/util/api"
 
-import Page from "../../layouts/Page.astro"
-import PostFile from "../../components/post/file/PostFile.tsx"
+import Page from "@argon/layouts/Page.astro"
+import PostFile from "@argon/components/post/file/PostFile.tsx"
 
-import PostNav from "../../components/post/PostNav.astro"
-import PostData from "../../components/post/PostData.tsx"
-import PostActions from "../../components/post/PostActions.tsx"
-import PostTags from "../../components/post/PostTags.tsx"
+import PostNav from "@argon/components/post/PostNav.astro"
+import PostData from "@argon/components/post/PostData.tsx"
+import PostActions from "@argon/components/post/PostActions.tsx"
+import PostTags from "@argon/components/post/PostTags.tsx"
 
-import "./post.css"
-import "../../globals.css"
+import "@argon/pages/post/_post.css"
+import "@argon/globals.css"
 
 const { id } = Astro.params
 const post = await getPostById(Astro.request, Number(id))
