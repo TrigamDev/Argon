@@ -1,5 +1,4 @@
 node_modules
-!node_modules/astro-navbar/src/Astronav.astro
 
 package-lock.json
 bun.lockb
