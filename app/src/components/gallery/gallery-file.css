@@ -1,11 +1,15 @@
+:root {
+	--image-size: 15vmax;
+}
+
 .gallery-file {
 	/* Layout */
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	width: 15vmax;
-	height: 15vmax;
+	width: var(--image-size);
+	height: var(--image-size);
 
 	/* Style */
 	cursor: pointer;
@@ -16,9 +20,8 @@
 
 /* Responsive */
 @media screen and (max-width: 1000px) {
-	.gallery-file {
-		width: 35vw;
-		height: 35vw;
+	:root {
+		--image-size: 35vmax;
 	}
 }
 
@@ -27,10 +30,23 @@
 	transform: scale(1.1);
 }
 
-.gallery-file .file {
+.gallery-file .file-container {
+	/* Display */
+	display: grid;
+	align-items: center;
+	justify-content: center;
+
 	/* Layout */
-	max-width: 100%;
-	max-height: 100%;
+	max-width: var(--image-size);
+	max-height: var(--image-size);
+}
+
+.gallery-file .file-container .file {
+	/* Layout */
+	max-width: var(--image-size);
+	max-height: var(--image-size);
+	width: 100%;
+	height: 100%;
 
 	/* Style */
 	border-radius: 15px;
@@ -45,4 +61,22 @@
 .gallery-file.blur .file:hover {
 	/* Style */
 	filter: blur(0vmin);
+}
+
+.gallery-file .file-container .file-type-icon {
+	/* Display */
+	position: absolute;
+	align-self: flex-start;
+	justify-self: flex-end;
+	
+	/* Layout */
+	max-width: 15%;
+	margin: -5px;
+
+	/* Color */
+	background-color: var(--background);
+
+	/* Border */
+	border: 6px solid var(--background);
+	border-radius: 12px;
 }

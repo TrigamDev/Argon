@@ -10,24 +10,41 @@ import type { Post } from "../../util/types"
 import GalleryFile from "./GalleryFile"
 
 import "./gallery.css"
+import { tagStringToSearchTags } from "@argon/util/tag"
 
 export default function Gallery() {
 
-	// Props
+	// Search
 	const $postList = useStore(postList)
+
+	// Page
 	const $pageSize = useStore(pageSize)
 	const $currentPage = useStore(currentPage)
+
+	// Filter + Sort
 	const $filterTags = useStore(filterTags)
 	const $sort = useStore(sort)
 
 	// Load posts
 	useEffect(() => {
 		async function loadPosts() {
-			let posts = await getPosts(new Request('/api/search'))
+			loadUrlSearch()
+			let posts = await getPosts(new Request('/api/search'), $filterTags)
 			if (posts) postList.set(posts)
 		}
 		loadPosts()
 	}, [$pageSize, $currentPage, $filterTags, $sort])
+
+	function loadUrlSearch() {
+		let params = new URLSearchParams(window.location.search)
+		let query = params.get('q')
+
+		if (!query) return
+		let urlTags = tagStringToSearchTags(query)
+
+		if (urlTags.length != 0 && $filterTags.length === 0)
+			filterTags.set(urlTags)
+	}
 
 	return (
 		<div className="gallery">

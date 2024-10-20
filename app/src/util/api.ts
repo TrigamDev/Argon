@@ -1,12 +1,12 @@
-import type { Post } from "./types"
+import type { Post, SearchTag } from "./types"
 
 // Get client IP address (used for verification)
 export async function getIpAddress(): Promise<string | null> {
-	const response = await fetch('http://ip-api.com/json')
-	if (!response.ok) { return null }
-	const data = await response.json()
-	return data.query
-	
+	// const response = await fetch('http://ip-api.com/json')
+	// if (!response.ok) { return null }
+	// const data = await response.json()
+	// return data.query
+	return '157.89.198.185'
 }
 // Routes
 export async function getPostById(request: Request, id: number): Promise<Post | null> {
@@ -15,8 +15,10 @@ export async function getPostById(request: Request, id: number): Promise<Post | 
 		return post
 	})
 }
-export async function getPosts(request: Request): Promise<Post[] | null> {
-	return post<Post[]>(request, 'search', {}, async (response: Response) => {
+export async function getPosts(request: Request, tags: SearchTag[]): Promise<Post[] | null> {
+	return post<Post[]>(request, 'search', {
+		tags: tags
+	}, async (response: Response) => {
 		const posts: Post[] = await response.json()
 		return posts
 	})
@@ -24,51 +26,75 @@ export async function getPosts(request: Request): Promise<Post[] | null> {
 
 
 // Utils
-export async function get<T>(request: Request, endpoint: string, callback: CallableFunction): Promise<T | null> {
+export async function get<T>(request: Request | null, endpoint: string, callback: CallableFunction): Promise<T | null> {
 	const ip = await getIpAddress()
-	const origin = new URL(request.url).origin
+	const origin = getOrigin(request)
+
+	let headers = {
+		"Content-Type": "application/json",
+		"Access-Control-Allow-Origin": "*",
+		"X-Forwarded-For": ip ?? ''
+	}
+	if (request?.headers) headers = { ...headers, ...request.headers }
+
 	const response = await fetch(`${origin}/api/${endpoint}`, {
 		credentials: "same-origin",
-		headers: {
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "*",
-			"X-Forwarded-For": ip ?? '',
-			... request.headers,
-		},
+		headers: headers,
 	})
+
 	if (!response || !response?.ok) { return null }
 	return callback(response)
 }
 
-export async function post<T>(request: Request, endpoint: string, data: {}, callback: CallableFunction): Promise<T | null> {
+export async function post<T>(request: Request | null, endpoint: string, data: {}, callback: CallableFunction): Promise<T | null> {
 	const ip = await getIpAddress()
-	const origin = new URL(request.url).origin
+	const origin = getOrigin(request)
+
+	let headers = {
+		"Content-Type": "application/json",
+		"Access-Control-Allow-Origin": "*",
+		"X-Forwarded-For": ip ?? ''
+	}
+	if (request?.headers) headers = { ...headers, ...request.headers }
+
 	const body = JSON.stringify(data)
+
 	const response = await fetch(`${origin}/api/${endpoint}`, {
-		method: 'POST',
+		method: "POST",
 		credentials: "same-origin",
-		headers: {
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "*",
-			"X-Forwarded-For": ip ?? '',
-			... request.headers,
-		},
+		headers: headers,
 		body: body
 	})
+	
 	if (!response || !response?.ok) { return null }
 	return callback(response)
-
 }
 
-// export async function apiUpload(endPoint: string, body: any) {
-//     let currentUrl = window.location.href.split("/")
-//     let fetchUrl = currentUrl[0] + "//" + currentUrl[2] + `/api/${endPoint}`
-//     const response = await fetch(fetchUrl, {
-//         method: 'POST',
-//         headers: {
-//             'Access-Control-Allow-Origin': '*'
-//         },
-//         body: body
-//     })
-//     return await response.json()
-// }
+export async function upload<T>(request: Request | null, endpoint: string, data: FormData, callback: CallableFunction): Promise<T | null> {
+	const ip = await getIpAddress()
+	const origin = getOrigin(request)
+
+	let headers = {
+		"Access-Control-Allow-Origin": "*",
+		"X-Forwarded-For": ip ?? ''
+	}
+	if (request?.headers) headers = { ...headers, ...request.headers }
+
+	const response = await fetch(`${origin}/api/${endpoint}`, {
+		method: "POST",
+		credentials: "same-origin",
+		headers: headers,
+		body: data
+	})
+	
+	if (!response || !response?.ok) { return null }
+	return callback(response)
+}
+
+function getOrigin (request: Request | null) {
+	if (request) return new URL(request.url).origin
+	else {
+		let currentUrl = window.location.href.split("/")
+		return currentUrl[0] + "//" + currentUrl[2]
+	}
+}

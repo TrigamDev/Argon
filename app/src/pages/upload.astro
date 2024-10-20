@@ -1,0 +1,14 @@
+---
+import Page from '../layouts/Page.astro'
+
+import Navbar from '@argon/components/layout/navbar/Navbar.astro'
+import PostUpload from '@argon/components/post/upload/PostUpload.tsx'
+
+import '@argon/pages/_upload.css'
+import '@argon/globals.css'
+---
+
+<Page title="Upload post">
+	<Navbar isGallery={false}/>
+	<PostUpload client:load/>
+</Page>

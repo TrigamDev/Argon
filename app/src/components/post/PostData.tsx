@@ -18,29 +18,32 @@ export default function PostData({ post }: Props) {
 	const $duration = useStore(duration)
 
 	let title = `${post.file.title}.${post.file.extension}`
-	let sourceName = post.file.sourceUrl ? new URL(post.file.sourceUrl).hostname : null
-	let newTab = true
+
+	let isSourceValid = post.file.sourceUrl && post.file.sourceUrl != "" && post.file.sourceUrl != "null"
+	let sourceName = isSourceValid ? new URL(post.file.sourceUrl)?.hostname : null
+
+	let newTab = false
 	let sourceUrl = post.file.sourceUrl
-	if (sourceName === 'discord.com') { sourceUrl = `discord://${post.file.sourceUrl}`; newTab = false }
+	switch (sourceName) {
+		case 'discord.com': { sourceUrl = `discord://${post.file.sourceUrl}`; break }
+		default: { newTab = true }
+	}
 
 	return (
-		<div className="post-data">
-			<span className="post-title">{title}</span>
-			<div className="post-info">
-				{ /* Post info */}
-				<span className="post-info-field" id="post-id">ID: { post.id }</span>
-				<span className="post-info-field" id="post-file-timestamp">Created: { displayTimestamp(post.file.timestamp) }</span>
-				<span className="post-info-field" id="post-timestamp">Posted: { displayTimestamp(post.timestamp) }</span>
-				{ /* File info */ }
-				{ post.file.type != "audio" && <span className="post-info-field" id="post-resolution">Resolution: {$dimensions.width}x{$dimensions.height}</span> }
-				<span className="post-info-field" id="post-size">Size: {formatFileSize($size)}</span>
-				<span className="post-info-field" id="post-file-type">Type: {post.file.type}</span>
-				<span className="post-info-field" id="post-file-extenstion">Extension: {post.file.extension}</span>
-				{ durationTypes.includes(post.file.type) && <span className="post-info-field" id="post-duration">Duration: {formatDuration($duration)}</span> }
-				{ /* URLs */ }
-				{ sourceName && <span className="post-info-field" id="post-file-source">Source: <a href={sourceUrl} target={ newTab ? "_blank" : "_self" }>{sourceName}</a></span> }
-			</div>
-		</div>
+		<ul className="post-info">
+			{ /* Post info */}
+			<li className="post-info-field" id="post-id">Post ID: { post.id }</li>
+			<li className="post-info-field" id="post-file-timestamp">Created: { displayTimestamp(post.file.timestamp) }</li>
+			<li className="post-info-field" id="post-timestamp">Posted: { displayTimestamp(post.timestamp) }</li>
+			{ /* File info */ }
+			{ post.file.type != "audio" && <li className="post-info-field" id="post-resolution">Resolution: {$dimensions.width}x{$dimensions.height}</li> }
+			<li className="post-info-field" id="post-size">Size: {formatFileSize($size)}</li>
+			<li className="post-info-field" id="post-file-type">Type: {post.file.type}</li>
+			<li className="post-info-field" id="post-file-extenstion">Extension: {post.file.extension}</li>
+			{ durationTypes.includes(post.file.type) && <li className="post-info-field" id="post-duration">Duration: {formatDuration($duration)}</li> }
+			{ /* URLs */ }
+			{ sourceName && <li className="post-info-field" id="post-file-source">Source: <a href={sourceUrl} target={ newTab ? "_blank" : "_self" }>{sourceName}</a></li> }
+		</ul>
 	)
 }
 

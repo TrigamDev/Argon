@@ -1,0 +1,36 @@
+.text-input {
+	/* Layout */
+	width: 100%;
+}
+
+.text-input .text-box {
+	/* Display */
+	display: flex;
+	flex-direction: row;
+
+	/* Layout */
+	width: 100%;
+	height: 42px;
+	padding: 8px;
+	box-sizing: border-box;
+
+	/* Color */
+	color: var(--text);
+	background-color: var(--secondary);
+
+	/* Border */
+	border: none;
+	outline: none;
+	border-radius: 12px;
+
+	/* Text */
+	font-family: var(--font);
+	font-size: 1.1rem;
+	font-weight: 600;
+}
+
+.text-input .text-box:disabled {
+	/* Color */
+	color: var(--text-disabled);
+	background-color: var(--disabled);
+}

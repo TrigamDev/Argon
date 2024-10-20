@@ -1,0 +1,154 @@
+.post-edit-area {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2.5vh;
+
+	/* Layout */
+	width: 100%;
+	padding-bottom: 32px;
+	overflow-y: scroll;
+}
+
+.post-edit-area .post-edit-content {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 2.5vh;
+
+	/* Layout */
+	width: 90%;
+	padding: 0 15px;
+	overflow-y: scroll;
+}
+
+.post-edit-area .post-title {
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	align-self: stretch;
+
+	/* Style */
+	font-size: 28px;
+	font-weight: 700;
+}
+
+.post-edit-fields {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2vh;
+
+	/* Layout */
+	margin: 0;
+	padding: 0;
+	width: 100%;
+
+	/* Style */
+	list-style: none;
+
+	/* Text */
+	text-align: center;
+}
+
+.post-edit-field-name {
+	/* Text */
+	font-size: 1.2em;
+	font-weight: 700;
+}
+
+.input-field {
+	/* Display */
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 8px;
+}
+
+.input-field .revert-change {
+	/* Display */
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	
+	/* Layout */
+	width: 56px;
+    height: 56px;
+	scale: 0.95;
+	padding: 12px;
+
+	/* Style */
+	cursor: pointer;
+	transform: scale(0.8);
+
+	/* Color */
+	color: white;
+	background-color: transparent;
+
+	/* Border */
+	outline: none;
+	border: none;
+	border-radius: 12px;
+
+	/* Text */
+	font-family: var(--font);
+	font-size: 20px;
+	font-weight: 600;
+	text-decoration: none;
+
+	/* Animation */
+	transition: 0.15s;
+}
+
+.input-field .revert-change:hover {
+	/* Color */
+	background-color: var(--accent);
+
+	/* Layout */
+	transform: scale(1);
+
+	/* Style */
+	scale: 1;
+}
+
+.input-field .revert-change:focus {
+	/* Color */
+	background-color: var(--accent);
+
+	/* Layout */
+	transform: scale(1);
+
+	/* Border */
+	border: var(--text) solid 2px;
+}
+
+.input-field .revert-change:active {
+	/* Layout */
+	transform: scale(0.9);
+}
+
+.post-edit-tags .search-bar {
+	/* Layout */
+	height: fit-content;
+}
+
+.post-edit-tags .search-bar .wrapper {
+	/* Layout */
+	position: relative !important;
+}
+
+.post-edit-tags .search-bar .search-input {
+	/* Layout */
+	width: 100%;
+	max-height: 25vh;
+}
+
+.post-edit-tags .search-bar .clear-icon {
+	/* Display */
+	display: none;
+}

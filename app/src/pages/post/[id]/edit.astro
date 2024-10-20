@@ -1,0 +1,30 @@
+---
+export const prerender = false
+
+import { getPostById } from "@argon/util/api"
+
+import Page from "@argon/layouts/Page.astro"
+import PostFile from "@argon/components/post/file/PostFile.tsx"
+import PostData from "@argon/components/post/PostData"
+import PostEdit from "@argon/components/post/edit/PostEdit.tsx"
+
+import "@argon/pages/post/[id]/_post-edit.css"
+import "@argon/globals.css"
+
+const { id } = Astro.params
+const post = await getPostById(Astro.request, Number(id))
+---
+
+<Page title={post?.file.title ?? "Argon"}>
+	<div class="post-edit">
+		<div id="left">
+			{post && <PostEdit post={post} client:load/> }
+		</div>
+		<div id="right">
+			{ post && <div class="file-preview"><PostFile post={ post } client:only="react" /></div> }
+			{ post && <div id="metadata">
+				<PostData post={post} client:load/>
+			</div> }
+		</div>
+	</div>
+</Page>

@@ -3,11 +3,16 @@ import { Astronav, MenuItems, Dropdown, DropdownItems, StickyHeader } from 'astr
 
 import NavToggle from '@argon/components/layout/navbar/NavToggle.astro'
 import OptionsMenu from '@argon/components/layout/navbar/options/OptionsMenu.tsx'
+import Search from '../../input/Tags'
 
 import '@argon/globals.css'
 import '@argon/components/layout/navbar/navbar.css'	
 import '@argon/components/layout/navbar/nav-button.css'
 
+interface Props {
+	isGallery: boolean
+}
+const { isGallery } = Astro.props
 ---
 
 <StickyHeader transition:persist>
@@ -21,10 +26,10 @@ import '@argon/components/layout/navbar/nav-button.css'
 						</button>
 						<DropdownItems class="nav-dropdown-items-container">
 							<ul>
-								<li>Setting 1</li>
-								<li>Setting 2</li>
-								<li>Setting 3</li>
-								<li>Setting 4</li>
+								<li>Thing 1</li>
+								<li>Thing 2</li>
+								<li>Thing 3</li>
+								<li>Thing 4</li>
 							</ul>
 						</DropdownItems>
 					</Dropdown>
@@ -41,16 +46,23 @@ import '@argon/components/layout/navbar/nav-button.css'
 			</ul>
 			<MenuItems class="nav-items hidden">
 				<ul class="nav-buttons">
+					{ isGallery &&
+						<li class="nav-button-container search-button-container">
+							<Search client:load/>
+						</li>
+					}
 					<li class="nav-button-container">
-						<button id="upload-button" class="nav-button" onclick="">
+						<a id="upload-button" class="nav-button" href="upload">
 							<img src="/icons/nav/upload.svg" alt="Upload" class="nav-icon"/>
-						</button>
+						</a>
 					</li>
-					<li class="nav-button-container">
-						<button id="bookmarks-button" class="nav-button" onclick="">
-							<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="nav-icon"/>
-						</button>
-					</li>
+					{ isGallery &&
+						<li class="nav-button-container">
+							<button id="bookmarks-button" class="nav-button" onclick="">
+								<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="nav-icon"/>
+							</button>
+						</li>
+					}
 					<li class="nav-button-container">
 						<Dropdown class="group settings-dropdown">
 							<button id="settings-button" class="nav-button">

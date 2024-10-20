@@ -35,7 +35,7 @@ const app = new Elysia()
 	// Plugins
 	.use(staticPlugin({ assets: "assets", prefix: "/assets" }))
 	.use(cors())
-	// .use(logger())
+	.use(logger())
 
 
 	// Parse

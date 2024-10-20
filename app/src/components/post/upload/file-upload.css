@@ -1,0 +1,7 @@
+.file-panel {
+	/* Display */
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center !important;
+	gap: 8px !important;
+}

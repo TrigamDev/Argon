@@ -5,6 +5,7 @@ import { Category, Status, log } from "./debug"
 import type Post from "../data/post"
 import type Tag from "../data/tag"
 import type ArgonFile from "../data/file"
+import { notifPostEdit } from "./webhook"
 
 export interface SearchTag {
 	name: string
@@ -103,14 +104,17 @@ export function clearDatabase(db: Database) {
 export function insertPost(post: Post, db: Database) {
 	log(Category.database, Status.loading, `Saving Post #${post.id}...`, true)
 
+	// Remove duplicate tags
+	let tags = [... new Set(post.tags)]
+
 	// Insert tags
-	post.tags.forEach(tag => insertTag(tag, db))
+	tags.forEach(tag => insertTag(tag, db))
 	
 	// Insert post
 	db.query(`
 		INSERT INTO Posts (id, timestamp, tags)
 		VALUES (?, ?, ?)
-	`).run(post.id, post.timestamp, encodeTags(post.tags, db))
+	`).run(post.id, post.timestamp, encodeTags(tags, db))
 
 	// Insert file
 	db.query(`
@@ -171,6 +175,7 @@ export function editPostByID(id: number, db: Database, data: {
 		data.file.sourceUrl ?? post.file.sourceUrl,
 	id)
 
+	notifPostEdit(post)
 	log(Category.database, Status.success, `Edited Post #${id}!`)
 	return getPostById(id, db)
 }
@@ -384,6 +389,7 @@ export function getTags(db: Database): Tag[] {
 	let results: any[] = db.query("SELECT * FROM tags").all()
 	return results.map(result => {
 		return {
+			id: result.tagId,
 			name: result.name,
 			type: result.type,
 			safe: Boolean(result.safe),

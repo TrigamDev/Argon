@@ -12,11 +12,22 @@ import type Tag from "../../data/tag"
 import { BunFile } from "bun"
 
 import { getWebPath } from "../../util/dir"
-import { FileData, compressImage, downloadFile, fetchFileUrl, getBufferFromBlob, getFileExtension, getFileFromBlob, getFileFromBuffer, getFileFromBunFile, getFileName, getFilePath, getFileType } from "../../util/files"
+import { FileData, validateUrl, compressImage, downloadFile, fetchFileUrl, getFileExtension, getFileFromBlob, getFileName, getFilePath, getFileType } from "../../util/files"
 import { notifPostUpload } from "../../util/webhook"
 import { Category, log, Status } from "../../util/debug"
 
-
+/* Fields
+	file: File
+	fileUrl: String
+	projectFile: File
+	projectUrl: String
+	thumbnailFile: File
+	thumbnailUrl: String
+	timestamp: Number
+	tags: Tag[]
+	sourceUrl: String
+	title: String
+*/
 export default async function uploadPost(context: Context, db: Database) {
 	// Input
 	let input = parseInput(context.body as FormData)
@@ -30,9 +41,12 @@ export default async function uploadPost(context: Context, db: Database) {
 	log(Category.database, Status.loading, `Posting Post #${postId}...`, true, true, false)
 
 	// Fetch files
-	if (input.fileUrl) input.file = await fetchFileUrl(input.fileUrl)
-	if (input.thumbnailUrl) input.thumbnailFile = await fetchFileUrl(input.thumbnailUrl)
-	if (input.projectUrl) input.projectFile = await fetchFileUrl(input.projectUrl)
+	if (input.fileUrl && validateUrl(input.fileUrl))
+		input.file = await fetchFileUrl(input.fileUrl)
+	if (input.thumbnailUrl && validateUrl(input.thumbnailUrl))
+		input.thumbnailFile = await fetchFileUrl(input.thumbnailUrl)
+	if (input.projectUrl && validateUrl(input.projectUrl))
+		input.projectFile = await fetchFileUrl(input.projectUrl)
 
 	let mainFile: File | null
 	let thumbnailFile: File | null = null

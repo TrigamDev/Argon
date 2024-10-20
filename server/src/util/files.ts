@@ -10,6 +10,7 @@ import { Category, Status, log } from "./debug"
 import { notifError } from "./webhook"
 import { BunFile } from "bun"
 import FileNotFoundError from "../errors/FileNotFoundError"
+import { existsSync } from "fs"
 
 const imageTypes = [ "png", "jpg", "jpeg", "gif", "webp", "svg" ]
 const videoTypes = [ "mp4", "webm", "mov", "avi" ]
@@ -65,6 +66,16 @@ export function getFileType(url: string | undefined): FileType {
 
 export async function doesFileExist(path: string): Promise<boolean> {
 	return await lstat(path).then(() => true).catch(() => false)
+}
+
+/**
+ * Returns either the Url or null based on whether the URL is empty/null
+ * @param { string } url The Url to get validate
+ * @returns { string | null } Either the Url or null
+ */
+export function validateUrl(url: string | undefined): string | null {
+	let isUrlValid = url && url != undefined && url != null && url != "" && url != "null"
+	return isUrlValid ? String(url) : null
 }
 
 //
@@ -221,7 +232,7 @@ export async function deleteFile(postId: number, fileData: FileData) {
 	
 	let fileType = fileData.type ?? getFileType(`${fileData.name}.${fileData.extension}`)
 	let path = `${baseDir}/assets/${fileType}/${fileData.name}.${fileData.extension}`
-	await unlink(path)
+	if (existsSync(path)) await unlink(path)
 
 	log(Category.database, Status.success, `Deleted File for Post #${postId}!`)
 }

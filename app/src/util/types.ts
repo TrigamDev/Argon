@@ -41,7 +41,9 @@ export enum Sorts {
 }
 
 export interface SearchTag {
+	id?: number
 	name: string
 	type: string
+	usages?: number
 	exclude: boolean
 }

@@ -14,6 +14,11 @@ export default function PostTags({ tags }: Props) {
 	)
 }
 
+/* Tags:
+	artist, character, copyright, source, medium, meta, content, style,
+	expression, clothing, object, location, characteristic, cons, nsfw
+*/
+
 interface TagProps { tag: Tag }
 export function PostTag({ tag }: TagProps) {
 	const icon = getTagIcon(tag);

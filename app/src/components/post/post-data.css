@@ -1,35 +1,17 @@
-.post-data {
-	/* Layout */
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	align-self: stretch;
-	gap: 25px;
-	padding-top: 17.5px;
-}
-
-.post-data .post-title {
-	/* Layout */
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	align-self: stretch;
-
-	/* Style */
-	font-size: 28px;
-	font-weight: 700;
-}
-
-.post-data .post-info {
+.post-info {
     /* Layout */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     align-self: stretch;
+	margin: 0;
+	padding: 0;
+
+	/* Style */
+	list-style: none;
 }
 
-.post-data .post-info .post-info-field {
+.post-info .post-info-field {
     /* Layout */
     align-self: stretch;
 
@@ -38,7 +20,7 @@
     font-weight: 600;
 }
 
-.post-data .post-info .post-info-field a {
+.post-info .post-info-field a {
 	/* Style */
 	color: var(--primary-color);
 }

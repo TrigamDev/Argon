@@ -2,9 +2,11 @@
 
 :root {
     --text: #EDE3EF;
+    --text-disabled:rgb(193, 182, 196);
     --background: #170D19;
     --primary: #BC32B4;
     --secondary: #881A81;
+    --secondary-light: #a6269d;
     --accent: #DD56D5;
 	--accent-light: #fb73f2;
     --disabled: #4d194e;

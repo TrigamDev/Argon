@@ -1,0 +1,41 @@
+.post-edit {
+	/* Display */
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	/* Layout */
+	width: 100vw;
+	height: 100vh;
+}
+
+#left {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	/* Layout */
+	width: 100%;
+
+	/* Color */
+	background-color: var(--primary);
+}
+
+#right {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 32px;
+
+	/* Layout */
+	width: 100%;
+	height: 100%;
+}
+
+#right .file-preview {
+	/* Layout */
+	max-height: 65%;
+}

@@ -3,8 +3,12 @@
 	display: flex;
 
 	/* Layout */
-	width: 100%;
 	margin: 0;
+}
+
+.search-button-container {
+	/* Layout */
+	width: 65%;
 }
 
 .nav-button {
@@ -17,7 +21,7 @@
 	width: 56px;
     height: 56px;
 	scale: 0.95;
-	padding: 12px;
+	padding: 0;
 
 	/* Style */
 	cursor: pointer;
@@ -29,7 +33,7 @@
 
 	/* Border */
 	outline: none;
-	border: none;
+	border: transparent solid 2px;
 	border-radius: 12px;
 
 	/* Text */
@@ -78,6 +82,9 @@
 /* Dropdown */
 
 .astronav-dropdown {
+	/* Display */
+	z-index: 99;
+
 	/* Layout */
 	padding: 0;
 
