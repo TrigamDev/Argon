@@ -13,9 +13,9 @@ import FileUpload from './FileUpload'
 import { upload } from '@argon/util/api'
 
 import { FileType, type Tag } from '@argon/util/types'
-import { tagsToString, tagsToTagString, tagStringToTags } from '@argon/util/tag'
+import { tagsToString, tagStringToTags } from '@argon/util/tag'
 
-import '@argon/components/post/upload/post-upload.css'
+import '@argon/components/upload/post-upload.css'
 import 'react-tabs/style/react-tabs.css'
 import '@argon/globals.css'
 

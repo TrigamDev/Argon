@@ -1,0 +1,21 @@
+{
+	"runOnStartup": true,
+	"keepExistingTerminalsOpen": false,
+	"terminals": [
+		{
+			"splitTerminals": [{
+				"name": "Client",
+				"color": "red",
+				"commands": [ "cd ./app", "bun run dev" ],
+				"shouldRunCommands": true
+			}]
+		},
+		{
+			"splitTerminals": [{
+				"name": "Server",
+				"commands": [ "cd ./server", "bun run dev" ],
+				"shouldRunCommands": true
+			}]
+		}
+	]
+}

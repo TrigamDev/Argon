@@ -1,6 +1,6 @@
 import type { Post } from '@argon/util/types'
 
-import '@argon/components/post/nav/post-nav.css'
+import '@argon/components/navbar/post/post-nav.css'
 
 interface Props {
 	post: Post

@@ -1,9 +1,10 @@
 import type { Category } from "../options";
 
-import '@argon/components/layout/navbar/options/option.css'
-import '@argon/components/layout/navbar/options/category.css'
-import '@argon/globals.css'
 import OptionsMenu from "./OptionsMenu";
+
+import '@argon/components/navbar/options/option.css'
+import '@argon/components/navbar/options/category.css'
+import '@argon/globals.css'
 
 interface Props {
 	category: Category

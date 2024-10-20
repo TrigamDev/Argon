@@ -5,9 +5,9 @@ import type { DropdownOption, DropdownSelection } from '../options';
 
 import Select, { type SingleValue } from 'react-select';
 
+import '@argon/components/navbar/options/option.css'
+import '@argon/components/navbar/options/dropdown.css'
 import '@argon/globals.css'
-import '@argon/components/layout/navbar/options/option.css'
-import '@argon/components/layout/navbar/options/dropdown.css'
 
 interface Props {
 	option: DropdownOption<any>

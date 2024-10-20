@@ -231,10 +231,14 @@ export async function deleteFile(postId: number, fileData: FileData) {
 	log(Category.database, Status.loading, `Deleting File for Post #${postId}...`, true)
 	
 	let fileType = fileData.type ?? getFileType(`${fileData.name}.${fileData.extension}`)
-	let path = `${baseDir}/assets/${fileType}/${fileData.name}.${fileData.extension}`
-	if (existsSync(path)) await unlink(path)
+	let path = `${baseDir}/assets/${fileType}/${postId}_${fileData.name}.${fileData.extension}`
+	if (existsSync(path)) {
+		await unlink(path)
+		log(Category.database, Status.success, `Deleted ${postId}_${fileData.name}.${fileData.extension} for Post #${postId}!`)
+	} else {
+		log(Category.database, Status.error, `The ${postId}_${fileData.name}.${fileData.extension} for Post #${postId} does not exist!`)
+	}
 
-	log(Category.database, Status.success, `Deleted File for Post #${postId}!`)
 }
 
 /**

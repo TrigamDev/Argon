@@ -5,7 +5,7 @@ import { extensionList, getFileType, getMimeType } from "@argon/util/files"
 
 import Text from "@argon/components/input/Text"
 
-import "@argon/components/post/upload/file-upload.css"
+import "@argon/components/upload/file-upload.css"
 import "@argon/globals.css"
 
 export interface Props {

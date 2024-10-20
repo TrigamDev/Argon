@@ -1,13 +1,13 @@
 ---
 import { Astronav, MenuItems, Dropdown, DropdownItems, StickyHeader } from 'astro-navbar'
 
-import NavToggle from '@argon/components/layout/navbar/NavToggle.astro'
-import OptionsMenu from '@argon/components/layout/navbar/options/OptionsMenu.tsx'
-import Search from '../../input/Tags'
+import NavToggle from '@argon/components/navbar/NavToggle.astro'
+import OptionsMenu from '@argon/components/navbar/options/OptionsMenu.tsx'
+import Search from '@argon/components/input/Tags'
 
+import '@argon/components/navbar/navbar.css'	
+import '@argon/components/navbar/nav-button.css'
 import '@argon/globals.css'
-import '@argon/components/layout/navbar/navbar.css'	
-import '@argon/components/layout/navbar/nav-button.css'
 
 interface Props {
 	isGallery: boolean

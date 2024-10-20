@@ -5,12 +5,12 @@ import type { Value } from "node_modules/react-datetime-picker/dist/cjs/shared/t
 import type { Post } from "@argon/util/types"
 import { upload, post as apiPost } from "@argon/util/api"
 
-import EditPostNav from "../nav/EditPostNav"
+import EditPostNav from "@argon/components/navbar/post/EditPostNav"
 import Search from "@argon/components/input/Tags"
-import Timestamp from "../../input/Timestamp"
-import Text from "../../input/Text"
+import Timestamp from "@argon/components/input/Timestamp"
+import Text from "@argon/components/input/Text"
 
-import "@argon/components/post/edit/post-edit.css"
+import "@argon/components/edit/post-edit.css"
 import "@argon/globals.css"
 
 interface Props { post: Post }
