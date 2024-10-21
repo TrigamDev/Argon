@@ -37,7 +37,7 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 
 	return (
 		<div className="search-bar-container">
-			{ tags && tags.length > 0 &&
+			{ tags &&
 				<ReactSearchAutocomplete<SearchTag>
 					className="search-bar"
 					items={tags.map(tag => hackSolution(tag) )}
