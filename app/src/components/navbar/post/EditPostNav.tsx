@@ -1,13 +1,10 @@
-import type { Post } from '@argon/util/types'
-
 import '@argon/components/navbar/post/post-nav.css'
 
 interface Props {
-	post: Post
 	savePost: Function
 	deletePost: Function
 }
-export default function EditPostNav({ post, savePost, deletePost }: Props) {
+export default function EditPostNav({ savePost, deletePost }: Props) {
 	return (
 		<div className="post-nav">
 			{ /* Cancel */ }

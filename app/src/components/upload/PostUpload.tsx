@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react'
-import type { ChangeEvent } from 'react'
+import { useState } from 'react'
 import type { Value } from 'node_modules/react-datetime-picker/dist/cjs/shared/types'
 
 import Text from '@argon/components/input/Text'

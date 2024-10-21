@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 
-import { dimensions, size, duration } from "../../../stores/file"
+import { dimensions, size } from "../../../stores/file"
 
 import type { Post } from "../../../util/types"
 

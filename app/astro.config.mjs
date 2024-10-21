@@ -7,6 +7,7 @@ export default defineConfig({
 	integrations: [react()],
 	output: 'server',
 	adapter: vercel(),
+	site: 'https://argon-dev.trigam.dev',
 	prefetch: true,
 	vite: {
 		server: {

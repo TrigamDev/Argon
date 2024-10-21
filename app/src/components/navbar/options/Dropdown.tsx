@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react';
+import { useState } from 'react';
 
 import { labelToId } from '../options';
 import type { DropdownOption, DropdownSelection } from '../options';

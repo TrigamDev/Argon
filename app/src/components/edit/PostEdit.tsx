@@ -54,7 +54,6 @@ export default function PostEdit({ post }: Props) {
 	return (
 		<div className="post-edit-area">
 			{ post && <EditPostNav
-				post={ post }
 				savePost={ savePost }
 				deletePost={ deletePost }
 				/>
