@@ -6,7 +6,7 @@ export async function getIpAddress(): Promise<string | null> {
 	// if (!response.ok) { return null }
 	// const data = await response.json()
 	// return data.query
-	return '157.89.198.185'
+	return '0.0.0.1'
 }
 // Routes
 export async function getPostById(request: Request, id: number): Promise<Post | null> {
