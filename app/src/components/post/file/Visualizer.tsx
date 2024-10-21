@@ -4,9 +4,9 @@ import { useStore } from "@nanostores/react"
 import { useWavesurfer } from "@wavesurfer/react"
 import moment from "moment"
 
-import { playing, duration, volume, muted, loop } from "../../../stores/file"
+import { playing, duration, volume, muted, loop } from "@argon/stores/file"
 
-import "./Visualizer.css"
+import "@argon/components/post/file/visualizer.css"
 
 export default function Visualizer({ post, bars }: { post: any, bars: boolean }) {
     const containerRef = useRef<HTMLDivElement>(null);
