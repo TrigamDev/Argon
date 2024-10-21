@@ -22,7 +22,7 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 
 	useEffect(() => {
 		async function loadTags() {
-			await get(null, `/tags/list`, async (res: Response) => {
+			await get(null, `tags/list`, async (res: Response) => {
 				let loadedTags = await res.json() as SearchTag[]
 				setTags(loadedTags)
 			})
