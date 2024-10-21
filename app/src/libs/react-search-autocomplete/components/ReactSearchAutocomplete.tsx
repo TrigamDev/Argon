@@ -1,4 +1,5 @@
-import { default as Fuse } from 'fuse.js'
+import Fuse from 'fuse.js'
+import type { FuseResult, IFuseOptions } from 'fuse.js'
 import React, { useEffect, useState } from 'react'
 import type { ChangeEvent, FocusEvent, FocusEventHandler, KeyboardEvent } from 'react'
 import { styled, ThemeProvider } from 'styled-components'
@@ -14,7 +15,7 @@ export const MAX_RESULTS = 10
 
 export interface ReactSearchAutocompleteProps<T> {
   items: T[]
-  fuseOptions?: Fuse.IFuseOptions<T>
+  fuseOptions?: IFuseOptions<T>
   inputDebounce?: number
   onSearch?: (keyword: string, results: T[]) => void
   onHover?: (result: T) => void
@@ -168,7 +169,7 @@ export default function ReactSearchAutocomplete<T>({
 		}
 		return fuse
 			.search<T>(keyword, { limit: maxResults })
-			.map((result: Fuse.FuseResult<T>) => ({ ...result.item as T }))
+			.map((result: FuseResult<T>) => ({ ...result.item as T }))
 			.slice(0, maxResults) as T[]
 	}
 
