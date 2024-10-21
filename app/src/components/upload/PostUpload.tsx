@@ -54,8 +54,6 @@ export default function PostUpload() {
 		if (sourceUrl) formdata.append('sourceUrl', sourceUrl)
 		if (tags) formdata.append('tags', tagsToString(tags))
 
-		console.log(tagsToString(tags))
-
 		upload(null, `post/upload`, formdata, () => {
 			window.location.href = `.`
 		})
@@ -99,7 +97,7 @@ export default function PostUpload() {
 						</TabList>
 
 						{ /* File */ }
-						<TabPanel>
+						<TabPanel forceRender={true}>
 							<FileUpload
 								name='File'
 								limitTo={FileType.unknown}
@@ -111,7 +109,7 @@ export default function PostUpload() {
 						</TabPanel>
 						
 						{ /* Thumbnail */ }
-						<TabPanel>
+						<TabPanel forceRender={true}>
 							<FileUpload
 								name='Thumbnail'
 								limitTo={FileType.image}
@@ -123,7 +121,7 @@ export default function PostUpload() {
 						</TabPanel>
 						
 						{ /* Project File */ }
-						<TabPanel>
+						<TabPanel forceRender={true}>
 							<FileUpload
 								name='Project File'
 								currentFile={projectFile}
@@ -140,7 +138,7 @@ export default function PostUpload() {
 				<button className="post-button" id="upload-post" onClick={uploadPost}>
 					<img className="post-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
-				<button className="post-button" id="cancel-post">
+				<button className="post-button" id="cancel-post" onClick={() => window.location.href = "."}>
 					<img className="post-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
 				</button>
 			</div>

@@ -54,15 +54,16 @@ export default async function uploadPost(context: Context, db: Database) {
 
 	if (input.file) mainFile = await getFileFromBlob(input.file, getFilePath(postId, input.file, input.fileUrl))
 	else { context.set.status = 400; return { error: "No file provided" } }
-	if (input.thumbnailFile) thumbnailFile = await getFileFromBlob(input.thumbnailFile, getFilePath(postId, input.file, input.fileUrl))
-	if (input.projectFile) projectFile = await getFileFromBlob(input.projectFile, getFilePath(postId, input.file, input.fileUrl))
-
+	if (input.thumbnailFile) thumbnailFile = await getFileFromBlob(input.thumbnailFile, getFilePath(postId, input.thumbnailFile, input.thumbnailUrl))
+	if (input.projectFile) projectFile = await getFileFromBlob(input.projectFile, getFilePath(postId, input.projectFile, input.projectUrl))
+	
 	// Download files
 	let mainPath = await downloadMainFile(postId, mainFile, input.fileUrl, !(input.thumbnailFile || input.thumbnailUrl))
 	if (!mainPath) {
 		context.set.status = 500
 		return { error: "Failed to download main file" }
 	}
+
 	let thumbnailPath = await downloadThumbnail(postId, thumbnailFile ?? mainFile, mainFile, input.fileUrl)
 	let projectPath = await downloadProjectFile(postId, projectFile, input.projectUrl)
 
@@ -132,11 +133,13 @@ export async function downloadThumbnail(postId: number, file: File | null, nameF
 	if (!file || !nameFile) return null
 
 	// Get data
+	let realName = getFileName(file.name).replace(/[^a-zA-Z\d]/g, '_')
+	let realExtension = getFileExtension(file.name)
 	let name = getFileName(nameFile.name ?? nameUrl ?? file.name).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(nameFile.name ?? nameUrl ?? file.name)
 
 	// Compress
-	let thumbnail = await compressImage(postId, file, getFileType(`${name}.${extension}`))
+	let thumbnail = await compressImage(postId, file, getFileType(`${realName}.${realExtension}`))
 	if (!thumbnail) return null
 
 	await downloadFile(postId, thumbnail, { name, extension, type: 'thumbnail' } as FileData)
