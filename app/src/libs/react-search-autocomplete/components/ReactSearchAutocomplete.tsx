@@ -168,7 +168,7 @@ export default function ReactSearchAutocomplete<T>({
 		}
 		return fuse
 			.search<T>(keyword, { limit: maxResults })
-			.map((result) => ({ ...result.item as T }))
+			.map((result: Fuse.FuseResult<T>) => ({ ...result.item as T }))
 			.slice(0, maxResults) as T[]
 	}
 
