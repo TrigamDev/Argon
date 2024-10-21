@@ -13,7 +13,7 @@ export default defineConfig({
 		server: {
 			proxy: {
 				'/api': {
-					target: 'https://argonapi.trigam.dev:3000',
+					target: 'https://argonapi.trigam.dev',
 					changeOrigin: true,
 					rewrite: path => path.replace(/^\/api/, '')
 				}
