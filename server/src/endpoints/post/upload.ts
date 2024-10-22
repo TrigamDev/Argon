@@ -16,18 +16,19 @@ import { FileData, validateUrl, compressImage, downloadFile, fetchFileUrl, getFi
 import { notifPostUpload } from "../../util/webhook"
 import { Category, log, Status } from "../../util/debug"
 
-/* Fields
-	file: File
-	fileUrl: String
-	projectFile: File
-	projectUrl: String
-	thumbnailFile: File
-	thumbnailUrl: String
-	timestamp: Number
-	tags: Tag[]
-	sourceUrl: String
-	title: String
-*/
+export interface PostInput {
+	title?: string
+	timestamp?: string | number
+	sourceUrl?: string
+	tags?: Tag[]
+
+	fileUrl?: string
+	file?: Blob
+	thumbnailUrl?: string
+	thumbnailFile?: Blob
+	projectUrl?: string
+	projectFile?: Blob
+}
 export default async function uploadPost(context: Context, db: Database) {
 	// Input
 	let input = parseInput(context.body as FormData)
@@ -35,43 +36,74 @@ export default async function uploadPost(context: Context, db: Database) {
 		context.set.status = 400
 		return { error: "No file provided" }
 	}
+
+	// Get precursory info
 	const assetsPath = `${getWebPath(context)}/assets`
-	console.log(assetsPath)
 	let postId = getLastPostId(db) + 1
 
 	log(Category.database, Status.loading, `Posting Post #${postId}...`, true, true, false)
 
-	// Fetch files
+
+	//
+	//	GET FILES
+	//
+
+	// Fetch File Urls
 	if (input.fileUrl && validateUrl(input.fileUrl))
 		input.file = await fetchFileUrl(input.fileUrl)
+
 	if (input.thumbnailUrl && validateUrl(input.thumbnailUrl))
 		input.thumbnailFile = await fetchFileUrl(input.thumbnailUrl)
+
 	if (input.projectUrl && validateUrl(input.projectUrl))
 		input.projectFile = await fetchFileUrl(input.projectUrl)
 
-	let mainFile: File | null
-	let thumbnailFile: File | null = null
-	let projectFile: File | null = null
 
-	if (input.file) mainFile = await getFileFromBlob(input.file, getFilePath(postId, input.file, input.fileUrl))
+	// Get Main File
+	let mainFile: File | null
+	if (input.file) mainFile = await getFileFromBlob(
+		input.file, getFilePath(postId, input.file, input.fileUrl)
+	)
 	else { context.set.status = 400; return { error: "No file provided" } }
-	if (input.thumbnailFile) thumbnailFile = await getFileFromBlob(input.thumbnailFile, getFilePath(postId, input.thumbnailFile, input.thumbnailUrl))
-	if (input.projectFile) projectFile = await getFileFromBlob(input.projectFile, getFilePath(postId, input.projectFile, input.projectUrl))
+
+	// Get Thumbnail File
+	let thumbnailFile: File | null = null
+	if (input.thumbnailFile) thumbnailFile = await getFileFromBlob(
+		input.thumbnailFile, getFilePath(postId, input.thumbnailFile, input.thumbnailUrl)
+	)
+
+	// Get Project File
+	let projectFile: File | null = null
+	if (input.projectFile) projectFile = await getFileFromBlob(
+		input.projectFile, getFilePath(postId, input.projectFile, input.projectUrl)
+	)
+
+
+	//
+	//	DOWNLOAD FILES
+	//
 	
-	// Download files
-	let mainPath = await downloadMainFile(postId, mainFile, input.fileUrl, !(input.thumbnailFile || input.thumbnailUrl))
+	// Download Main File
+	let mainPath = await downloadMainFile(postId, mainFile, input.fileUrl)
 	if (!mainPath) {
 		context.set.status = 500
 		return { error: "Failed to download main file" }
 	}
 
-	let thumbnailPath = await downloadThumbnail(postId, thumbnailFile ?? mainFile, mainFile, input.fileUrl)
-	let projectPath = await downloadProjectFile(postId, projectFile, input.projectUrl)
-
 	if (!mainPath) { context.set.status = 500; return { error: "Failed to download main file" } }
 
+	// Download Thumbnail File
+	let thumbnailPath = await downloadThumbnail(postId, thumbnailFile ?? mainFile, mainFile, input.fileUrl)
 	if (!thumbnailPath) thumbnailPath = await copyDefaultThumbnail(postId, mainFile, assetsPath)
+
+	// Download Project File
+	let projectPath = await downloadProjectFile(postId, projectFile, input.projectUrl)
+
 	
+	//
+	//	OUTPUT
+	//
+
 	// Construct file object
 	let file = {
 		url: `${assetsPath}/${mainPath}`,
@@ -101,8 +133,60 @@ export default async function uploadPost(context: Context, db: Database) {
 	return post
 }
 
+/**
+ * Parses the request body into a PostInput object
+ * @param { FormData } input
+ * @returns { PostInput }
+ */
+export function parseInput(input: FormData): PostInput {
+	// Parse tags
+	let tags = input.get("tags") as string | Tag[] | undefined
+	if (typeof tags === "string" && tags !== "") tags = JSON.parse(tags) as Tag[]
+
+	// Verify tags
+	if (tags) tags = tags?.map(tag => {
+		if (!tag.name) tag.name = "unknown"
+		if (!tag.type) tag.type = "unknown"
+		return tag
+	}) ?? [] as Tag[]
+	if (tags === "") tags = undefined
+
+	// Parse timestamp
+	let timestamp = input.get("timestamp") as string | number
+	if (typeof timestamp === "string") timestamp = parseInt(timestamp)
+	
+	// Return data
+	return {
+		title: input.get("title") as string,
+		timestamp: timestamp ?? 0,
+		sourceUrl: input.get("sourceUrl") as string,
+		tags: tags as Tag[] ?? undefined,
+
+		fileUrl: input.get("fileUrl") as string,
+		file: input.get("file") as Blob,
+		thumbnailUrl: input.get("thumbnailUrl") as string,
+		thumbnailFile: input.get("thumbnailFile") as Blob,
+		projectUrl: input.get("projectUrl") as string,
+		projectFile: input.get("projectFile") as Blob,
+	}
+}
+
+/**
+ * Finds the name of the file
+ * @param { PostInput } input 
+ * @param { string | undefined } path 
+ * @returns { string }
+ */
+function getTitle(input: PostInput, path: string | undefined): string {
+	let name = input.title ?? ''
+	if ((!name || name === '') && path) name = getFileName(path)
+	if ((!name || name === '') && input.file) name = getFileName(input.file.name)
+	if ((!name || name === '') && input.fileUrl) name = getFileName(input.fileUrl)
+	return name ?? 'file'
+}
+
 //
-//	Download Functions
+//	File Downloads
 //
 /**
  * Downloads the main file
@@ -112,7 +196,7 @@ export default async function uploadPost(context: Context, db: Database) {
  * @param { boolean } makethumbnail Whether to make a thumbnail of the file
  * @returns { Promise<string | null> } The path of the downloaded file
  */
-export async function downloadMainFile(postId: number, file: File, url?: string, makethumbnail: boolean = true): Promise<string | null> {
+export async function downloadMainFile(postId: number, file: File, url?: string): Promise<string | null> {
 	if (!file) return null
 	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(file.name ?? url)
@@ -184,72 +268,4 @@ export async function copyDefaultThumbnail(postId: number, file: File | null, as
 	
 	await downloadFile(postId, thumbnail, { name, extension: 'webp', type: 'thumbnail' } as FileData)
 	return `thumbnail/${name}.webp`
-}
-
-//
-//	Input Parsing
-//
-/**
- * Parses the request body into a PostInput object
- * @param { FormData } input
- * @returns { PostInput }
- */
-export function parseInput(input: FormData): PostInput {
-	// Parse tags
-	let tags = input.get("tags") as string | Tag[] | undefined
-	if (typeof tags === "string" && tags !== "") tags = JSON.parse(tags) as Tag[]
-
-	// Verify tags
-	if (tags) tags = tags?.map(tag => {
-		if (!tag.name) tag.name = "unknown"
-		if (!tag.type) tag.type = "unknown"
-		if (tag.safe === undefined) tag.safe = true
-		return tag
-	}) ?? [] as Tag[]
-	if (tags === "") tags = undefined
-
-	// Parse timestamp
-	let timestamp = input.get("timestamp") as string | number
-	if (typeof timestamp === "string") timestamp = parseInt(timestamp)
-	
-	// Return data
-	return {
-		fileUrl: input.get("fileUrl") as string,
-		file: input.get("file") as Blob,
-		thumbnailUrl: input.get("thumbnailUrl") as string,
-		thumbnailFile: input.get("thumbnailFile") as Blob,
-		projectUrl: input.get("projectUrl") as string,
-		projectFile: input.get("projectFile") as Blob,
-		timestamp: timestamp ?? 0,
-		tags: tags as Tag[] ?? undefined,
-		sourceUrl: input.get("sourceUrl") as string,
-		title: input.get("title") as string,
-	}
-}
-
-/**
- * Finds the name of the file
- * @param { PostInput } input 
- * @param { string | undefined } path 
- * @returns { string }
- */
-function getTitle(input: PostInput, path: string | undefined): string {
-	let name = input.title ?? ''
-	if ((!name || name === '') && path) name = getFileName(path)
-	if ((!name || name === '') && input.file) name = getFileName(input.file.name)
-	if ((!name || name === '') && input.fileUrl) name = getFileName(input.fileUrl)
-	return name ?? 'file'
-}
-
-export interface PostInput {
-	fileUrl?: string
-	file?: Blob
-	thumbnailUrl?: string
-	thumbnailFile?: Blob
-	projectUrl?: string
-	projectFile?: Blob
-	timestamp?: string | number
-	tags?: Tag[]
-	sourceUrl?: string
-	title?: string
 }
