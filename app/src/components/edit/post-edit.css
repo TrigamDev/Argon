@@ -7,6 +7,7 @@
 
 	/* Layout */
 	width: 100%;
+	height: 100%;
 	padding-bottom: 32px;
 	overflow: hidden;
 }
@@ -20,6 +21,7 @@
 
 	/* Layout */
 	width: 90%;
+	height: 100%;
 	padding: 0 15px;
 	overflow-x: hidden;
 	overflow-y: scroll;
@@ -131,11 +133,6 @@
 .input-field .revert-change:active {
 	/* Layout */
 	transform: scale(0.9);
-}
-
-.post-edit-tags .search-bar {
-	/* Layout */
-	height: fit-content;
 }
 
 .post-edit-tags .search-bar .wrapper {

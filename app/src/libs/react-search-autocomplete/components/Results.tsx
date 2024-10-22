@@ -96,7 +96,7 @@ export default function Results<T>({
 const ResultsWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <StyledResults>
-      <ul>{children}</ul>
+      <ul className='search-results'>{children}</ul>
     </StyledResults>
   )
 }
