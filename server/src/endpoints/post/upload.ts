@@ -36,6 +36,7 @@ export default async function uploadPost(context: Context, db: Database) {
 		return { error: "No file provided" }
 	}
 	const assetsPath = `${getWebPath(context)}/assets`
+	console.log(assetsPath)
 	let postId = getLastPostId(db) + 1
 
 	log(Category.database, Status.loading, `Posting Post #${postId}...`, true, true, false)
