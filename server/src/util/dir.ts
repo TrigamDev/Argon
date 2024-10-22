@@ -13,7 +13,7 @@ export function getWebPath(context: Context): string {
 	if (baseUrl && path) return (baseUrl.replace(path, ''))
 
 	// Attempt to get from headers
-	const protocol = context.request.headers.get('x-forwarded-proto') || 'http'
+	const protocol = context.request.headers.get('x-forwarded-proto') || 'https'
 	const url = `${protocol}://${context.request.headers.get('host')}`
 	return url
 }
