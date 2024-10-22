@@ -38,5 +38,5 @@
 .post-tag:hover {
 	/* Style */
 	transform: scale(1.1);
-	background-color: var(--primary-light);
+	background-color: var(--accent);
 }

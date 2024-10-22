@@ -8,35 +8,35 @@ export default function PostActions({ post }: Props) {
 		<div className="post-actions">
 
 			{ /* Open in New Tab */ }
-			{ post.file.url &&
+			{ post?.file?.url &&
 				<a className="post-action" id="post-action-open" href={post.file.url} target="_blank" rel="noreferrer">
 					<img className="post-action-icon" src="/icons/actions/open_in_new_tab.svg" alt="Open in New Tab" title="Open in New Tab"/>
 				</a>
 			}
 
 			{ /* Copy */ }
-			{ post.file.url && post.file.type === 'image' &&
+			{ post?.file?.url && post.file.type === 'image' &&
 				<div className="post-action" id="post-action-copy" onClick={() => copyPostMedia(post)}>
 					<img className="post-action-icon" src="/icons/actions/copy.svg" alt="Copy" title="Copy"/>
 				</div>
 			}
 
 			{ /* Copy Post Url */}
-			{ post.file.url &&
+			{ post?.file?.url &&
 				<div className="post-action" id="post-action-copy-url" onClick={() => navigator.clipboard.writeText(post.file.url)}>
 					<img className="post-action-icon" src="/icons/actions/copy_link.svg" alt="Copy File URL" title="Copy File URL"/>
 				</div>
 			}
 
 			{ /* Download File */ }
-			{ post.file.url &&
+			{ post?.file?.url &&
 				<div className="post-action" id="post-action-download" onClick={() => downloadUrl(post.file.url, post.file.title) }>
 					<img className="post-action-icon" src="/icons/actions/download.svg" alt="Download" title="Download"/>
 				</div>
 			}
 
 			{ /* Download Project File */ }
-			{ post.file.url && post.file.projectUrl &&
+			{ post?.file?.url && post?.file?.projectUrl &&
 				<div className="post-action" id="post-action-download-project" onClick={() => downloadUrl(post.file.projectUrl, post.file.title) }>
 					<img className="post-action-icon" src="/icons/actions/project.svg" alt="Download Project" title="Download Project"/>
 				</div>

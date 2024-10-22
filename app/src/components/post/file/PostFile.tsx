@@ -15,17 +15,17 @@ export default function PostFile({ post }: Props) {
 
 	// Load file
 	useEffect(() => {
-		if (post.file.type === 'image') loadImageData(post)
-	}, [ post ])
+		if (post?.file?.type === 'image') loadImageData(post)
+	}, [ post, post?.file ])
 
 	// Load file size
 	useEffect(() => {
 		async function loadFileSize() {
-			const fileSize = await getFileSize(post.file.url)
+			const fileSize = await getFileSize(post?.file?.url)
 			if (fileSize && !isNaN(fileSize)) size.set(fileSize)
 		}
 		loadFileSize()
-	}, [ post ])
+	}, [ post, post?.file ])
 
 	return (
 		<div className="post-file-container">
@@ -62,7 +62,7 @@ function loadImageData(post: Post) {
 
 	// Load image
 	let loader = new Image()
-	loader.src = post.file.url
+	loader.src = post?.file?.url
 	loader.onload = () => {
 		imageElem.src = loader.src
 		// Set props

@@ -18,14 +18,14 @@ const { id } = Astro.params
 const post = await getPostById(Astro.request, Number(id))
 ---
 
-<Page title={post?.file.title ?? "Argon"}>
+<Page title={post?.file?.title ?? "Argon"}>
 	<div class="post">
 		<div id="left">
 			{ post && <PostNav post={ post }/> }
 			
 			<div id="post-content">
 				{ post &&
-					<span class="post-title">{ post.file.title }</span>
+					<span class="post-title">{ post?.file?.title }</span>
 					<PostData post={ post } client:load />
 					<PostActions post={ post } client:load />
 					<PostTags tags={ post.tags } client:load/>
