@@ -48,7 +48,7 @@ const { isGallery } = Astro.props
 				<ul class="nav-buttons">
 					{ isGallery &&
 						<li class="nav-button-container search-button-container">
-							<Search client:load/>
+							<Search client:only/>
 						</li>
 					}
 					<li class="nav-button-container">

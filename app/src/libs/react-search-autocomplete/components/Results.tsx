@@ -96,7 +96,6 @@ export default function Results<T>({
 const ResultsWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <StyledResults>
-      <div className="line" />
       <ul>{children}</ul>
     </StyledResults>
   )

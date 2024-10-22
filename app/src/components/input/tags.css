@@ -8,6 +8,7 @@
 
 	/* Layout */
 	width: 100%;
+	height: 56px;
 }
 
 .search-bar {
@@ -19,9 +20,14 @@
 
 	/* Layout */
 	width: 100%;
+	height: 80%;
 }
 
 .search-bar .wrapper {
+	/* Layout */
+	width: 100%;
+	height: 100%;
+
 	/* Color */
 	color: var(--text) !important;
 	background-color: var(--secondary) !important;
@@ -39,10 +45,16 @@
 	box-shadow: none !important;
 }
 
+.search-bar .wrapper > div {
+	/* Layout */
+	height: 100%;
+}
+
 .search-bar .wrapper .search-input {
 	/* Layout */
-	padding: 8px !important;
 	resize: vertical;
+	width: 100%;
+	height: 100%;
 
 	/* Color */
 	color: var(--text) !important;

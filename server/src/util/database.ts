@@ -6,6 +6,7 @@ import type Post from "../data/post"
 import type Tag from "../data/tag"
 import type ArgonFile from "../data/file"
 import { notifPostEdit } from "./webhook"
+import { removeDuplicates } from "./tags"
 
 export interface SearchTag {
 	name: string
@@ -105,7 +106,7 @@ export function insertPost(post: Post, db: Database) {
 	log(Category.database, Status.loading, `Saving Post #${post.id}...`, true)
 
 	// Remove duplicate tags
-	let tags = [... new Set(post.tags)]
+	let tags = removeDuplicates(post?.tags) as Tag[]
 
 	// Insert tags
 	tags.forEach(tag => insertTag(tag, db))
@@ -159,6 +160,7 @@ export function editPostByID(id: number, db: Database, data: {
 
 		// Final tags
 		let tags = newTags.filter(tag => !tagsToRemove.some(removeTag => removeTag?.name === tag?.name && removeTag?.type === tag?.type))
+		tags = removeDuplicates(tags) as Tag[]
 
 		// Update post
 		db.query("UPDATE posts SET tags = ? WHERE id = ?").run(encodeTags(tags, db), id)

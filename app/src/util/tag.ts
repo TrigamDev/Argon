@@ -33,12 +33,14 @@ export function tagStringToSearchTag(tagString: string): SearchTag | null {
 }
 
 export function tagStringToTags(tagString: string): Tag[] {
-    return tagString.split(' ').map(tagStringToTag).filter(tag => tag) as Tag[];
+    let tags = tagString.split(' ').map(tagStringToTag).filter(tag => tag) as Tag[];
+	return removeDuplicates(tags) as Tag[]
 }
 
 export function tagStringToSearchTags(tagString: string): SearchTag[] {
 	if (tagString == "") return []
-    return tagString.split(' ').map(tagStringToSearchTag).filter(tag => tag) as SearchTag[];
+    let tags = tagString.split(' ').map(tagStringToSearchTag).filter(tag => tag) as SearchTag[]
+	return removeDuplicates(tags) as SearchTag[]
 }
 
 export function tagToTagString(tag: Tag | SearchTag): string {
@@ -48,7 +50,7 @@ export function tagToTagString(tag: Tag | SearchTag): string {
 	if (!asTag.safe && !asSearch.exclude) exclamation = true
 	// Tag is a search tag and excluding
 	if (!asTag.safe && asSearch.exclude) exclamation = true
-    return `${exclamation ? '!' : ''}${tag.name}_(${tag.type})`;
+    return `${exclamation ? '!' : ''}${tag.name}_(${tag.type})`
 }
 
 export function tagsToTagString(tags: Tag[] | SearchTag[]) {
@@ -66,4 +68,13 @@ export function tagToString(tag: Tag) {
 
 export function tagsToString(tags: Tag[]) {
 	return `[${tags.map(tag => tagToString(tag)).join(", ")}]`
-} 
+}
+
+export function removeDuplicates(tags: Tag[] | SearchTag[]) {
+	let filtered = tags.filter((tag1: Tag | SearchTag, i, arr) => {
+		return arr.findIndex((tag2: Tag | SearchTag) => {
+			return tag1.name == tag2.name && tag1.type == tag2.type
+		}) === i
+	})
+	return filtered
+}

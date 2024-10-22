@@ -23,7 +23,7 @@ export default function Text({ currentText = "", resetButton = true, disabled = 
 
 	return (
 		<div className="text-input input-field">
-			<input role='textbox' className="text-box" value={ currentValue } disabled={disabled} onChange={ onInputChange }/>
+			<input role='textbox' className="text-box" value={ currentValue ?? "" } disabled={disabled} onChange={ onInputChange }/>
 			{ currentText != currentValue && resetButton &&
 				<button className='revert-change' onClick={revert}>
 					<img className='revert-icon' src="/icons/actions/revert.svg"/>

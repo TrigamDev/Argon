@@ -31,7 +31,9 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 	}, [])
 
 	function hackSolution(tag: SearchTag) {
-		if (!tag.name.includes('_')) tag.name = `${tag.name}_(${tag.type})`
+		let typeRegex = /_\([^)]+\)/g
+		let isTyped = (tag.name.match(typeRegex) != null)
+		if (!isTyped) tag.name = `${tag.name}_(${tag.type})`
 		return tag
 	}
 
@@ -53,6 +55,7 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 					sortResults={sortResults}
 					formatResult={formatResult}
 					showIcon={false}
+					showClear={false}
 
 					styling={{
 						boxShadow: "none",

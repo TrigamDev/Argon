@@ -1,11 +1,12 @@
 import type { Tag } from "../../util/types";
-import { getTagIcon } from '../../util/tag';
+import { getTagIcon, removeDuplicates } from '../../util/tag';
 
 import '@argon/components/post/post-tags.css'
 import '@argon/globals.css'
 
 interface Props { tags: Tag[] }
 export default function PostTags({ tags }: Props) {
+
 	return (
 		<div className="post-tags">
 			{ tags?.map((tag: Tag) => {
