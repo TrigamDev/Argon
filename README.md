@@ -12,7 +12,6 @@ Argon is private due to the fact it's solely meant for those close to me, though
 - A Discord bot for managing the server
 - Allow specifying a sort method
 ## Client
-- Uploading
 - Make the config actually affect things
 - Tag list page
 - Random post button

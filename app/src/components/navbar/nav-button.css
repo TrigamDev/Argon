@@ -91,6 +91,21 @@
 
 	/* Layout */
 	width: 100%;
+
+	/* Style */
+	transform: scale(0.9) !important;
+}
+
+.more-dropdown .nav-dropdown-items-container .nav-button:hover {
+	transform: scale(1) !important;
+}
+
+.more-dropdown .nav-dropdown-items-container .nav-button:focus {
+	transform: scale(1) !important;
+}
+
+.more-dropdown .nav-dropdown-items-container .nav-button:active {
+	transform: scale(0.95) !important;
 }
 
 .more-dropdown .nav-dropdown-items-container .nav-button .nav-icon {

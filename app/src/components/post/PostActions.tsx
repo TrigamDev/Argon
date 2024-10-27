@@ -49,9 +49,10 @@ async function copyPostMedia(post: Post) {
 	const { ClipboardItem } = window
 	if (!ClipboardItem) return clipboardError()
 	try {
+		let postBlob = await fetch(post.file.url).then(res => res.blob())
 		await navigator.clipboard.write([
 			new ClipboardItem({
-				'image/png': await fetch(post.file.url).then(res => res.blob())
+				[postBlob.type]: postBlob
 			})
 		])
 	} catch (err) { clipboardError(err) }
