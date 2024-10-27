@@ -9,6 +9,11 @@ const changelogCollection = defineCollection({
 	})
 })
 
+const miscCollection = defineCollection({
+	type: 'content'
+})
+
 export const collections = {
-	'changelogs': changelogCollection
+	'changelogs': changelogCollection,
+	'misc': miscCollection
 }

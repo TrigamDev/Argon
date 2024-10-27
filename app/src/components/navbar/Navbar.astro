@@ -26,26 +26,26 @@ const alpha: boolean = isAlpha()
 			<ul id="nav-info">
 				<li class="nav-button-container">
 					<Dropdown class="group more-dropdown">
-						<button id="more-button" class="nav-button">
-							<img src="/icons/nav/hamburger.svg" alt="More" class="nav-icon"/>
+						<button id="more-button" class="nav-button button">
+							<img src="/icons/nav/hamburger.svg" alt="More" class="button-icon"/>
 						</button>
 						<DropdownItems class="nav-dropdown-items-container">
 							<ul>
 								<li class="nav-button-container">
-									<a id="tags-button" class="nav-button nav-text" href="tags">
-										<img src="/icons/nav/tag.svg" alt="Tag" class="nav-icon"/>
-										Tags List
+									<a id="tags-button" class="nav-button button text focusable" href="tags">
+										<img src="/icons/nav/tag.svg" alt="Tags" class="button-icon"/>
+										Tags
 									</a>
 								</li>
 								<li class="nav-button-container">
-									<a id="random-button" class="nav-button nav-text" href="random">
-										<img src="/icons/nav/tag.svg" alt="Tag" class="nav-icon"/>
+									<a id="random-button" class="nav-button button text focusable" href="random">
+										<img src="/icons/nav/random.svg" alt="Random Post" class="button-icon"/>
 										Random Post
 									</a>
 								</li>
 								<li class="nav-button-container">
-									<a id="changelog-button" class="nav-button nav-text" href="changelog">
-										<img src="/icons/nav/tag.svg" alt="Tag" class="nav-icon"/>
+									<a id="changelog-button" class="nav-button button text focusable" href="changelog">
+										<img src="/icons/nav/changelog.svg" alt="Changelog" class="button-icon"/>
 										Changelog
 									</a>
 								</li>
@@ -71,21 +71,21 @@ const alpha: boolean = isAlpha()
 						</li>
 					}
 					<li class="nav-button-container">
-						<a id="upload-button" class="nav-button" href="upload">
-							<img src="/icons/nav/upload.svg" alt="Upload" class="nav-icon"/>
+						<a id="upload-button" class="nav-button button focusable" href="upload">
+							<img src="/icons/nav/upload.svg" alt="Upload" class="button-icon"/>
 						</a>
 					</li>
 					{ isGallery &&
 						<li class="nav-button-container">
-							<button id="bookmarks-button" class="nav-button" onclick="">
-								<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="nav-icon"/>
+							<button id="bookmarks-button" class="nav-button button focusable" onclick="">
+								<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="button-icon"/>
 							</button>
 						</li>
 					}
 					<li class="nav-button-container">
 						<Dropdown class="group settings-dropdown">
-							<button id="settings-button" class="nav-button">
-								<img src="/icons/nav/settings.svg" alt="Settings" class="nav-icon"/>
+							<button id="settings-button" class="focusable nav-button button">
+								<img src="/icons/nav/settings.svg" alt="Settings" class="button-icon"/>
 							</button>
 							<DropdownItems class="nav-dropdown-items-container">
 								<OptionsMenu client:load/>

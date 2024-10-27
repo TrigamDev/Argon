@@ -4,6 +4,9 @@
 	flex-direction: column;
 	justify-content: center !important;
 	gap: 8px !important;
+
+	/* Layout */
+	padding: 8px 0 0 0;
 }
 
 .react-tabs__tab-list {

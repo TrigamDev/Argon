@@ -1,19 +1,5 @@
 import type { SearchTag, Tag } from "./types";
 
-export function getTagIcon(tag: Tag | SearchTag) {
-    switch (tag.type) {
-        case 'artist': return '/icons/tag/artist.svg';
-        case 'character': return '/icons/tag/character.svg';
-        case 'expression': return '/icons/tag/expression.svg';
-        case 'action': return '/icons/tag/action.svg';
-        case 'object': return '/icons/tag/object.svg';
-        case 'content': return '/icons/tag/content.svg';
-        case 'copyright': return '/icons/tag/copyright.svg';
-        case 'meta': return '/icons/tag/meta.svg';
-        default: return '';
-    }
-}
-
 export function tagStringToTag(tagString: string): Tag | null {
     const match = tagString?.match(/^(.*)_\((.*)\)$/);
     if (!match) return null

@@ -6,13 +6,14 @@ interface Props {
 	changelog: CollectionEntry<'changelogs'>
 }
 const { changelog } = Astro.props
-const { Content, headings } = await changelog.render()
+const { Content } = await changelog.render()
 
-import '@argon/components/changelog/version.css'
 import '@argon/globals.css'
 ---
 
-<div class="changelog-version" id={changelog.data.version}>
-	<h1 class="version-title">{ changelog.data.version } - {moment(changelog.data.released).format('MM/DD/YYYY')}</h1>
+<div class="section" id={changelog.data.version}>
+	<h1 class="version-title">
+		{ changelog.data.version } - {moment(changelog.data.released).format('M/DD/YYYY')}
+	</h1>
 	<Content/>
 </div>

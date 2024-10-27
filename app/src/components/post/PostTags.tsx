@@ -1,5 +1,4 @@
 import type { Tag } from "../../util/types";
-import { getTagIcon, removeDuplicates } from '../../util/tag';
 
 import '@argon/components/post/post-tags.css'
 import '@argon/globals.css'
@@ -23,11 +22,10 @@ export default function PostTags({ tags }: Props) {
 
 interface TagProps { tag: Tag }
 export function PostTag({ tag }: TagProps) {
-	const icon = getTagIcon(tag);
 	return (
-		<div className="post-tag">
-			{ icon && <img src={icon} alt={tag.name} title={tag.type} className="post-tag-icon"/> }
+		<a className="post-tag" href={`/?q=${tag.name}_(${tag.type})`}>
+			<img src={`/icons/tag/${tag.type}.svg`} alt={tag.name} title={tag.type} className="post-tag-icon"/>
 			<span className="post-tag-name">{tag.name}</span>
-		</div>
+		</a>
 	)
 }

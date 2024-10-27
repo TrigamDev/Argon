@@ -136,3 +136,12 @@
 	/* Layout */
 	margin: 0 12px;
 }
+
+.tag-icon {
+	/* Display */
+	overflow: hidden;
+
+	/* Layout */
+	width: 24px;
+	height: 24px;
+}

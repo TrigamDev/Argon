@@ -21,10 +21,148 @@ body {
     height: 100vh;
 }
 
-#root {
-    height: 100%;
+#root { height: 100%; }
+
+.hidden { display: none; }
+
+.focusable:focus {
+	/* Color */
+	background-color: var(--accent) !important;
+
+	/* Border */
+	border: var(--text) solid 2px !important;
+
+	/* Animation */
+	transform: scale(1);
 }
 
-.hidden {
-	display: none;
+/* Button */
+.button {
+	/* Display */
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	gap: 16px;
+	
+	/* Layout */
+	min-width: 56px;
+	height: 56px;
+
+	/* Style */
+	cursor: pointer;
+
+	/* Color */
+	color: white !important;
+	background-color: transparent;
+
+	/* Border */
+	outline: none;
+	border: transparent solid 2px !important;
+	border-radius: 16px !important;
+
+	/* Text */
+	font-family: var(--font);
+	font-size: 22px;
+	font-weight: 600;
+	text-decoration: none;
+
+	/* Animation */
+	transform: scale(0.9);
+	transition: 0.15s;
+}
+.button.accent {
+	/* Color */
+	background-color: var(--accent);
+}
+
+.button.text {
+	/* Layout */
+	height: fit-content;
+	padding: 8px 12px;
+}
+
+.button-icon {
+	/* Layout */
+	width: 42px;
+	height: 42px;
+}
+
+.button:hover {
+	/* Color */
+	background-color: var(--accent);
+	
+	/* Animation */
+	transform: scale(1);
+}
+.button.accent:hover {
+	/* Color */
+	background-color: var(--accent-light);
+}
+
+.button:active {
+	/* Animation */
+	transform: scale(0.9);
+}
+
+.button.accent.focusable:focus {
+	/* Color */
+	background-color: var(--accent-light);
+}
+
+/* Section */
+.section {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+
+	/* Layout */
+	max-width: 60vw;
+	padding: 16px 32px;
+
+	/* Color */
+	background-color: var(--primary);
+
+	/* Border */
+	border-radius: 16px;
+}
+
+.section h1 {
+	/* Layout */
+	margin: 16px 0 8px 0;
+}
+
+.section h2 {
+	/* Layout */
+	margin: 12px 0 6px 0;
+}
+
+.section h3 {
+	/* Layout */
+	margin: 8px 0 4px 0;
+}
+
+.section.center-title h1 {
+	/* Text */
+	text-align: center;
+}
+
+.section p {
+	/* Layout */
+	margin: 6px 0;
+}
+
+.section ul {
+	/* Layout */
+	margin: 0;
+}
+
+.section code {
+	/* Layout */
+	padding: 3px 6px;
+
+	/* Color */
+	background-color: var(--secondary);
+
+	/* Border */
+	border-radius: 6px;
 }

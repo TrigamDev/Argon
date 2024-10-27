@@ -52,7 +52,7 @@ export default function FileUpload({ name, limitTo = null, currentFile, currentU
 			{ /* File Upload */ }
 			<div className={ `upload-field-sub ${ hasUrl ? 'disabled' : '' }` }>
 				<button
-					className="file-button"
+					className="button text accent focusable"
 					disabled={currentUrl != null && currentUrl != ""}
 					onClick={() => { inputRef.current?.click() }}
 				>
@@ -64,7 +64,7 @@ export default function FileUpload({ name, limitTo = null, currentFile, currentU
 
 			{ /* File URL */ }
 			<div className={ `upload-field-sub ${ hasFile ? 'disabled' : '' }` }>
-				<span className="field-name">{name} URL</span>
+				<h3>{name} URL</h3>
 				<Text
 					currentText={currentUrl || ""} resetButton={false}
 					disabled={currentFile != null} onChange={handleUrlUpdate}
@@ -82,7 +82,7 @@ export default function FileUpload({ name, limitTo = null, currentFile, currentU
 			</div>
 
 			<div className={ `upload-field-sub ${ hasFile || hasUrl ? '' : 'disabled' }` }>
-				<button className="file-button" onClick={clearFile}>Clear {name}</button>
+				<button className="button text accent focusable" onClick={clearFile}>Clear {name}</button>
 			</div>
 		</div>
 	)

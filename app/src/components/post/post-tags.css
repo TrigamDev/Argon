@@ -15,22 +15,30 @@
 }
 
 .post-tag {
-	/* Layout */
+	/* Display */
 	display: flex;
 	align-items: center;
 	gap: 10px;
 
+	/* Layout */
 	height: 35px;
 	padding: 0px 17.5px;
-
-	user-select: none;
 	
 	/* Style */
 	cursor: pointer;
+	user-select: none;
 
+	/* Color */
+	color: var(--text);
 	background-color: var(--primary);
+
+	/* Border */
 	border-radius: 17.5px;
 
+	/* Text */
+	text-decoration: none;
+
+	/* Animation */
 	transform: scale(1);
 	transition: 0.25s;
 }
@@ -39,4 +47,13 @@
 	/* Style */
 	transform: scale(1.1);
 	background-color: var(--accent);
+}
+
+.post-tag-icon {
+	/* Display */
+	overflow: hidden;
+
+	/* Layout */
+	width: 24px;
+	height: 24px;
 }

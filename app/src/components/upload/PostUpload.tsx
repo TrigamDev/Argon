@@ -59,40 +59,40 @@ export default function PostUpload() {
 	}
 
 	return (
-		<div className="post-upload-manual">
+		<div className="post-upload">
 			<div className="upload-side" id="left">
 				{ /* Title */ }
-				<div className="upload-field" id="post-title">
-					<span className="field-name">Title</span>
+				<div className="upload-field section" id="post-title">
+					<h2>Title</h2>
 					<Text resetButton={false} onChange={setTitle}/>
 				</div>
 
 				{ /* Timestamp */ }
-				<div className="upload-field" id="post-title">
-					<span className="field-name">Created</span>
+				<div className="upload-field section" id="post-title">
+					<h2>Created</h2>
 					<Timestamp resetButton={false} onChange={updateTimestamp}/>
 				</div>
 
 				{ /* Source URL */ }
-				<div className="upload-field" id="post-source">
-					<span className="field-name">Source URL</span>
+				<div className="upload-field section" id="post-source">
+					<h2>Source URL</h2>
 					<Text resetButton={false} onChange={setSourceUrl}/>
 				</div>
 
 				{ /* Tags */ }
-				<div className="upload-field" id="post-tags">
-					<span className="field-name">Tags</span>
+				<div className="upload-field section" id="post-tags">
+					<h2>Tags</h2>
 					<Tags search={false} multiline={true} onChange={updateTags}/>
 				</div>
 			</div>
 
 			<div className="upload-side" id="right">
-				<div className="upload-field" id="post-upload-file">
+				<div className="upload-field section" id="post-upload-file">
 					<Tabs>
 						<TabList>
-							<Tab>File</Tab>
-							<Tab>Thumbnail</Tab>
-							<Tab>Project File</Tab>
+							<Tab className="button text accent focusable">File</Tab>
+							<Tab className="button text accent focusable">Thumbnail</Tab>
+							<Tab className="button text accent focusable">Project File</Tab>
 						</TabList>
 
 						{ /* File */ }
@@ -134,11 +134,11 @@ export default function PostUpload() {
 			</div>
 
 			<div className="upload-menu">
-				<button className="post-button" id="upload-post" onClick={uploadPost}>
-					<img className="post-icon" src="/icons/nav/save.svg" title='Upload'/>
+				<button className="button" id="upload-post" onClick={uploadPost}>
+					<img className="button-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
-				<button className="post-button" id="cancel-post" onClick={() => window.location.href = "."}>
-					<img className="post-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
+				<button className="button" id="cancel-post" onClick={() => window.location.href = "."}>
+					<img className="button-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
 				</button>
 			</div>
 		</div>

@@ -13,15 +13,12 @@ import '@argon/globals.css'
 
 <Page title="Upload post">
 	<Navbar isGallery={false}/>
-	<div class="changelog">
-		<h1 class="changelog-title">Changelog</h1>
-		<div class="changelog-content">
-			<div class="changelogs">				
-				{ changelogs && changelogs.map((version) => {
-					return <Version changelog={version}/>
-				}) }
-			</div>
-			<VersionList/>
+	<div class="changelog-content">
+		<div class="changelogs">				
+			{ changelogs && changelogs.map((version) => {
+				return <Version changelog={version}/>
+			}) }
 		</div>
+		<VersionList/>
 	</div>
 </Page>

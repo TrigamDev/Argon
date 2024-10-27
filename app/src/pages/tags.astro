@@ -1,0 +1,21 @@
+---
+import Page from '../layouts/Page.astro'
+
+import { getEntry, render } from 'astro:content'
+const tagsBlurb = await getEntry('misc', 'tags')
+const { Content } = await tagsBlurb.render()
+
+import Navbar from '@argon/components/navbar/Navbar.astro'
+
+import '@argon/pages/_tags.css'
+import '@argon/globals.css'
+---
+
+<Page title="Tags">
+	<Navbar isGallery={false}/>
+	<div class="content">
+		<div class="section center-title">
+			<Content/>
+		</div>
+	</div>
+</Page>

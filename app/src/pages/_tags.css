@@ -1,0 +1,9 @@
+.content {
+	/* Display */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	/* Layout */
+	padding-top: 32px;
+}

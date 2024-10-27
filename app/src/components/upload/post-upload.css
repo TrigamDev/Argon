@@ -1,4 +1,4 @@
-.post-upload-manual {
+.post-upload {
 	/* Display */
 	display: flex;
 	flex-direction: row;
@@ -38,53 +38,6 @@
 	border-radius: 16px;
 }
 
-.post-button {
-	/* Layout */
-	padding: 12px;
-
-	/* Style */
-	cursor: pointer;
-
-	/* Color */
-	color: var(--text);
-	background-color: var(--accent);
-
-	/* Border */
-	border: none;
-	outline: none;
-	border-radius: 8px;
-
-	/* Text */
-	font-size: 1.1em;
-	font-weight: 700;
-
-	/* Animation */
-	transition: 0.15s;
-	transform: scale(0.9);
-}
-
-.post-icon {
-	/* Layout */
-	width: 36px;
-	height: 36px;
-}
-
-.post-button:hover, .post-button:focus {
-	/* Color */
-	background-color: var(--accent-light);
-
-	/* Animation */
-	transform: scale(1);
-}
-
-.post-button:active {
-	/* Color */
-	background-color: var(--accent);
-
-	/* Animation */
-	transform: scale(0.9);
-}
-
 .upload-field {
 	/* Display */
 	display: flex;
@@ -95,12 +48,6 @@
 	/* Layout */
 	width: 100%;
 	padding: 16px;
-
-	/* Color */
-	background-color: var(--primary);
-
-	/* Border */
-	border-radius: 16px;
 }
 
 .upload-field-sub {
@@ -114,60 +61,11 @@
 	width: 100%;
 }
 
-.field-name {
-	/* Text */
-	font-size: 1.2em;
-	font-weight: 700;
-	text-align: center;
-}
-
 .upload-separator {
 	/* Text */
 	font-size: 1.1em;
 	font-weight: 600;
-}
-
-.file-button {
-	/* Layout */
-	width: fit-content;
-	padding: 12px;
-	margin: 0;
-
-	/* Style */
-	cursor: pointer;
-
-	/* Color */
-	color: var(--text);
-	background-color: var(--accent);
-
-	/* Border */
-	border: none;
-	outline: none;
-	border-radius: 8px;
-
-	/* Text */
-	font-size: 1.1em;
-	font-weight: 700;
-
-	/* Animation */
-	transition: 0.15s;
-	transform: scale(0.9);
-}
-
-.file-button:hover, .file-button:focus {
-	/* Color */
-	background-color: var(--accent-light);
-
-	/* Animation */
-	transform: scale(1);
-}
-
-.file-button:active {
-	/* Color */
-	background-color: var(--accent);
-
-	/* Animation */
-	transform: scale(0.9);
+	text-align: center;
 }
 
 .upload-field-sub.disabled .field-name {

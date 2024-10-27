@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import { get } from "@argon/util/api"
 import type { SearchTag, Tag } from "@argon/util/types"
-import { getTagIcon, tagsToTagString, tagStringToSearchTags } from "@argon/util/tag"
+import { tagsToTagString, tagStringToSearchTags } from "@argon/util/tag"
 
 import { ReactSearchAutocomplete } from "@argon/libs/react-search-autocomplete"
 
@@ -65,7 +65,7 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 			}
 			{ search &&
 				<div className="nav-button-container">
-					<button id="search-button" className="nav-button" onClick={forceSearch}>
+					<button id="search-button" className="button focusable" onClick={forceSearch}>
 						<img src="/icons/nav/search.svg" alt="Search" className="nav-icon"/>
 					</button>
 				</div>
@@ -91,11 +91,10 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 	}
 
 	function formatResult(tag: SearchTag) {
-		const icon = getTagIcon(tag)
 		return (
 			<div className="search-result">
 				<div id="left">
-					{ icon && <img src={icon} alt={tag.name} title={tag.type} className="tag-icon"/> }
+					<img src={`/icons/tag/${tag.type}.svg`} alt={tag.name} title={tag.type} className="tag-icon"/>
 					<span className="tag-name">{tag.name}</span>
 				</div>
 				<span className="tag-usages">({tag.usages})</span>
