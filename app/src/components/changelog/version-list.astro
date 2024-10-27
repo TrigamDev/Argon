@@ -1,0 +1,15 @@
+---
+import { getSortedVersions } from '@argon/util/version'
+const changelogs = getSortedVersions()
+
+import '@argon/components/changelog/version-list.css'
+import '@argon/globals.css'
+---
+
+<div class="changelog-version-list">
+	{ changelogs && changelogs.map((version) => {
+		return <ul class="versions">
+			<li><a href={`#${version.data.version}`}>v{version.data.version}</a></li>
+		</ul>
+	}) }
+</div>

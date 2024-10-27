@@ -1,6 +1,8 @@
 ---
 import { Astronav, MenuItems, Dropdown, DropdownItems, StickyHeader } from 'astro-navbar'
 
+import { getLatestVersion, isAlpha } from '@argon/util/version'
+
 import NavToggle from '@argon/components/navbar/NavToggle.astro'
 import OptionsMenu from '@argon/components/navbar/options/OptionsMenu.tsx'
 import Search from '@argon/components/input/Tags'
@@ -13,6 +15,9 @@ interface Props {
 	isGallery: boolean
 }
 const { isGallery } = Astro.props
+
+const version = getLatestVersion()
+const alpha: boolean = isAlpha()
 ---
 
 <StickyHeader transition:persist>
@@ -26,10 +31,24 @@ const { isGallery } = Astro.props
 						</button>
 						<DropdownItems class="nav-dropdown-items-container">
 							<ul>
-								<li>Thing 1</li>
-								<li>Thing 2</li>
-								<li>Thing 3</li>
-								<li>Thing 4</li>
+								<li class="nav-button-container">
+									<a id="tags-button" class="nav-button nav-text" href="tags">
+										<img src="/icons/nav/tag.svg" alt="Tag" class="nav-icon"/>
+										Tags List
+									</a>
+								</li>
+								<li class="nav-button-container">
+									<a id="random-button" class="nav-button nav-text" href="random">
+										<img src="/icons/nav/tag.svg" alt="Tag" class="nav-icon"/>
+										Random Post
+									</a>
+								</li>
+								<li class="nav-button-container">
+									<a id="changelog-button" class="nav-button nav-text" href="changelog">
+										<img src="/icons/nav/tag.svg" alt="Tag" class="nav-icon"/>
+										Changelog
+									</a>
+								</li>
 							</ul>
 						</DropdownItems>
 					</Dropdown>
@@ -37,7 +56,7 @@ const { isGallery } = Astro.props
 				<li>
 					<a class="logo" href="." tabindex="-1">
 						<span id="text-mark">Argon</span>
-						<span id="website-version">v1.0</span>
+						<span id="website-version">v{ version.data.version }{ alpha && '-alpha' }</span>
 					</a>
 				</li>
 				<li>

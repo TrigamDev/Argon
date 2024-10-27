@@ -1,0 +1,10 @@
+.changelog-version {
+	/* Layout */
+	padding: 16px 32px;
+
+	/* Color */
+	background-color: var(--primary);
+
+	/* Border */
+	border-radius: 32px;;
+}

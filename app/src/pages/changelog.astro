@@ -1,0 +1,27 @@
+---
+import { getSortedVersions } from '@argon/util/version'
+const changelogs = getSortedVersions()
+
+import Page from '../layouts/Page.astro'
+import Navbar from '@argon/components/navbar/Navbar.astro'
+import Version from '@argon/components/changelog/version.astro'
+import VersionList from '@argon/components/changelog/version-list.astro'
+
+import '@argon/pages/_changelog.css'
+import '@argon/globals.css'
+---
+
+<Page title="Upload post">
+	<Navbar isGallery={false}/>
+	<div class="changelog">
+		<h1 class="changelog-title">Changelog</h1>
+		<div class="changelog-content">
+			<div class="changelogs">				
+				{ changelogs && changelogs.map((version) => {
+					return <Version changelog={version}/>
+				}) }
+			</div>
+			<VersionList/>
+		</div>
+	</div>
+</Page>
