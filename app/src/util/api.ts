@@ -34,7 +34,7 @@ export async function get<T>(request: Request | null, endpoint: string, callback
 		"Content-Type": "application/json",
 		"Access-Control-Allow-Origin": "*",
 		"X-Forwarded-For": ip ?? '',
-		"x-forwarded-proto": getProtocol(request)
+		"X-Forwarded-Protocol": getProtocol(request)
 	}
 	if (request?.headers) headers = { ...headers, ...request.headers }
 
@@ -55,7 +55,7 @@ export async function post<T>(request: Request | null, endpoint: string, data: {
 		"Content-Type": "application/json",
 		"Access-Control-Allow-Origin": "*",
 		"X-Forwarded-For": ip ?? '',
-		"x-forwarded-proto": getProtocol(request)
+		"X-Forwarded-Protocol": getProtocol(request)
 	}
 	if (request?.headers) headers = { ...headers, ...request.headers }
 
@@ -79,7 +79,7 @@ export async function upload<T>(request: Request | null, endpoint: string, data:
 	let headers = {
 		"Access-Control-Allow-Origin": "*",
 		"X-Forwarded-For": ip ?? '',
-		"x-forwarded-proto": getProtocol(request)
+		"X-Forwarded-Protocol": getProtocol(request)
 	}
 	if (request?.headers) headers = { ...headers, ...request.headers }
 
@@ -105,7 +105,7 @@ function getOrigin (request: Request | null) {
 function getProtocol (request: Request | null) {
 	if (request) return new URL(request.url).protocol
 	else {
-		let currentUrl = window.location.href.split("/")
+		let currentUrl = window.location.href.split("://")
 		return currentUrl[0]
 	}
 }

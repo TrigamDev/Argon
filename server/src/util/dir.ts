@@ -7,11 +7,12 @@ export { baseDir }
 export function getWebPath(context: Context): string {
 	if (!context) return ""
 
-	// Attempt to get from Elysia path
-	let path = (context as any).path
+	let protocol: string | null = context.request.headers.get('X-Forwarded-Protocol')
+	let host = context.headers.host
+	let port = process.env.PORT
 
 	// Attempt to get from headers
-	const protocol = context.request.headers.get('x-forwarded-proto') ?? 'http'
-	const url = `${protocol ?? 'http'}://${context.request.headers.get('host') ?? path}`
+	const url = `${protocol ?? 'http'}://${host ?? `localhost:${port}`}`
+	console.log(url)
 	return url
 }
