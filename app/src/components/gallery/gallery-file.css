@@ -35,10 +35,14 @@
 	display: grid;
 	align-items: center;
 	justify-content: center;
+	overflow: hidden;
 
 	/* Layout */
 	max-width: var(--image-size);
 	max-height: var(--image-size);
+
+	/* Border */
+	border-radius: 15px;
 }
 
 .gallery-file .file-container .file {
@@ -68,6 +72,7 @@
 	position: absolute;
 	align-self: flex-start;
 	justify-self: flex-end;
+	z-index: 1;
 	
 	/* Layout */
 	max-width: 15%;

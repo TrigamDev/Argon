@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 
 import { get } from "@argon/util/api"
-import type { SearchTag, Tag } from "@argon/util/types"
-import { tagsToTagString, tagStringToSearchTags } from "@argon/util/tag"
+import type { Tag } from "@argon/util/types"
+import { parseTagString, tagsToTagString } from "@argon/util/tag"
 
 import { ReactSearchAutocomplete } from "@argon/libs/react-search-autocomplete"
 
@@ -13,24 +13,24 @@ import "@argon/components/input/tags.css"
 interface Props {
 	search?: boolean,
 	multiline?: boolean,
-	presetTags?: SearchTag[] | Tag[],
+	presetTags?: Tag[],
 	onChange?: (value: string) => void
 }
 export default function Tags({ search = true, multiline = false, presetTags = [], onChange }: Props) {
 
-	const [tags, setTags] = useState<SearchTag[]>([])
+	const [tags, setTags] = useState<Tag[]>([])
 
 	useEffect(() => {
 		async function loadTags() {
 			await get(null, `tags/list`, async (res: Response) => {
-				let loadedTags = await res.json() as SearchTag[]
+				let loadedTags = await res.json() as Tag[]
 				setTags(loadedTags)
 			})
 		}
 		loadTags()
 	}, [])
 
-	function hackSolution(tag: SearchTag) {
+	function hackSolution(tag: Tag) {
 		let typeRegex = /_\([^)]+\)/g
 		let isTyped = (tag.name.match(typeRegex) != null)
 		if (!isTyped) tag.name = `${tag.name}_(${tag.type})`
@@ -40,7 +40,7 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 	return (
 		<div className="search-bar-container">
 			{ tags &&
-				<ReactSearchAutocomplete<SearchTag>
+				<ReactSearchAutocomplete<Tag>
 					className="search-bar"
 					items={tags.map(tag => hackSolution(tag) )}
 					fuseOptions={{ keys: ["name", "type"] }}
@@ -81,16 +81,16 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 	function handleOnSearch(search: string) {
 		if (onChange) onChange(search)
 		if (search || search == "") {
-			filterTags.set(tagStringToSearchTags(search))
+			filterTags.set(parseTagString(search))
 		}
 	}
 
-	function sortResults(tags: SearchTag[]) {
+	function sortResults(tags: Tag[]) {
 		let sorted = tags.sort((tagA, tagB) => (tagB.usages ?? 0) - (tagA.usages ?? 0))
 		return sorted
 	}
 
-	function formatResult(tag: SearchTag) {
+	function formatResult(tag: Tag) {
 		return (
 			<div className="search-result">
 				<div id="left">

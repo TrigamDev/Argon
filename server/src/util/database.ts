@@ -62,7 +62,6 @@ export function createTables(db: Database) {
 			tagId INTEGER PRIMARY KEY AUTOINCREMENT,
 			type TEXT,
 			name TEXT,
-			safe INTEGER,
 			usages INTEGER
 		)
 	`).run()
@@ -243,7 +242,7 @@ export function searchPostsByTag(tags: SearchTag[], sort: Sorts, pageSize: numbe
 	let excludeTagIds: number[] = []
 
 	tags.map(tag => {
-		let real = getTag({ name: tag.name, type: tag.type, safe: true }, db)
+		let real = getTag({ name: tag.name, type: tag.type }, db)
 		if (!tag.exclude && real && real.id) searchTagIds.push(real.id)
 		else if (tag.exclude && real && real.id) excludeTagIds.push(real.id)
 	})
@@ -361,7 +360,7 @@ export function insertTag(tag: Tag, db: Database) {
 	if (result) {
 		db.query("UPDATE tags SET usages = usages + 1 WHERE tagId = ?").run(result.tagId)
 	} else {
-		db.query("INSERT INTO tags (type, name, safe, usages) VALUES (?, ?, ?, ?)").run(tag.type, tag.name, tag.safe ?? true, 1)
+		db.query("INSERT INTO tags (type, name, usages) VALUES (?, ?, ?, ?)").run(tag.type, tag.name, 1)
 	}
 }
 
@@ -377,8 +376,7 @@ export function getTag(tag: Tag, db: Database): Tag | null {
 	return {
 		id: result.tagId,
 		name: result.name,
-		type: result.type,
-		safe: Boolean(result.safe)
+		type: result.type
 	}
 }
 
@@ -394,7 +392,6 @@ export function getTags(db: Database): Tag[] {
 			id: result.tagId,
 			name: result.name,
 			type: result.type,
-			safe: Boolean(result.safe),
 			usages: result.usages
 		} as Tag
 	})
@@ -411,8 +408,7 @@ export function getTagById(id: number, db: Database): Tag | null {
 	if (!result) return null
 	return {
 		name: result.name,
-		type: result.type,
-		safe: Boolean(result.safe)
+		type: result.type
 	}
 }
 
@@ -483,8 +479,7 @@ export function decodeTags(encoded: string, db: Database): Tag[] {
 		let result: any = db.query("SELECT * FROM tags WHERE tagId = ?").get(id)
 		return {
 			name: result.name,
-			type: result.type,
-			safe: Boolean(result.safe)
+			type: result.type
 		}
 	})
 }

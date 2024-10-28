@@ -27,8 +27,8 @@ export interface Tag {
 	id?: number
 	name: string
 	type: string
-	safe: boolean,
 	usages?: number
+	exclude?: boolean
 }
 
 export enum Sorts {
@@ -38,12 +38,4 @@ export enum Sorts {
 	timestampReverse = "timestampReverse",
 	tagCount = "tagCount",
 	tagCountReverse = "tagCountReverse"
-}
-
-export interface SearchTag {
-	id?: number
-	name: string
-	type: string
-	usages?: number
-	exclude: boolean
 }

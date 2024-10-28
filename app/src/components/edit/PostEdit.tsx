@@ -12,7 +12,7 @@ import Text from "@argon/components/input/Text"
 
 import "@argon/components/edit/post-edit.css"
 import "@argon/globals.css"
-import { tagStringToTags } from "@argon/util/tag"
+import { parseTagString } from "@argon/util/tag"
 
 interface Props { post: Post }
 export default function PostEdit({ post }: Props) {
@@ -32,7 +32,7 @@ export default function PostEdit({ post }: Props) {
 	function updateSourceUrl(value: string) {
 		if (value) setNewSourceUrl(value)
 	}
-	function updateTags(tagString: string) { setNewTags(tagStringToTags(tagString)) }
+	function updateTags(tagString: string) { setNewTags(parseTagString(tagString)) }
 
 	// Saving
 	function savePost() {

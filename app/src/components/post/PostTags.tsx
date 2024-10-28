@@ -17,7 +17,7 @@ export default function PostTags({ tags }: Props) {
 
 /* Tags:
 	artist, character, copyright, source, medium, meta, content, style,
-	expression, clothing, object, location, characteristic, cons, nsfw
+	expression, clothing, object, location, characteristic, nsfw
 */
 
 interface TagProps { tag: Tag }

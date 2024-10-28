@@ -12,7 +12,7 @@ import FileUpload from './FileUpload'
 import { upload } from '@argon/util/api'
 
 import { FileType, type Tag } from '@argon/util/types'
-import { tagsToString, tagStringToTags } from '@argon/util/tag'
+import { parseTagString, tagsToString } from '@argon/util/tag'
 
 import '@argon/components/upload/post-upload.css'
 import 'react-tabs/style/react-tabs.css'
@@ -146,7 +146,7 @@ export default function PostUpload() {
 
 	function updateTimestamp(value: Value) { if (value) setTimestamp(value.getTime()) }
 
-	function updateTags(tagString: string) { setTags(tagStringToTags(tagString)) }
+	function updateTags(tagString: string) { setTags(parseTagString(tagString)) }
 
 	// Files
 	function updateFile(file: File | null) {

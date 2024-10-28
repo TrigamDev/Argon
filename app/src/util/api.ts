@@ -1,4 +1,4 @@
-import type { Post, SearchTag } from "./types"
+import type { Post, Tag } from "./types"
 
 // Get client IP address (used for verification)
 export async function getIpAddress(): Promise<string | null> {
@@ -15,7 +15,7 @@ export async function getPostById(request: Request, id: number): Promise<Post | 
 		return post
 	})
 }
-export async function getPosts(request: Request, tags: SearchTag[]): Promise<Post[] | null> {
+export async function getPosts(request: Request, tags: Tag[]): Promise<Post[] | null> {
 	return post<Post[]>(request, 'search', {
 		tags: tags
 	}, async (response: Response) => {

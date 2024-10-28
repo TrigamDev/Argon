@@ -10,7 +10,7 @@ import type { Post } from "../../util/types"
 import GalleryFile from "./GalleryFile"
 
 import "./gallery.css"
-import { tagStringToSearchTags } from "@argon/util/tag"
+import { parseTagString } from "@argon/util/tag"
 
 export default function Gallery() {
 
@@ -40,7 +40,7 @@ export default function Gallery() {
 		let query = params.get('q')
 
 		if (!query) return
-		let urlTags = tagStringToSearchTags(query)
+		let urlTags = parseTagString(query)
 
 		if (urlTags.length != 0 && $filterTags.length === 0)
 			filterTags.set(urlTags)
