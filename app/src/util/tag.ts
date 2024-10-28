@@ -3,24 +3,25 @@ import type { Tag } from "./types";
 export function parseTagString(tagString: string): Tag[] {
 	let tags = tagString.split(' ').map((tag: string) => {
 		const match = tag?.match(/^(.*)_\((.*)\)$/)
-		if (!match || match.length < 2) return {} as Tag
+		if (!match || match.length < 2) return null
 		const name = match[1].replace(/^!/, '').toLowerCase()
 		const type = match[2].toLowerCase()
-		return { name, type } as Tag
+		const exclude = match[1].startsWith('!')
+		return { name, type, exclude } as Tag
 	})
-	return tags
+	return removeDuplicates(tags.filter(tag => tag !== null) as Tag[])
 }
 
 export function tagsToTagString(tags: Tag[]): string {
 	let strings = []
-	for (let tag of tags) {
-		strings.push(`${tag.exclude ? '!' :''}${tag.name}_(${tag.type})`)
+	for (let tag of removeDuplicates(tags)) {
+		strings.push(`${tag.exclude ? '!' :''}${tag.name.toLowerCase()}_(${tag.type.toLowerCase()})`)
 	}
 	return strings.join(' ')
 }
 
 export function tagToString(tag: Tag) {
-	return `{ "type": "${tag.type}", "name": "${tag.name}" }`
+	return `{ "type": "${tag.type}", "name": "${tag.name}", "exclude": ${tag.exclude} }`
 }
 export function tagsToString(tags: Tag[]) {
 	return `[${tags.map(tag => tagToString(tag)).join(", ")}]`
@@ -29,7 +30,8 @@ export function tagsToString(tags: Tag[]) {
 export function removeDuplicates(tags: Tag[]) {
 	let filtered = tags.filter((tag1: Tag, i, arr) => {
 		return arr.findIndex((tag2: Tag) => {
-			return tag1.name == tag2.name && tag1.type == tag2.type
+			return tag1.name.toLowerCase() == tag2.name.toLowerCase()
+				&& tag1.type.toLowerCase() == tag2.type.toLowerCase()
 		}) === i
 	})
 	return filtered
