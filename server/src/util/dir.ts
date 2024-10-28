@@ -8,12 +8,10 @@ export function getWebPath(context: Context): string {
 	if (!context) return ""
 
 	// Attempt to get from Elysia path
-	let baseUrl = (context as any).url
 	let path = (context as any).path
-	if (baseUrl && path) return (baseUrl.replace(path, ''))
 
 	// Attempt to get from headers
 	const protocol = context.request.headers.get('x-forwarded-proto') ?? 'http'
-	const url = `${protocol ?? 'https'}://${context.request.headers.get('host')}`
+	const url = `${protocol ?? 'http'}://${context.request.headers.get('host') ?? path}`
 	return url
 }
