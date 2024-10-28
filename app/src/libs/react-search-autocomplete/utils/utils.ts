@@ -1,7 +1,7 @@
 
 
 export function debounce(func: Function, wait: number, immediate?: boolean) {
-  let timeout: NodeJS.Timeout | null
+  let timeout: Timer | null
 
   return function (this: any) {
     const context = this
