@@ -1,14 +1,18 @@
 ---
 import Page from '../layouts/Page.astro'
 
-import { getEntry, render } from 'astro:content'
+import { getEntry } from 'astro:content'
 const tagsBlurb = await getEntry('misc', 'tags')
 const { Content } = await tagsBlurb.render()
+
+const tags: Tag[] | null = await get(Astro.request, `tags/list`, (res: Response) => res.json())
 
 import Navbar from '@argon/components/navbar/Navbar.astro'
 
 import '@argon/pages/_tags.css'
 import '@argon/globals.css'
+import { get } from '@argon/util/api'
+import type { Tag } from '@argon/util/types'
 ---
 
 <Page title="Tags">
@@ -17,5 +21,8 @@ import '@argon/globals.css'
 		<div class="section center-title">
 			<Content/>
 		</div>
+		{ tags && tags.map((tag: Tag) => {
+			return (tag.name)
+		}) }
 	</div>
 </Page>

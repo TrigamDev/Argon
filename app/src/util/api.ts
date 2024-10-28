@@ -33,7 +33,8 @@ export async function get<T>(request: Request | null, endpoint: string, callback
 	let headers = {
 		"Content-Type": "application/json",
 		"Access-Control-Allow-Origin": "*",
-		"X-Forwarded-For": ip ?? ''
+		"X-Forwarded-For": ip ?? '',
+		"x-forwarded-proto": origin
 	}
 	if (request?.headers) headers = { ...headers, ...request.headers }
 
@@ -53,7 +54,8 @@ export async function post<T>(request: Request | null, endpoint: string, data: {
 	let headers = {
 		"Content-Type": "application/json",
 		"Access-Control-Allow-Origin": "*",
-		"X-Forwarded-For": ip ?? ''
+		"X-Forwarded-For": ip ?? '',
+		"x-forwarded-proto": origin
 	}
 	if (request?.headers) headers = { ...headers, ...request.headers }
 
@@ -76,7 +78,8 @@ export async function upload<T>(request: Request | null, endpoint: string, data:
 
 	let headers = {
 		"Access-Control-Allow-Origin": "*",
-		"X-Forwarded-For": ip ?? ''
+		"X-Forwarded-For": ip ?? '',
+		"x-forwarded-proto": origin
 	}
 	if (request?.headers) headers = { ...headers, ...request.headers }
 
