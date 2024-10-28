@@ -1,12 +1,11 @@
 import Tag from "../data/tag"
-import { SearchTag } from "./database"
 
-export function removeDuplicates(tags: Tag[] | SearchTag[]) {
-	let filtered = tags.filter((tag1: Tag | SearchTag, i, arr) => {
-		return arr.findIndex((tag2: Tag | SearchTag) => {
-			return tag1.name == tag2.name && tag1.type == tag2.type
+export function removeDuplicates(tags: Tag[]) {
+	let filtered = tags.filter((tag1: Tag, i, arr) => {
+		return arr.findIndex((tag2: Tag) => {
+			return tag1.name.toLowerCase() == tag2.name.toLowerCase()
+				&& tag1.type.toLowerCase() == tag2.type.toLowerCase()
 		}) === i
 	})
-	console.log(filtered)
 	return filtered
 }

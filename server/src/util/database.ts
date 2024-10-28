@@ -8,12 +8,6 @@ import type ArgonFile from "../data/file"
 import { notifPostEdit } from "./webhook"
 import { removeDuplicates } from "./tags"
 
-export interface SearchTag {
-	name: string
-	type: string
-	exclude: boolean
-}
-
 export enum Sorts {
 	postId = "postId",
 	postIdReverse = "postIdReverse",
@@ -229,14 +223,14 @@ export function getPostById(id: number, db: Database): Post | null {
 
 /**
  * Searches for posts by tags
- * @param { SearchTag[] } tags A list of tags to search for 
+ * @param { Tag[] } tags A list of tags to search for 
  * @param { Sorts } sort How to sort the results 
  * @param { number } pageSize How large each page should be 
  * @param { number } pageNumber Which page to get 
  * @param { Database } db The database to search in 
  * @returns { Post[] } A list of posts that match the search criteria
  */
-export function searchPostsByTag(tags: SearchTag[], sort: Sorts, pageSize: number, pageNumber: number, db: Database): Post[] {
+export function searchPostsByTag(tags: Tag[], sort: Sorts, pageSize: number, pageNumber: number, db: Database): Post[] {
 	// Get tag IDs
 	let searchTagIds: number[] = []
 	let excludeTagIds: number[] = []
