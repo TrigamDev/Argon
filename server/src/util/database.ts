@@ -5,8 +5,8 @@ import { Category, Status, log } from "./debug"
 import type Post from "../data/post"
 import type Tag from "../data/tag"
 import type ArgonFile from "../data/file"
-import { notifPostEdit } from "./webhook"
-import { removeDuplicates } from "./tags"
+import { notifError, notifPostEdit } from "./webhook"
+import { getTagDifference, removeDuplicates } from "./tags"
 
 export enum Sorts {
 	postId = "postId",
@@ -16,6 +16,8 @@ export enum Sorts {
 	tagCount = "tagCount",
 	tagCountReverse = "tagCountReverse"
 }
+
+
 
 //
 //	Init
@@ -87,6 +89,8 @@ export function clearDatabase(db: Database) {
 	log(Category.database, Status.success, "Database cleared!")
 }
 
+
+
 //
 //	Post
 //
@@ -102,30 +106,43 @@ export function insertPost(post: Post, db: Database) {
 	let tags = removeDuplicates(post?.tags) as Tag[]
 
 	// Insert tags
-	tags.forEach(tag => insertTag(tag, db))
+	tags.forEach(tag => increaseTagUsages(tag, db))
 	
 	// Insert post
-	db.query(`
-		INSERT INTO Posts (id, timestamp, tags)
-		VALUES (?, ?, ?)
-	`).run(post.id, post.timestamp, encodeTags(tags, db))
-
-	// Insert file
-	db.query(`
-		INSERT INTO files (postId, url, thumbnailUrl, projectUrl, sourceUrl, timestamp, title, type, extension)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-	`).run(post.id, post.file.url, post.file.thumbnailUrl, post.file.projectUrl, post.file.sourceUrl, post.file.timestamp, post.file.title, post.file.type, post.file.extension)
+	try {
+		db.query(`
+			INSERT INTO Posts (id, timestamp, tags)
+			VALUES (?, ?, ?)
+		`).run(post.id, post.timestamp, encodeTags(tags, db))
+	
+		// Insert file
+		db.query(`
+			INSERT INTO files (postId, url, thumbnailUrl, projectUrl, sourceUrl, timestamp, title, type, extension)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+		`).run(post.id, post.file.url, post.file.thumbnailUrl, post.file.projectUrl, post.file.sourceUrl, post.file.timestamp, post.file.title, post.file.type, post.file.extension)
+	} catch (error: any) {
+		log(Category.database, Status.error, `Error saving Post #${post.id}!`)
+		notifError(error)
+	}
 	
 	log(Category.database, Status.success, `Saved Post #${post.id}!`)
 }
 
-export function editPostByID(id: number, db: Database, data: {
-	tags?: Tag[], file: {
+interface PostEditData {
+	tags?: Tag[],
+	file: {
 		timestamp?: number,
 		title?: string,
-		sourceUrl?: string,
+		sourceUrl?: string
 	}
-}): Post | null {
+}
+/**
+ * Edits a post's data by its ID
+ * @param { number } id The ID of the post to edit 
+ * @param { Database } db The database to edit the post in
+ * @param { PostEditData } data The new post data
+ */
+export function editPostByID(id: number, db: Database, data: PostEditData): Post | null {
 	log(Category.database, Status.loading, `Editing Post #${id}...`, true)
 
 	let post = getPostById(id, db)
@@ -139,24 +156,19 @@ export function editPostByID(id: number, db: Database, data: {
 	}
 
 	let tagsNeedEditing = (data.tags && data.tags !== post.tags)
-
 	if (tagsNeedEditing) {
-		// Get tag differences
-		let oldTags = post.tags ?? []
-		let newTags = data.tags ?? []
-		let tagsToAdd = newTags.filter(tag => !oldTags.some(oldTag => oldTag?.name === tag?.name && oldTag?.type === tag?.type))
-		let tagsToRemove = oldTags.filter(tag => !newTags.some(newTag => newTag?.name === tag?.name && newTag?.type === tag?.type))
-
+		let tagDifference = getTagDifference(post.tags, data.tags ?? [])
+		
 		// Handle tags
-		tagsToAdd.map(tag => insertTag(tag, db))
-		tagsToRemove.map(tag => decreaseTagUsages([tag], db))
+		tagDifference.added.map(tag => increaseTagUsages(tag, db))
+		tagDifference.removed.map(tag => decreaseTagUsages(tag, db))
 
 		// Final tags
-		let tags = newTags.filter(tag => !tagsToRemove.some(removeTag => removeTag?.name === tag?.name && removeTag?.type === tag?.type))
-		tags = removeDuplicates(tags) as Tag[]
+		let finalTags = [... tagDifference.unchanged, ... tagDifference.added]
+		finalTags = removeDuplicates(finalTags) as Tag[]
 
 		// Update post
-		db.query("UPDATE posts SET tags = ? WHERE id = ?").run(encodeTags(tags, db), id)
+		db.query("UPDATE posts SET tags = ? WHERE id = ?").run(encodeTags(finalTags, db), id)
 	}
 
 	// Update file
@@ -173,6 +185,16 @@ export function editPostByID(id: number, db: Database, data: {
 	notifPostEdit(post)
 	log(Category.database, Status.success, `Edited Post #${id}!`)
 	return getPostById(id, db)
+}
+
+/**
+ * Deletes a post by its ID
+ * @param { number } id The ID of the post to delete 
+ * @param { Database } db The database to delete the post from 
+ */
+export function deletePostById(id: number, db: Database) {
+	db.query("DELETE FROM posts WHERE id = ?").run(id)
+	deleteFileById(id, db)
 }
 
 /**
@@ -294,16 +316,6 @@ export function searchPostsByTag(tags: Tag[], sort: Sorts, pageSize: number, pag
 	return posts
 }
 
-/**
- * Deletes a post by its ID
- * @param { number } id The ID of the post to delete 
- * @param { Database } db The database to delete the post from 
- */
-export function deletePostById(id: number, db: Database) {
-	db.query("DELETE FROM posts WHERE id = ?").run(id)
-	deleteFileById(id, db)
-}
-
 
 
 //
@@ -340,21 +352,36 @@ export function deleteFileById(id: number, db: Database) {
 }
 
 
+
 //
 //	Tags
 //
 /**
- * Inserts a tag into the database
+ * Increases the usages of a tag in the database
  * @param { Tag } tag The tag to insert 
  * @param { Database } db The database to insert the tag into 
  */
-export function insertTag(tag: Tag, db: Database) {
+export function increaseTagUsages(tag: Tag, db: Database) {
 	// If tag exists, increment usages, otherwise insert
 	let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
 	if (result) {
 		db.query("UPDATE tags SET usages = usages + 1 WHERE tagId = ?").run(result.tagId)
 	} else {
 		db.query("INSERT INTO tags (type, name, usages) VALUES (?, ?, ?, ?)").run(tag.type, tag.name, 1)
+	}
+}
+
+/**
+ * Decreases the usages of a tag in the database
+ * @param { Tag[] } tag The tag to decrease usages of 
+ * @param { Database } db The database to decrease usages in 
+ */
+export function decreaseTagUsages(tag: Tag, db: Database) {
+	let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag?.name, tag?.type)
+	if (result) {
+		// If tag is only used once, delete it
+		if (result.usages <= 1) deleteTagById(result.tagId, db)
+		else db.query("UPDATE tags SET usages = usages - 1 WHERE tagId = ?").run(result?.tagId)
 	}
 }
 
@@ -413,34 +440,6 @@ export function getTagById(id: number, db: Database): Tag | null {
  */
 export function deleteTagById(id: number, db: Database) {
 	db.query("DELETE FROM tags WHERE tagId = ?").run(id)
-}
-
-/**
- * Increases the usages of tags in the database
- * @param { Tag[] } tags The tags to increase usages of 
- * @param { Database } db The database to increase usages in
- */
-export function increaseTagUsages(tags: Tag[], db: Database) {
-	tags.map(tag => {
-		let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
-		if (result) db.query("UPDATE tags SET usages = usages + 1 WHERE tagId = ?").run(result.tagId)
-	})
-}
-
-/**
- * Decreases the usages of tags in the database
- * @param { Tag[] } tags The tags to decrease usages of 
- * @param { Database } db The database to decrease usages in 
- */
-export function decreaseTagUsages(tags: Tag[], db: Database) {
-	tags.map(tag => {
-		let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag?.name, tag?.type)
-		if (result) {
-			// If tag is only used once, delete it
-			if (result.usages <= 1) deleteTagById(result.tagId, db)
-			else db.query("UPDATE tags SET usages = usages - 1 WHERE tagId = ?").run(result?.tagId)
-		}
-	})
 }
 
 /**

@@ -27,7 +27,8 @@ const audioTypes = [ "mp3", "wav", "ogg", "flac" ]
  */
 export function getFileExtension(url: string): string {
 	if (!url) return ""
-	return url.split(".").pop()?.split('?')[0] || ""
+	let extension = url.split(/[#?]/)[0].split('.')?.pop()?.trim() || ""
+	return (extension.includes('/') ? "" : extension).toLowerCase()
 }
 
 export function getFilePath(postId: number, file: Blob | undefined, url?: string): string | null {

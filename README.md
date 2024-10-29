@@ -10,7 +10,7 @@ Argon is private due to the fact it's solely meant for those close to me, though
 - More webhook notifications
 - Maybe a login system? Either that or an improved IP whitelist system
 - A Discord bot for managing the server
-- Allow specifying a sort method
+- Make sorting actually work
 ## Client
 - Make the config actually affect things
 - Tag list page

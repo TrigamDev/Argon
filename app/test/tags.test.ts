@@ -1,5 +1,8 @@
-import { parseTagString, tagsToTagString } from "@argon/util/tag"
 import { expect, test } from "bun:test"
+
+import type { Tag } from "@argon/util/types"
+
+import { parseTagString, removeDuplicates, tagsToTagString } from "@argon/util/tag"
 
 test('Parse Tag String', () => {
 	expect(
@@ -36,4 +39,31 @@ test('Convert Tags Array to Tag String', () => {
 			exclude: false
 		}])
 	).toBe("trigam_(artist) !amber_(character)")
+})
+
+test.each([
+	[
+		[
+			{ type: 'artist', name: 'trigam', exclude: false },
+			{ type: "ARTIST", name: "TrIgAM", exclude: true },
+			{ type: 'character', name: 'amber' },
+			{ type: 'CHARACTER', name: 'amber', exclude: true }
+		],
+		[
+			{ type: 'artist', name: 'trigam', exclude: false },
+			{ type: 'character', name: 'amber' }
+		]
+	], [
+		[
+			{ name: 'spurhuns', type: 'artist' },
+			{ name: 'spurhuns', type: 'artist' },
+			{ name: 'spurhuns', type: 'character' }
+		], 
+		[
+			{ name: 'spurhuns', type: 'artist' },
+			{ name: 'spurhuns', type: 'character' }
+		]
+	]
+])('Remove Duplicate Tags', (tags: Tag[], expected) => {
+	expect(removeDuplicates(tags)).toMatchObject(expected)
 })
