@@ -107,7 +107,7 @@ export function insertPost(post: Post, db: Database) {
 
 	// Insert tags
 	tags.forEach(tag => increaseTagUsages(tag, db))
-	
+
 	// Insert post
 	try {
 		db.query(`
@@ -193,6 +193,10 @@ export function editPostByID(id: number, db: Database, data: PostEditData): Post
  * @param { Database } db The database to delete the post from 
  */
 export function deletePostById(id: number, db: Database) {
+	let post = getPostById(id, db)
+	let tags = post?.tags
+	if (tags) { for (let tag of tags) decreaseTagUsages(tag, db) }
+
 	db.query("DELETE FROM posts WHERE id = ?").run(id)
 	deleteFileById(id, db)
 }
@@ -363,11 +367,16 @@ export function deleteFileById(id: number, db: Database) {
  */
 export function increaseTagUsages(tag: Tag, db: Database) {
 	// If tag exists, increment usages, otherwise insert
-	let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
-	if (result) {
-		db.query("UPDATE tags SET usages = usages + 1 WHERE tagId = ?").run(result.tagId)
-	} else {
-		db.query("INSERT INTO tags (type, name, usages) VALUES (?, ?, ?, ?)").run(tag.type, tag.name, 1)
+	try {		
+		let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
+		if (result) {
+			db.query("UPDATE tags SET usages = usages + 1 WHERE tagId = ?").run(result.tagId)
+		} else {
+			db.query("INSERT INTO tags (type, name, usages) VALUES (?, ?, ?)").run(tag.type, tag.name, 1)
+		}
+	} catch (error) {
+		log(Category.database, Status.error, `Error inserting tag: ${error}`)
+		notifError(error as Error)
 	}
 }
 

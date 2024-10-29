@@ -13,6 +13,5 @@ export function getWebPath(context: Context): string {
 
 	// Attempt to get from headers
 	const url = `${protocol ?? 'http'}://${host ?? `localhost:${port}`}`
-	console.log(url)
 	return url
 }
