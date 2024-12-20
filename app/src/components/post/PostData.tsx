@@ -46,19 +46,19 @@ export default function PostData({ post }: Props) {
 }
 
 function displayTimestamp(timestamp: number) {
-    return moment(timestamp).format("M/D/YYYY h:mm A")
+	return moment(timestamp).format("M/D/YYYY h:mm A")
 }
 
 function formatFileSize(fileSize: number) {
-    if (!fileSize) return "0 B";
-    if (fileSize < 1000) return `${fileSize} B`;
-    else if (fileSize < 1000000) return `${roundToTwo(fileSize / 1000)} KB`;
-    else if (fileSize < 1000000000) return `${roundToTwo(fileSize / 1000000)} MB`;
-    else return `${roundToTwo(fileSize / 1000000000)} GB`;
+	if (!fileSize) return "0 B";
+	if (fileSize < 1000) return `${fileSize} B`;
+	else if (fileSize < 1000000) return `${roundToTwo(fileSize / 1000)} KB`;
+	else if (fileSize < 1000000000) return `${roundToTwo(fileSize / 1000000)} MB`;
+	else return `${roundToTwo(fileSize / 1000000000)} GB`;
 }
 
 function roundToTwo(num: number) {
-    return Math.round((num + Number.EPSILON) * 100) / 100
+	return Math.round((num + Number.EPSILON) * 100) / 100
 }
 
 function formatDuration(duration: number) {

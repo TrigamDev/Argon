@@ -70,12 +70,12 @@
 .input-field .revert-change {
 	/* Display */
 	display: flex;
-    justify-content: center;
-    align-items: center;
-	
+	justify-content: center;
+	align-items: center;
+
 	/* Layout */
 	width: 56px;
-    height: 56px;
+	height: 56px;
 	scale: 0.95;
 	padding: 12px;
 

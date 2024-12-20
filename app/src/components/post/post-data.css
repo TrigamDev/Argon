@@ -1,23 +1,23 @@
 .post-info {
-    /* Layout */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    align-self: stretch;
+	/* Layout */
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	align-self: stretch;
 	margin: 0;
 	padding: 0;
 
 	/* Style */
 	list-style: none;
-}
+	}
 
-.post-info .post-info-field {
-    /* Layout */
-    align-self: stretch;
+	.post-info .post-info-field {
+	/* Layout */
+	align-self: stretch;
 
-    /* Style */
-    font-size: 18px;
-    font-weight: 600;
+	/* Style */
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .post-info .post-info-field a {

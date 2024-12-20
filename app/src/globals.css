@@ -1,31 +1,31 @@
 :root {
-    --text: #EDE3EF;
-    --text-disabled:rgb(193, 182, 196);
-    --background: #170D19;
-    --primary: #BC32B4;
-    --secondary: #881A81;
-    --secondary-light: #a6269d;
-    --accent: #DD56D5;
+	--text: #EDE3EF;
+	--text-disabled:rgb(193, 182, 196);
+	--background: #170D19;
+	--primary: #BC32B4;
+	--secondary: #881A81;
+	--secondary-light: #a6269d;
+	--accent: #DD56D5;
 	--accent-light: #fb73f2;
-    --disabled: #4d194e;
-    --font: 'Poppins', sans-serif;
+	--disabled: #4d194e;
+	--font: 'Poppins', sans-serif;
 }
 
 body {
 	/* Display */
-    overflow-x: hidden;
+	overflow-x: hidden;
 
 	/* Layout */
-    height: 100vh;
-    padding: 0;
-    margin: 0;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
 
 	/* Color */
-    color: var(--text);
-    background-color: var(--background);
+	color: var(--text);
+	background-color: var(--background);
 
 	/* Typography */
-    font-family: var(--font);
+	font-family: var(--font);
 
 	transform-style: preserve-3d;
 }
@@ -65,8 +65,8 @@ body {
 	height: 56px;
 
 	/* Alignment */
-    align-items: center;
-    justify-content: center;
+	align-items: center;
+	justify-content: center;
 
 	/* Transformations */
 	transform: scale(0.9);

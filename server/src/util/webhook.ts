@@ -47,10 +47,10 @@ export function uploadPayload(post: Post) {
 			timestamp: new Date(post.file.timestamp ?? 0).toISOString(),
 			footer: { text: `ID: ${post.id}` },
 			fields: [
-                {	name: 'Source',		value: post.file.sourceUrl ?? "None",		inline: true	},
-                {	name: 'Type',		value: post.file.type ?? "Unknown",			inline: true	},
-                {	name: 'Extension',	value: post.file.extension ?? "Unknown",	inline: true	}
-            ],
+				{	name: 'Source',		value: post.file.sourceUrl ?? "None",		inline: true	},
+				{	name: 'Type',		value: post.file.type ?? "Unknown",			inline: true	},
+				{	name: 'Extension',	value: post.file.extension ?? "Unknown",	inline: true	}
+			],
 		}]
 	}
 }
@@ -61,9 +61,9 @@ export function errorPayload(error: Error) {
 		embeds: [{
 			title: `${error.name ?? "Error!"}`,
 			fields: [
-                {	name: 'Message',	value: error.message ?? 'Unknown',		inline: false	},
-                {	name: 'Cause',		value: error.cause ?? 'Unknown',		inline: false	}
-            ],
+				{	name: 'Message',	value: error.message ?? 'Unknown',		inline: false	},
+				{	name: 'Cause',		value: error.cause ?? 'Unknown',		inline: false	}
+			],
 			description: `${error.stack ?? '?'}`,
 			color: 0xEF233C,
 			footer: { text: `Oopsie daisies!` }
