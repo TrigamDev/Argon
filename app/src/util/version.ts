@@ -9,7 +9,7 @@ export function getLatestVersion() {
 export function getSortedVersions(): CollectionEntry<'changelogs'>[] {
 	let sorted = changelogs.sort(
 		(a: CollectionEntry<'changelogs'>, b: CollectionEntry<'changelogs'>) =>
-			b.data.released - a.data.released
+			b.data.released.getTime() - a.data.released.getTime()
 	)
 	return sorted
 }
