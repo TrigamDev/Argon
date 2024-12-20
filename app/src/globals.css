@@ -12,18 +12,33 @@
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: var(--font);
-    background-color: var(--background);
-    color: var(--text);
+	/* Display */
     overflow-x: hidden;
+
+	/* Layout */
     height: 100vh;
+    padding: 0;
+    margin: 0;
+
+	/* Color */
+    color: var(--text);
+    background-color: var(--background);
+
+	/* Typography */
+    font-family: var(--font);
+
+	transform-style: preserve-3d;
 }
 
 #root { height: 100%; }
 
 .hidden { display: none; }
+
+.center {
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+}
 
 .focusable:focus {
 	/* Color */
@@ -36,38 +51,48 @@ body {
 	transform: scale(1);
 }
 
+.accent.focusable:focus {
+	background-color: var(--accent-light) !important;
+}
+
 /* Button */
 .button {
 	/* Display */
 	display: flex;
-    justify-content: center;
-    align-items: center;
-	gap: 16px;
-	
+
 	/* Layout */
 	min-width: 56px;
 	height: 56px;
 
-	/* Style */
+	/* Alignment */
+    align-items: center;
+    justify-content: center;
+
+	/* Transformations */
+	transform: scale(0.9);
+
+	/* Cursor */
 	cursor: pointer;
 
 	/* Color */
 	color: white !important;
 	background-color: transparent;
 
-	/* Border */
-	outline: none;
-	border: transparent solid 2px !important;
-	border-radius: 16px !important;
-
-	/* Text */
+	/* Typography */
 	font-family: var(--font);
 	font-size: 22px;
 	font-weight: 600;
 	text-decoration: none;
 
+	/* Grid */
+	gap: 16px;
+
+	/* Border */
+	border: transparent solid 2px !important;
+	border-radius: 16px !important;
+	outline: none;
+
 	/* Animation */
-	transform: scale(0.9);
 	transition: 0.15s;
 }
 .button.accent {
@@ -75,16 +100,15 @@ body {
 	background-color: var(--accent);
 }
 
-.button.text {
-	/* Layout */
-	height: fit-content;
-	padding: 8px 12px;
-}
-
 .button-icon {
 	/* Layout */
 	width: 42px;
 	height: 42px;
+}
+
+.button-label {
+	/* Layout */
+	margin: 0;
 }
 
 .button:hover {
@@ -109,10 +133,23 @@ body {
 	background-color: var(--accent-light);
 }
 
+.button.text {
+	/* Layout */
+	height: fit-content;
+	padding: 8px 12px;
+	justify-content: flex-start;
+}
+
+.button.text .button-icon {
+	width: 36px;
+	height: 36px;
+}
+
 /* Section */
 .section {
 	/* Display */
 	display: flex;
+	flex: 0 1 auto;
 	flex-direction: column;
 
 	/* Layout */

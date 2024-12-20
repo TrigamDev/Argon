@@ -1,9 +1,11 @@
 ---
 import Page from '../layouts/Page.astro'
 
-import { getEntry } from 'astro:content'
+import { getEntry, render } from 'astro:content'
+import type { RenderResult } from 'astro:content'
+
 const tagsBlurb = await getEntry('misc', 'tags')
-const { Content } = await tagsBlurb.render()
+const { Content } = tagsBlurb ? await render( tagsBlurb ) : {} as RenderResult
 
 const tags: Tag[] | null = await get(Astro.request, `tags/list`, (res: Response) => res.json())
 
@@ -19,7 +21,7 @@ import type { Tag } from '@argon/util/types'
 	<Navbar isGallery={false}/>
 	<div class="content">
 		<div class="section center-title">
-			<Content/>
+			{ Content && <Content/> }
 		</div>
 		{ tags && tags.map((tag: Tag) => {
 			return (tag.name)

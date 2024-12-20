@@ -2,22 +2,23 @@ import { useEffect, useState } from "react"
 
 import { get } from "@argon/util/api"
 import type { Tag } from "@argon/util/types"
-import { parseTagString, tagsToTagString } from "@argon/util/tag"
+import { areTagsEqual, parseTagString, tagsToTagString, tagToString } from "@argon/util/tag"
 
-import { ReactSearchAutocomplete } from "@argon/libs/react-search-autocomplete"
-
+import { Multiselect } from "@argon/libs/multiselect-react-dropdown"
 import { filterTags } from "@argon/stores/postList"
 
 import "@argon/components/input/tags.css"
+import "@argon/globals.css"
+import { useStore } from "@nanostores/react"
 
 interface Props {
 	search?: boolean,
 	multiline?: boolean,
-	presetTags?: Tag[],
-	onChange?: (value: string) => void
+	defaultValue?: Tag[],
+	onChange?: ( value: Tag[] ) => void
 }
-export default function Tags({ search = true, multiline = false, presetTags = [], onChange }: Props) {
-
+export default function Tags ({ search = true, multiline = false, defaultValue = [], onChange, ...props }: Props) {
+	
 	const [tags, setTags] = useState<Tag[]>([])
 
 	useEffect(() => {
@@ -30,75 +31,82 @@ export default function Tags({ search = true, multiline = false, presetTags = []
 		loadTags()
 	}, [])
 
-	function hackSolution(tag: Tag) {
-		let typeRegex = /_\([^)]+\)/g
-		let isTyped = (tag.name.match(typeRegex) != null)
-		if (!isTyped) tag.name = `${tag.name}_(${tag.type})`
-		return tag
+
+	function onItemChange (selectedList: Tag[], selectedItem: Tag) {
+		// Scroll input box
+		let input: HTMLInputElement | null = document.querySelector('.searchBox')
+		if (input && !multiline) {
+			setTimeout(() => {
+				input.scrollIntoView({ inline: 'start', behavior: 'smooth' })
+			}, 50)
+		}
+
+		filterTags.set( tagsToTagString( selectedList ) )
+
+		// Update
+		if (onChange) onChange( selectedList )
+	}
+
+	function formatResult ( value: string, tag: Tag ) {
+		return (
+			<div className="search-result">
+				<div id="left">
+					<img src={`/icons/tag/${ tag.type }.svg`} alt={ tag.name } title={ tag.type } className="tag-icon"/>
+					<span className="tag-name">{ tag.name }_({ tag.type })</span>
+				</div>
+				<span className="tag-usages">({ tag.usages })</span>
+			</div>
+		)
+	}
+	function formatChip ( value: string, tag: Tag ) {
+		return (
+			<div className="tag-chip">
+				<img src={`/icons/tag/${ tag.type }.svg`} alt={ tag.name } title={ tag.type } className="tag-icon"/>
+				<span className="tag-name">{ tag.name }</span>
+			</div>
+		)
+	}
+
+	function parseInput ( value: string ): Tag | null {
+		let parsed = parseTagString( value )
+		let parsedTag = parsed[0]
+		if (parsedTag) {
+			parsedTag.usages = 0
+			return parsedTag
+		} else return null
 	}
 
 	return (
-		<div className="search-bar-container">
-			{ tags &&
-				<ReactSearchAutocomplete<Tag>
-					className="search-bar"
-					items={tags.map(tag => hackSolution(tag) )}
-					fuseOptions={{ keys: ["name", "type"] }}
-					
-					multi
-					multiline={multiline}
-					splitter=" "
-					inputSearchString={tagsToTagString(presetTags)}
+		<div className="tag-input-container">
+			<div className="tag-input">
+				<Multiselect
+					className={`search-bar ${ multiline ? 'multiline' : '' }`}
+		
+					options={ tags }
+					selectedValues={ defaultValue }
 
-					onSearch={handleOnSearch}
+					displayValue="name"
+					placeholder="Search"
+					emptyRecordMsg="No Tags Available"
+		
+					onSelect={ onItemChange }
+					onRemove={ onItemChange }
 
-					sortResults={sortResults}
-					formatResult={formatResult}
-					showIcon={false}
-					showClear={false}
+					selectedValueDecorator={ formatChip }
+					optionValueDecorator={ formatResult }
 
-					styling={{
-						boxShadow: "none",
-						hoverBackgroundColor: "var(--accent)",
-					}}
+					evaluateValue={ parseInput }
+					areOptionsEqual={ areTagsEqual }
 				/>
-			}
-			{ search &&
+			</div>
+			{ /*search &&
 				<div className="nav-button-container">
-					<button id="search-button" className="button focusable" onClick={forceSearch}>
+					<button id="search-button" className="button focusable" onClick={ () => {} }>
 						<img src="/icons/nav/search.svg" alt="Search" className="nav-icon"/>
 					</button>
-				</div>
+				</div>*/
 			}
 		</div>
 	)
 
-	function forceSearch() {
-		let input: HTMLInputElement | null = document.querySelector('.search-bar input')
-		if (input) handleOnSearch(input.value ?? "")
-	}
-
-	function handleOnSearch(search: string) {
-		if (onChange) onChange(search)
-		if (search || search == "") {
-			filterTags.set(parseTagString(search))
-		}
-	}
-
-	function sortResults(tags: Tag[]) {
-		let sorted = tags.sort((tagA, tagB) => (tagB.usages ?? 0) - (tagA.usages ?? 0))
-		return sorted
-	}
-
-	function formatResult(tag: Tag) {
-		return (
-			<div className="search-result">
-				<div id="left">
-					<img src={`/icons/tag/${tag.type}.svg`} alt={tag.name} title={tag.type} className="tag-icon"/>
-					<span className="tag-name">{tag.name}</span>
-				</div>
-				<span className="tag-usages">({tag.usages})</span>
-			</div>
-		)
-	}
 }

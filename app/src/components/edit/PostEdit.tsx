@@ -2,17 +2,17 @@ import { useState } from "react"
 
 import type { Value } from "node_modules/react-datetime-picker/dist/cjs/shared/types"
 
-import type { Post } from "@argon/util/types"
+import type { Post, Tag } from "@argon/util/types"
 import { upload, post as apiPost } from "@argon/util/api"
+import { parseTagString } from "@argon/util/tag"
 
 import EditPostNav from "@argon/components/navbar/post/EditPostNav"
-import Search from "@argon/components/input/Tags"
+import Tags from "@argon/components/input/Tags"
 import Timestamp from "@argon/components/input/Timestamp"
 import Text from "@argon/components/input/Text"
 
 import "@argon/components/edit/post-edit.css"
 import "@argon/globals.css"
-import { parseTagString } from "@argon/util/tag"
 
 interface Props { post: Post }
 export default function PostEdit({ post }: Props) {
@@ -32,7 +32,7 @@ export default function PostEdit({ post }: Props) {
 	function updateSourceUrl(value: string) {
 		if (value) setNewSourceUrl(value)
 	}
-	function updateTags(tagString: string) { setNewTags(parseTagString(tagString)) }
+	function updateTags(tags: Tag[]) { setNewTags( tags ) }
 
 	// Saving
 	function savePost() {
@@ -61,27 +61,27 @@ export default function PostEdit({ post }: Props) {
 				/>
 			}
 			<div className="post-edit-content">
-				<span className="post-title">Edit { post?.file.title }.{post?.file.extension}</span>
+				<h1 className="post-title">Edit { post?.file.title }.{post?.file.extension}</h1>
 				{ post &&
 					<ul className="post-edit-fields">
 						<li className="post-edit-title">
-							<span className="post-edit-field-name">Title</span>
+							<h2>Title</h2>
 							<Text currentText={post.file.title} onChange={updateTitle} />
 						</li>
 						<li className="post-edit-timestamp">
-							<span className="post-edit-field-name">Created</span>
+							<h2>Created</h2>
 							<Timestamp currentTimestamp={ post.file.timestamp } onChange={updateTimestamp} />
 						</li>
 						<li className="post-edit-source-url">
-							<span className="post-edit-field-name">Source URL</span>
+							<h2>Source URL</h2>
 							<Text currentText={post.file.sourceUrl} onChange={updateSourceUrl} />
 						</li>
 						<li className="post-edit-tags">
-							<span className="post-edit-field-name">Tags</span>
-							<Search
+							<h2>Tags</h2>
+							<Tags
 								search={false}
 								multiline={true}
-								presetTags={post.tags}
+								defaultValue={ post.tags }
 								onChange={updateTags}
 							/>
 						</li>

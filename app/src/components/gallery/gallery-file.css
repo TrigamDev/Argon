@@ -3,18 +3,25 @@
 }
 
 .gallery-file {
-	/* Layout */
+	/* Display */
 	display: flex;
-	justify-content: center;
-	align-items: center;
 
+	/* Layout */
 	width: var(--image-size);
 	height: var(--image-size);
 
-	/* Style */
+	/* Alignment */
+	align-items: center;
+	justify-content: center;
+
+	/* Cursor */
 	cursor: pointer;
+
+	/* Border */
 	border-radius: 15px;
-	transform: scale(1);
+	border: 2px solid transparent;
+
+	/* Animation */
 	transition: 0.25s;
 }
 
@@ -23,11 +30,6 @@
 	:root {
 		--image-size: 35vmax;
 	}
-}
-
-.gallery-file:hover {
-	/* Style */
-	transform: scale(1.1);
 }
 
 .gallery-file .file-container {

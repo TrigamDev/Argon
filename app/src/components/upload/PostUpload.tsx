@@ -53,36 +53,35 @@ export default function PostUpload() {
 		if (sourceUrl) formdata.append('sourceUrl', sourceUrl)
 		if (tags) formdata.append('tags', tagsToString(tags))
 
-		upload(null, `post/upload`, formdata, () => {
-			window.location.href = `.`
+		upload(null, `post/upload`, formdata, ( response: Response ) => {
+			if (response.ok) window.location.href = `.`
+			else alert("Oopsies!")
 		})
 	}
 
 	return (
 		<div className="post-upload">
 			<div className="upload-side" id="left">
-				{ /* Title */ }
-				<div className="upload-field section" id="post-title">
+				<div className="upload-field section" id="post-details">
+					{ /* Title */ }
 					<h2>Title</h2>
 					<Text resetButton={false} onChange={setTitle}/>
-				</div>
-
-				{ /* Timestamp */ }
-				<div className="upload-field section" id="post-title">
+					
+					{ /* Timestamp */ }
 					<h2>Created</h2>
 					<Timestamp resetButton={false} onChange={updateTimestamp}/>
-				</div>
 
-				{ /* Source URL */ }
-				<div className="upload-field section" id="post-source">
+					{ /* Source URL */ }
 					<h2>Source URL</h2>
 					<Text resetButton={false} onChange={setSourceUrl}/>
-				</div>
 
-				{ /* Tags */ }
-				<div className="upload-field section" id="post-tags">
+					{ /* Tags */ }
 					<h2>Tags</h2>
-					<Tags search={false} multiline={true} onChange={updateTags}/>
+					<Tags
+						search={false}
+						multiline={true}
+						onChange={ updateTags }
+					/>
 				</div>
 			</div>
 
@@ -90,9 +89,9 @@ export default function PostUpload() {
 				<div className="upload-field section" id="post-upload-file">
 					<Tabs>
 						<TabList>
-							<Tab className="button text accent focusable">File</Tab>
-							<Tab className="button text accent focusable">Thumbnail</Tab>
-							<Tab className="button text accent focusable">Project File</Tab>
+							<Tab className="button text accent focusable center">File</Tab>
+							<Tab className="button text accent focusable center">Thumbnail</Tab>
+							<Tab className="button text accent focusable center">Project File</Tab>
 						</TabList>
 
 						{ /* File */ }
@@ -134,10 +133,10 @@ export default function PostUpload() {
 			</div>
 
 			<div className="upload-menu">
-				<button className="button" id="upload-post" onClick={uploadPost}>
+				<button className="button focusable" id="upload-post" onClick={uploadPost}>
 					<img className="button-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
-				<button className="button" id="cancel-post" onClick={() => window.location.href = "."}>
+				<button className="button focusable	" id="cancel-post" onClick={() => window.location.href = "."}>
 					<img className="button-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
 				</button>
 			</div>
@@ -146,7 +145,7 @@ export default function PostUpload() {
 
 	function updateTimestamp(value: Value) { if (value) setTimestamp(value.getTime()) }
 
-	function updateTags(tagString: string) { setTags(parseTagString(tagString)) }
+	function updateTags(tags: Tag[]) { setTags(tags) }
 
 	// Files
 	function updateFile(file: File | null) {

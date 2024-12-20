@@ -17,7 +17,6 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	gap: 2.5vh;
 
 	/* Layout */
 	width: 90%;
@@ -34,10 +33,6 @@
 	justify-content: center;
 	align-items: center;
 	align-self: stretch;
-
-	/* Style */
-	font-size: 28px;
-	font-weight: 700;
 }
 
 .post-edit-fields {
@@ -45,7 +40,6 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	gap: 2vh;
 
 	/* Layout */
 	margin: 0;

@@ -1,0 +1,19 @@
+---
+import '@argon/globals.css'
+
+interface Props {
+	id: string
+	label: string
+	icon: string
+	alt: string
+	href: string
+}
+const { id, label, icon, alt, href } = Astro.props
+---
+
+<li class="button-container">
+	<a id={ id } class="dropdown-button button text focusable" href={ href }>
+		<img src={ icon } alt={alt} class="button-icon"/>
+		<h3 class="button-label">{ label }</h3>
+	</a>
+</li>

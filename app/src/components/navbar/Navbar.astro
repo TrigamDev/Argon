@@ -5,7 +5,8 @@ import { getLatestVersion, isAlpha } from '@argon/util/version'
 
 import NavToggle from '@argon/components/navbar/NavToggle.astro'
 import OptionsMenu from '@argon/components/navbar/options/OptionsMenu.tsx'
-import Search from '@argon/components/input/Tags'
+import Tags from '@argon/components/input/Tags'
+import DropdownButton from '@argon/components/button/DropdownButton.astro'
 
 import '@argon/components/navbar/navbar.css'	
 import '@argon/components/navbar/nav-button.css'
@@ -31,24 +32,21 @@ const alpha: boolean = isAlpha()
 						</button>
 						<DropdownItems class="nav-dropdown-items-container">
 							<ul>
-								<li class="nav-button-container">
-									<a id="tags-button" class="nav-button button text focusable" href="tags">
-										<img src="/icons/nav/tag.svg" alt="Tags" class="button-icon"/>
-										Tags
-									</a>
-								</li>
-								<li class="nav-button-container">
-									<a id="random-button" class="nav-button button text focusable" href="random">
-										<img src="/icons/nav/random.svg" alt="Random Post" class="button-icon"/>
-										Random Post
-									</a>
-								</li>
-								<li class="nav-button-container">
-									<a id="changelog-button" class="nav-button button text focusable" href="changelog">
-										<img src="/icons/nav/changelog.svg" alt="Changelog" class="button-icon"/>
-										Changelog
-									</a>
-								</li>
+								<DropdownButton
+									id="tags-button"
+									label="Tags" icon="/icons/nav/tag.svg"
+									alt="Tags" href="tags"
+								/>
+								<DropdownButton
+									id="random-button"
+									label="Random Post" icon="/icons/nav/random.svg"
+									alt="Random Post" href="random"
+								/>
+								<DropdownButton
+									id="changelog-button"
+									label="Changelog" icon="/icons/nav/changelog.svg"
+									alt="Changelog" href="changelog"
+								/>
 							</ul>
 						</DropdownItems>
 					</Dropdown>
@@ -56,7 +54,7 @@ const alpha: boolean = isAlpha()
 				<li>
 					<a class="logo" href="." tabindex="-1">
 						<span id="text-mark">Argon</span>
-						<span id="website-version">v{ version.data.version }{ alpha && '-alpha' }</span>
+						<span id="website-version">v{ version?.data?.version }{ alpha && '-alpha' }</span>
 					</a>
 				</li>
 				<li>
@@ -67,7 +65,11 @@ const alpha: boolean = isAlpha()
 				<ul class="nav-buttons">
 					{ isGallery &&
 						<li class="nav-button-container search-button-container">
-							<Search client:only="react"/>
+							<Tags
+								search={true}
+								multiline={false}
+								client:only="react"
+							/>
 						</li>
 					}
 					<li class="nav-button-container">

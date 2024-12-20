@@ -1,18 +1,21 @@
 ---
+import moment from 'moment'
+
 import { getSortedVersions } from '@argon/util/version'
 const changelogs = getSortedVersions()
+import { formatTime } from './version.astro'
 
 import '@argon/components/changelog/version-list.css'
 import '@argon/globals.css'
-import moment from 'moment'
 ---
 
 <div class="section changelog-version-list">
 	{ changelogs && changelogs.map((version) => {
 		return <ul class="versions">
-			<li>
-				<a href={`#${version.data.version}`}>v{ version.data.version }</a>
-				- {moment(version.data.released).format('M/DD/YYYY')}
+			<li class="version">
+				<a href={ `#${version.data.version}` }>v{ version.data.version }</a>
+				<span>-</span>
+				<span class="version-released">{ formatTime( version.data.released ) }</span>
 			</li>
 		</ul>
 	}) }

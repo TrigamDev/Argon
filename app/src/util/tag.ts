@@ -6,7 +6,7 @@ export function parseTagString(tagString: string): Tag[] {
 		if (!match || match.length < 2) return null
 		const name = match[1].replace(/^!/, '').toLowerCase()
 		const type = match[2].toLowerCase()
-		const exclude = match[1].startsWith('!')
+		const exclude = match[1].startsWith('!') ?? false
 		return { name, type, exclude } as Tag
 	})
 	return removeDuplicates(tags.filter(tag => tag !== null) as Tag[])
@@ -15,13 +15,13 @@ export function parseTagString(tagString: string): Tag[] {
 export function tagsToTagString(tags: Tag[]): string {
 	let strings = []
 	for (let tag of removeDuplicates(tags)) {
-		strings.push(`${tag.exclude ? '!' :''}${tag.name.toLowerCase()}_(${tag.type.toLowerCase()})`)
+		strings.push(`${tag.exclude ? '!' : ''}${tag.name.toLowerCase()}_(${tag.type.toLowerCase()})`)
 	}
 	return strings.join(' ')
 }
 
 export function tagToString(tag: Tag) {
-	return `{ "type": "${tag.type}", "name": "${tag.name}", "exclude": ${tag.exclude} }`
+	return `{ "type": "${tag.type}", "name": "${tag.name}", "exclude": ${tag.exclude ?? false} }`
 }
 export function tagsToString(tags: Tag[]) {
 	return `[${tags.map(tag => tagToString(tag)).join(", ")}]`
@@ -38,6 +38,10 @@ export function removeDuplicates(tags: Tag[]) {
 }
 
 export function hasTag(tags: Tag[], tag: Tag) {
-	let search = tags.filter(postTag => postTag.name == tag.name && postTag.type == tag.type)
+	let search = tags.filter(postTag => areTagsEqual( postTag, tag ) )
 	return search.length > 0
+}
+
+export function areTagsEqual(tagA: Tag, tagB: Tag): boolean {
+	return tagA?.name === tagB?.name && tagA?.type === tagB?.type
 }

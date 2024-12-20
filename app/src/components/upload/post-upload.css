@@ -2,6 +2,7 @@
 	/* Display */
 	display: flex;
 	flex-direction: row;
+	height: 100%;
 }
 
 .upload-side {
@@ -14,6 +15,7 @@
 	/* Layout */
 	width: 100%;
 	max-width: 50vw;
+	height: 100%;
 	padding: 32px;
 }
 

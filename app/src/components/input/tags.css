@@ -1,124 +1,193 @@
-.search-bar-container {
+.tag-input-container {
 	/* Display */
 	display: flex;
 	flex-direction: row;
-	align-items: center;
-	justify-content: flex-end;
-	gap: 8px;
 
 	/* Layout */
 	width: 100%;
-	height: 56px;
+
+	/* Grid */
+	gap: 8px;
+}
+
+.tag-input {
+	/* Layout */
+	width: 100%;
+}
+
+.tag-input > div {
+	/* Layout */
+	width: 100%;
+	height: 100%;
 }
 
 .search-bar {
-	/* Display */
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-	z-index: 1;
-
 	/* Layout */
-	width: 100%;
-	height: 80%;
+	height: 100%;
 }
 
-.search-bar .wrapper {
+.search-wrapper {
+	/* Display */
+	display: flex;
+	overflow-x: scroll;
+	overflow-y: hidden;
+
 	/* Layout */
-	width: 100%;
-	height: fit-content;
+	height: 100%;
+	padding: 8px !important;
+
+	/* Alignment */
+	align-items: center;
 
 	/* Color */
-	color: var(--text) !important;
 	background-color: var(--secondary) !important;
+
+	/* Grid */
+	gap: 8px;
 
 	/* Border */
 	border: none !important;
-	border-radius: 12px !important;
-
-	/* Text */
-	font-family: var(--font) !important;
+	border-radius: 20px !important;
 }
 
-.search-bar .wrapper:hover {
-	/* Shadow */
-	box-shadow: none !important;
+.search-bar.multiline .search-wrapper {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	flex-wrap: wrap;
 }
 
-.search-bar .wrapper > div {
+.tag-input-container input {
 	/* Layout */
-	height: fit-content;
-}
-
-.search-bar .wrapper .search-input {
-	/* Layout */
+	width: 160px;
+	padding: 8px 12px;
+	box-sizing: border-box;
 	resize: vertical;
-	width: 100%;
-	height: 100%;
 
 	/* Color */
 	color: var(--text) !important;
-	background-color: transparent;
+	background-color: var(--disabled) !important;
+
+	/* Typography */
+	font-family: var(--font);
+	font-size: 1em;
+	font-weight: 500;
 
 	/* Border */
 	border: none;
+	border-radius: 16px;
 	outline: none;
+}
 
-	/* Text */
-	font-family: var(--font);
-	font-weight: 500;
+/* Chip */
+.search-wrapper .chip {
+	/* Layout */
+	padding: 8px 12px;
+	margin: 0;
+
+	/* Color */
+	background-color: var(--primary);
+
+	/* Typography */
+	font-size: 1em;
+
+	/* Border */
+	border-radius: 16px;
+}
+
+.search-wrapper .chip .closeIcon {
+	/* Layout */
+	margin-left: 10px;
+}
+
+.search-bar .tag-chip {
+	/* Display */
+	display: flex;
+	flex-direction: row;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: space-between;
+
+	/* Grid */
+	gap: 10px;
+}
+
+.search-bar .tag-chip .tag-icon {
+	/* Layout */
+	width: 18px;
+	height: 18px;
 }
 
 /* Results */
-.search-bar .wrapper li {
-	/* Style */
-	cursor: pointer;
-
-	/* Animation */
-	transition: 0.15s;
+.search-bar .optionListContainer {
+	background: none !important;
 }
 
-.search-bar .search-results {
+.search-bar .optionContainer {
 	/* Display */
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	overflow: hidden;
+	z-index: 99;
 
 	/* Layout */
 	width: 100%;
-	padding: 12px 0;
+	padding: 12px 0px;
 	margin: 0;
+
+	/* Alignment */
+	justify-content: flex-start;
 
 	/* Color */
 	background-color: var(--secondary);
 
 	/* Border */
-	border-radius: 12px;
+	border: none !important;
+	border-radius: 12px !important;
+}
+
+.search-bar .option {
+	/* Layout */
+	padding: 8px 12px;
+
+	/* Cursor */
+	cursor: pointer;
+	user-select: none;
+
+	/* Color */
+	background-color: var(--secondary);
+
+	/* Border */
+	border-radius: 8px;
+
+	/* Animation */
+	transition: 0.15s;
+}
+
+.search-bar .option.highlight {
+	/* Color */
+	background-color: var(--primary);
 }
 
 .search-bar .search-result {
-	/* Display */
+	width: 100%;
 	display: flex;
-	flex-direction: row;
-	align-items: center;
 	justify-content: space-between;
-
-	/* Layout */
-	padding: 0px 16px;
-	margin: 0;
 }
 
 .search-bar .search-result #left {
 	/* Display */
 	display: flex;
 	flex-direction: row;
+
+	/* Alignment */
 	align-items: center;
 	justify-content: flex-start;
-	gap: 12px;
 
 	/* Color */
 	background-color: transparent;
+
+	/* Grid */
+	gap: 12px;
 }
 
 /* Icons */
@@ -130,11 +199,13 @@
 .search-bar .clear-icon {
 	/* Display */
 	display: flex;
-	align-items: center;
-	justify-content: center;
 
 	/* Layout */
 	margin: 0 12px;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: center;
 }
 
 .tag-icon {

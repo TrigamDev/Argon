@@ -1,19 +1,27 @@
 ---
+import moment from 'moment-timezone'
 import type { CollectionEntry } from 'astro:content'
-import moment from 'moment'
+import { render } from 'astro:content'
+import type { RenderResult } from 'astro:content'
+
+import '@argon/globals.css'
 
 interface Props {
 	changelog: CollectionEntry<'changelogs'>
 }
 const { changelog } = Astro.props
-const { Content } = await changelog.render()
+const { Content } = changelog ? await render( changelog ) : {} as RenderResult
 
-import '@argon/globals.css'
+export function formatTime ( date: Date ) {
+	return moment
+		.utc( date.getTime() )
+		.format( 'MM/DD/YYYY' )
+}
 ---
 
 <div class="section" id={changelog.data.version}>
 	<h1 class="version-title">
-		{ changelog.data.version } - {moment(changelog.data.released).format('M/DD/YYYY')}
+		{ changelog.data.version } - { formatTime( changelog.data.released ) }
 	</h1>
 	<Content/>
 </div>

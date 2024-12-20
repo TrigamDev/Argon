@@ -10,5 +10,5 @@ export const pageSize = atom<number>(60)
 export const currentPage = atom<number>(1)
 
 // Filter + Sort
-export const filterTags = atom<Tag[]>([])
+export const filterTags = atom<string>("")
 export const sort = atom<Sorts>(Sorts.timestamp)

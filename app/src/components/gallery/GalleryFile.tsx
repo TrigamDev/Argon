@@ -1,10 +1,10 @@
-import type { Post } from "../../util/types"
-
 import { useStore } from "@nanostores/react"
 import { handleNSFW, handleSuggestive, handleUntagged, animations, tagSuggestions, PostHandleType } from "@argon/stores/options"
 
-import "./gallery-file.css"
+import type { Post } from "../../util/types"
+
 import { hasTag } from "@argon/util/tag"
+import "./gallery-file.css"
 
 interface Props { post: Post }
 export default function GalleryImage({ post }: Props) {

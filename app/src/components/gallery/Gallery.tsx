@@ -10,7 +10,7 @@ import type { Post } from "../../util/types"
 import GalleryFile from "./GalleryFile"
 
 import "./gallery.css"
-import { parseTagString } from "@argon/util/tag"
+import { parseTagString, tagsToTagString } from "@argon/util/tag"
 
 export default function Gallery() {
 
@@ -26,14 +26,15 @@ export default function Gallery() {
 	const $sort = useStore(sort)
 
 	// Load posts
-	useEffect(() => {
-		async function loadPosts() {
-			loadUrlSearch()
-			let posts = await getPosts(new Request('/api/search'), $filterTags)
-			if (posts) postList.set(posts)
-		}
-		loadPosts()
-	}, [$pageSize, $currentPage, $filterTags, $sort])
+	async function loadPosts() {
+		loadUrlSearch()
+		let posts = await getPosts(new Request('/api/search'), parseTagString( $filterTags ) )
+		if (posts) postList.set(posts)
+	}
+
+	useEffect(() => { loadPosts() }, [
+		$pageSize, $currentPage, $filterTags, $sort
+	])
 
 	function loadUrlSearch() {
 		let params = new URLSearchParams(window.location.search)
@@ -43,7 +44,7 @@ export default function Gallery() {
 		let urlTags = parseTagString(query)
 
 		if (urlTags.length != 0 && $filterTags.length === 0)
-			filterTags.set(urlTags)
+			filterTags.set( tagsToTagString( urlTags ) )
 	}
 
 	return (
