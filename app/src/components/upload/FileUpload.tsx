@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react"
 
 import { FileType } from "@argon/util/types"
-import { extensionList, getFileType, getMimeType } from "@argon/util/files"
+import { extensionList, getFileType, getTypeFromMime } from "@argon/util/files"
 
 import Text from "@argon/components/input/Text"
 
@@ -91,7 +91,7 @@ export default function FileUpload({ name, limitTo = null, currentFile, currentU
 		let userFile = event.target.files?.item(0) || currentFile
 		if (userFile) {
 			// Preview file
-			let type = getMimeType(userFile.type)
+			let type = getTypeFromMime(userFile.type)
 			setFileType(type)
 			setFileName(userFile.name)
 

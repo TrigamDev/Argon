@@ -1,7 +1,7 @@
 import { FileType } from "./types"
 
 export const imageTypes = [ "png", "jpg", "jpeg", "gif", "webp", "svg", "avif", "tiff" ]
-export const videoTypes = [ "mp4", "webm", "mov", "avi" ]
+export const videoTypes = [ "mp4", "webm", "mov", "avi", "flv", "vob", "mpeg", "m4v" ]
 export const audioTypes = [ "mp3", "wav", "ogg", "flac" ]
 export const projectTypes = [ "mdp", "psd", "xcf", "afphoto", "afdesign", "kra", "ai", "svg", "clip", "procreate", "blend", "anim", "ma", "mb", "mp", "dwg", "obj", "abl", "ablbundle", "als", "flp" ]
 
@@ -19,7 +19,7 @@ export function getFileExtension(url: string): string {
 	return url.split(".").pop()?.split('?')[0] || ""
 }
 
-export function getMimeType(mime: string): FileType {
+export function getTypeFromMime(mime: string): FileType {
 	let type = mime.split('/')[0]
 	switch (type) {
 		case 'image': return FileType.image
