@@ -62,17 +62,9 @@ function roundToTwo(num: number) {
 }
 
 function formatDuration(duration: number) {
-	let momentDuration = moment.duration(duration, 'seconds')
-	// Prioritize the 2 largest units
-	let times = [ momentDuration.years(), momentDuration.months(), momentDuration.weeks(), momentDuration.days(),
-		momentDuration.hours(), momentDuration.minutes(), momentDuration.seconds()
-	]
-	let units = [ 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds' ]
-	let unitString = ''
-	for (let i = 0; i < times.length; i++) {
-		if (times[i] > 0) {
-			unitString += `${Math.floor(times[i])} ${units[i]}, `
-		}
-	}
-	return unitString.slice(0, -2)
+	let songDuration = moment.duration(duration, 'seconds')
+	return [
+		songDuration.minutes(),
+		songDuration.seconds()
+	].map(v => v.toString().padStart(2, '0')).join(':')
 }

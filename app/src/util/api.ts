@@ -10,6 +10,7 @@ export async function getIpAddress(): Promise<string | null> {
 }
 // Routes
 export async function getPostById(request: Request, id: number): Promise<Post | null> {
+	if ( isNaN(id) ) return null
 	return get<Post>(request, `post/${id}`, async (response: Response) => {
 		const post: Post = await response.json()
 		return post
