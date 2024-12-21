@@ -203,3 +203,16 @@ body {
 	/* Border */
 	border-radius: 6px;
 }
+
+.section a {
+	/* Color */
+	color: var(--white);
+
+	/* Typography */
+	font-weight: bold;
+	text-decoration: none;
+}
+.section a:hover {
+	/* Typography */
+	text-decoration: underline;
+}
