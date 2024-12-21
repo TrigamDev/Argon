@@ -21,7 +21,10 @@ import { clearFiles } from "./util/files"
 const db = new Database("argon.db")
 
 let version = getSQLiteVersion(db)
-log(Category.database, Status.loading, `SQLite version: ${version}`)
+log({
+	category: Category.database, status: Status.loading,
+	message: `SQLite version: ${version}`
+})
 
 db.exec(`
 	PRAGMA foreign_keys = ON;
@@ -111,4 +114,8 @@ const app = new Elysia()
 
 	.listen(process.env.PORT || 3000)
 
-log(Category.server, Status.success, `Argon server running on ${app.server?.port}!`, true)
+log({
+	category: Category.server, status: Status.success,
+	newLine: true,
+	message: `Argon server running on ${app.server?.port}!`
+})

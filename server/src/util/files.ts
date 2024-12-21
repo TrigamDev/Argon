@@ -108,7 +108,11 @@ export async function compressImage(postId: number, file: File, fileType: FileTy
 		let compressed = await sharp(fileBuffer).webp({ quality }).resize(resolution, resolution, { fit: "inside" }).toBuffer()
 		return compressed
 	} catch (error: any) {
-		log(Category.download, Status.error, `Failed to compress image: ${error}`, true)
+		log({
+			category: Category.download, status: Status.error,
+			newLine: true,
+			message: `Failed to compress image: ${error}`
+		})
 		await notifError(error)
 		return null
 	}
@@ -128,13 +132,20 @@ export async function extractVideoFrame(postId: number, file: Blob): Promise<Buf
 	if (!tempDirExists)
 		await mkdir(`${baseDir}/assets/temp`)
 	
-	log(Category.download, Status.loading, `Extracting video frame for ${name}.${extension}...`, true)
+	log({
+		category: Category.download, status: Status.loading,
+		newLine: true,
+		message: `Extracting video frame for ${name}.${extension}...`
+	})
 
 	return new Promise(async (resolve, reject) => {
 		let fileExists: boolean = await doesFileExist(path)
 		if (!fileExists) {
 			let error: FileNotFoundError = new FileNotFoundError(path, `Could not find file or directory:\n\`${path}\``)
-			log(Category.download, Status.error, error.message)
+			log({
+				category: Category.download, status: Status.error,
+				message: error.message
+			})
 			notifError(error)
 			return reject(error)
 		}
@@ -149,15 +160,24 @@ export async function extractVideoFrame(postId: number, file: Blob): Promise<Buf
 				.output(tempPath)
 
 				.on('error', (error: Error) => {
-					log(Category.download, Status.error, error.message)
+					log({
+						category: Category.download, status: Status.error,
+						message: error.message
+					})
 					notifError(error)
 					reject(error)
 				})
 				.on('progress', async (progress) => {
-					log(Category.download, Status.loading, `Extracting video frame (${progress.percent}%)`)
+					log({
+						category: Category.download, status: Status.loading,
+						message: `Extracting video frame (${progress.percent}%)`
+					})
 				})
 				.on('end', async () => {
-					log(Category.download, Status.success, `Extracted video frame for ${name}.${extension}!`)
+					log({
+						category: Category.download, status: Status.success,
+						message: `Extracted video frame for ${name}.${extension}!`
+					})
 
 					const frameBuffer = await readFile(tempPath)
 					resolve(frameBuffer)
@@ -166,7 +186,10 @@ export async function extractVideoFrame(postId: number, file: Blob): Promise<Buf
 				})
 				.run()
 		} catch (error: any){
-			log(Category.download, Status.error, error.message)
+			log({
+				category: Category.download, status: Status.error,
+				message: error.message
+			})
 			notifError(error)
 			reject(error)
 		}
@@ -193,7 +216,11 @@ export async function writeFile(data: Buffer, id: number, fileData: FileData) {
  */
 export async function downloadFile(postId: number, file: Blob | Buffer, fileData: FileData) {
 	if (!file) return
-	log(Category.download, Status.loading, `Downloading ${fileData.type === 'thumbnail' ? 'thumbnail for ' : ''}${fileData.name}.${fileData.extension}...`, true)
+	log({
+		category: Category.download, status: Status.loading,
+		newLine: true,
+		message: `Downloading ${fileData.type === 'thumbnail' ? 'thumbnail for ' : ''}${fileData.name}.${fileData.extension}...`
+	})
 
 	let extension = fileData.type === 'thumbnail' ? 'webp' : fileData.extension
 	let dataReal = { name: fileData.name, extension, type: fileData.type } as FileData
@@ -201,7 +228,10 @@ export async function downloadFile(postId: number, file: Blob | Buffer, fileData
 	let fileBuffer = await getBufferFromBlob(file)
 	await writeFile(fileBuffer, postId, dataReal)
 
-	log(Category.download, Status.success, `Downloaded ${fileData.type === 'thumbnail' ? 'thumbnail for ' : ''}${fileData.name}.${fileData.extension}!`)
+	log({
+		category: Category.download, status: Status.success,
+		message: `Downloaded ${fileData.type === 'thumbnail' ? 'thumbnail for ' : ''}${fileData.name}.${fileData.extension}!`
+	})
 }
 
 /**
@@ -212,7 +242,11 @@ export async function downloadFile(postId: number, file: Blob | Buffer, fileData
  * @param { Database } db The database to use 
  */
 export async function replaceFile(postId: number, oldFileData: FileData, file: Blob | Buffer, fileData: FileData) {
-	log(Category.database, Status.loading, `Replacing File for Post #${postId}...`, true)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true,
+		message: `Replacing File for Post #${postId}...`
+	})
 
 	// Delete old file
 	deleteFile(postId, oldFileData)
@@ -220,7 +254,10 @@ export async function replaceFile(postId: number, oldFileData: FileData, file: B
 	// Download new file
 	await downloadFile(postId, file, fileData)
 
-	log(Category.database, Status.success, `Replaced File for Post #${postId}!`)
+	log({
+		category: Category.database, status: Status.success,
+		message: `Replaced File for Post #${postId}!`
+	})
 }
 
 /**
@@ -229,15 +266,25 @@ export async function replaceFile(postId: number, oldFileData: FileData, file: B
  * @param { Database } db The database to use
  */
 export async function deleteFile(postId: number, fileData: FileData) {
-	log(Category.database, Status.loading, `Deleting File for Post #${postId}...`, true)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true,
+		message: `Deleting File for Post #${postId}...`
+	})
 	
 	let fileType = fileData.type ?? getFileType(`${fileData.name}.${fileData.extension}`)
 	let path = `${baseDir}/assets/${fileType}/${postId}_${fileData.name}.${fileData.extension}`
 	if (existsSync(path)) {
 		await unlink(path)
-		log(Category.database, Status.success, `Deleted ${postId}_${fileData.name}.${fileData.extension} for Post #${postId}!`)
+		log({
+			category: Category.database, status: Status.success,
+			message: `Deleted ${postId}_${fileData.name}.${fileData.extension} for Post #${postId}!`
+		})
 	} else {
-		log(Category.database, Status.error, `The ${postId}_${fileData.name}.${fileData.extension} for Post #${postId} does not exist!`)
+		log({
+			category: Category.database, status: Status.error,
+			message: `The ${postId}_${fileData.name}.${fileData.extension} for Post #${postId} does not exist!`
+		})
 	}
 
 }
@@ -252,10 +299,16 @@ export async function clearFiles() {
 		if (exists) {
 			try {
 				rm(path, { recursive: true, force: true }).then(() => {
-					log(Category.download, Status.success, `Cleared ${fileType} files!`)
+					log({
+						category: Category.download, status: Status.success,
+						message: `Cleared ${fileType} files!`
+					})
 				})
 			} catch (error: any) {
-				log(Category.download, Status.error, error.message)
+				log({
+					category: Category.download, status: Status.error,
+					message: error.message
+				})
 				notifError(error)
 			}
 		}

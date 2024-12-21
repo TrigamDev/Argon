@@ -19,10 +19,14 @@ export default function deletePost(context: Context, db: Database) {
 		return { error: "Post not found" }
 	}
 
-	log(Category.database, Status.loading, `Deleting Post #${post.id}...`, true)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true,
+		message: `Deleting Post #${post.id}...`
+	})
 
 	// Decrease tag usages
-	decreaseTagUsages(post.tags, db)
+	for (let tag of post.tags) decreaseTagUsages(tag, db)
 
 	// Delete files
 	deleteFile(post.id, {
@@ -44,6 +48,9 @@ export default function deletePost(context: Context, db: Database) {
 	// Delete posts from database
 	deletePostById(post.id, db)
 
-	log(Category.database, Status.success, `Deleted Post #${post.id}!`)
+	log({
+		category: Category.database, status: Status.success,
+		message: `Deleted Post #${post.id}!`
+	})
 	return { success: true }
 }

@@ -27,7 +27,11 @@ export enum Sorts {
  * @param { Database } db The database to create tables for 
  */
 export function createTables(db: Database) {
-	log(Category.database, Status.loading, "Creating tables...", true)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true,
+		message: "Creating tables..."
+	})
 	// Posts
 	db.query(`
 		CREATE TABLE IF NOT EXISTS Posts (
@@ -62,7 +66,10 @@ export function createTables(db: Database) {
 		)
 	`).run()
 
-	log(Category.database, Status.success, "Tables created!")
+	log({
+		category: Category.database, status: Status.success,
+		message: "Tables created!"
+	})
 }
 
 /**
@@ -80,13 +87,20 @@ export function getSQLiteVersion(db: Database): string {
  * @param { Database } db The database to clear posts from
  */
 export function clearDatabase(db: Database) {
-	log(Category.database, Status.loading, "Clearing database...", true)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true,
+		message: "Clearing database..."
+	})
 
 	db.query("DELETE FROM posts").run()
 	db.query("DELETE FROM files").run()
 	db.query("DELETE FROM tags").run()
 
-	log(Category.database, Status.success, "Database cleared!")
+	log({
+		category: Category.database, status: Status.success,
+		message: "Database cleared!"
+	})
 }
 
 
@@ -100,7 +114,11 @@ export function clearDatabase(db: Database) {
  * @param { Database } db The database to insert the post into
  */
 export function insertPost(post: Post, db: Database) {
-	log(Category.database, Status.loading, `Saving Post #${post.id}...`, true)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true,
+		message: `Saving Post #${post.id}...`
+	})
 
 	// Remove duplicate tags
 	let tags = removeDuplicates(post?.tags) as Tag[]
@@ -121,11 +139,17 @@ export function insertPost(post: Post, db: Database) {
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 		`).run(post.id, post.file.url, post.file.thumbnailUrl, post.file.projectUrl, post.file.sourceUrl, post.file.timestamp, post.file.title, post.file.type, post.file.extension)
 	} catch (error: any) {
-		log(Category.database, Status.error, `Error saving Post #${post.id}!`)
+		log({
+			category: Category.database, status: Status.error,
+			message: `Error saving Post #${post.id}!`
+		})
 		notifError(error)
 	}
 	
-	log(Category.database, Status.success, `Saved Post #${post.id}!`)
+	log({
+		category: Category.database, status: Status.success,
+		message: `Saved Post #${post.id}!`
+	})
 }
 
 interface PostEditData {
@@ -143,15 +167,25 @@ interface PostEditData {
  * @param { PostEditData } data The new post data
  */
 export function editPostByID(id: number, db: Database, data: PostEditData): Post | null {
-	log(Category.database, Status.loading, `Editing Post #${id}...`, true)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true,
+		message: `Editing Post #${id}...`
+	})
 
 	let post = getPostById(id, db)
 	if (!post) {
-		log(Category.database, Status.error, `Post #${id} does not exist!`)
+		log({
+			category: Category.database, status: Status.error,
+			message: `Post #${id} does not exist!`
+		})
 		return null
 	}
 	if (!data.tags && !data.file.timestamp && !data.file.title) {
-		log(Category.database, Status.error, `No data provided to edit Post #${id}!`)
+		log({
+			category: Category.database, status: Status.error,
+			message: `No data provided to edit Post #${id}!`
+		})
 		return null
 	}
 
@@ -183,7 +217,10 @@ export function editPostByID(id: number, db: Database, data: PostEditData): Post
 	id)
 
 	notifPostEdit(post)
-	log(Category.database, Status.success, `Edited Post #${id}!`)
+	log({
+		category: Category.database, status: Status.success,
+		message: `Edited Post #${id}!`
+	})
 	return getPostById(id, db)
 }
 
@@ -375,7 +412,10 @@ export function increaseTagUsages(tag: Tag, db: Database) {
 			db.query("INSERT INTO tags (type, name, usages) VALUES (?, ?, ?)").run(tag.type, tag.name, 1)
 		}
 	} catch (error) {
-		log(Category.database, Status.error, `Error inserting tag: ${error}`)
+		log({
+			category: Category.database, status: Status.error,
+			message: `Error inserting tag: ${error}`
+		})
 		notifError(error as Error)
 	}
 }

@@ -5,10 +5,16 @@ import config from "../../argonConfig"
 export async function notifPostUpload(post: Post) {
 	for (let webhookConfig of [config.publicWebhook, config.privateWebhook]) {
 		if (webhookConfig.notifications.postUpload) {
-			log(Category.webhook, Status.loading, `Sending upload notification for post #${post.id}...	`)
+			log({
+				category: Category.webhook, status: Status.loading,
+				message: `Sending upload notification for post #${post.id}...`
+			})
 			let payload = uploadPayload(post)
 			webhookSend(webhookConfig.url, payload, () => {
-				log(Category.webhook, Status.success, `Sent upload notification for post #${post.id}!`)
+				log({
+					category: Category.webhook, status: Status.success,
+					message: `Sent upload notification for post #${post.id}!`
+				})
 			})
 		}
 	}
@@ -25,10 +31,16 @@ export async function notifPostEdit(post: Post) {
 export async function notifError(error: Error) {
 	for (let webhookConfig of [config.publicWebhook, config.privateWebhook]) {
 		if (webhookConfig.notifications.error) {
-			log(Category.webhook, Status.loading, `Sending error notification...`)
+			log({
+				category: Category.webhook, status: Status.loading,
+				message: `Sending error notification...`
+			})
 			let payload = errorPayload(error)
 			webhookSend(webhookConfig.url, payload, () => {
-				log(Category.webhook, Status.success, `Sent error notification!`)
+				log({
+					category: Category.webhook, status: Status.success,
+					message: `Sent error notification!`
+				})
 			})
 		}
 	}
@@ -82,5 +94,8 @@ export async function webhookSend(url: string, payload: Object, callback: Callab
 	})
 	const body = await response.json()
 	if (response.ok) callback()
-	else log(Category.webhook, Status.error, JSON.stringify(body, null, 4))
+	else log({
+		category: Category.webhook, status: Status.error,
+		message: JSON.stringify(body, null, 4)
+	})
 }

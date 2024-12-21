@@ -5,6 +5,10 @@ Argon is private due to the fact it's solely meant for those close to me, though
 
 # To Do
 ## Server
+- Check over video uploading
+- Fix up files.ts#writeFile
+- Make all the functions easier to read
+- Log grouping?
 - Clean up post editing (move more logic into the endpoint file)
 - Code documentation of endpoints
 - More webhook notifications

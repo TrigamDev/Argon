@@ -14,7 +14,7 @@ import { BunFile } from "bun"
 import { getWebPath } from "../../util/dir"
 import { FileData, validateUrl, compressImage, downloadFile, fetchFileUrl, getFileExtension, getFileFromBlob, getFileName, getFilePath, getFileType } from "../../util/files"
 import { notifPostUpload } from "../../util/webhook"
-import { Category, log, Status } from "../../util/debug"
+import { Category, Group, log, Status } from "../../util/debug"
 
 export interface PostInput {
 	title?: string
@@ -41,7 +41,11 @@ export default async function uploadPost(context: Context, db: Database) {
 	const assetsPath = `${getWebPath(context)}/assets`
 	let postId = getLastPostId(db) + 1
 
-	log(Category.database, Status.loading, `Posting Post #${postId}...`, true, true, false)
+	log({
+		category: Category.database, status: Status.loading,
+		newLine: true, group: Group.start,
+		message: `Posting Post #${postId}...`
+	})
 
 
 	//
@@ -128,7 +132,11 @@ export default async function uploadPost(context: Context, db: Database) {
 	insertPost(post, db)
 	notifPostUpload(post)
 
-	log(Category.database, Status.success, `Posted Post #${postId}!`, true, false, true)
+	log({
+		category: Category.database, status: Status.success,
+		newLine: true, group: Group.end,
+		message: `Posted Post #${postId}!`
+	})
 
 	return post
 }
