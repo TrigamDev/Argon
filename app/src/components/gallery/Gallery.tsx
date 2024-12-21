@@ -28,7 +28,7 @@ export default function Gallery() {
 	// Load posts
 	async function loadPosts() {
 		loadUrlSearch()
-		let posts = await getPosts(new Request('/api/search'), parseTagString( $filterTags ) )
+		let posts = await getPosts( new Request('/api/search'), parseTagString( $filterTags ) )
 		if (posts) postList.set(posts)
 	}
 

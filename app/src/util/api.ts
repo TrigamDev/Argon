@@ -17,7 +17,7 @@ export async function getPostById(request: Request, id: number): Promise<Post | 
 }
 export async function getPosts(request: Request, tags: Tag[]): Promise<Post[] | null> {
 	return post<Post[]>(request, 'search', {
-		tags: tags
+		tags: tags ?? []
 	}, async (response: Response) => {
 		const posts: Post[] = await response.json()
 		return posts

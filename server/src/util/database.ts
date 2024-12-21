@@ -444,9 +444,10 @@ export function getTag(tag: Tag, db: Database): Tag | null {
 	let result: any = db.query("SELECT * FROM tags WHERE name = ? AND type = ?").get(tag.name, tag.type)
 	if (!result) return null
 	return {
-		id: result.tagId,
-		name: result.name,
-		type: result.type
+		id: result?.tagId ?? 0,
+		name: result?.name ?? 'tag',
+		type: result?.type ?? 'unknown',
+		usages: result?.usages ?? 0
 	}
 }
 
@@ -459,10 +460,10 @@ export function getTags(db: Database): Tag[] {
 	let results: any[] = db.query("SELECT * FROM tags").all()
 	return results.map(result => {
 		return {
-			id: result.tagId,
-			name: result.name,
-			type: result.type,
-			usages: result.usages
+			id: result?.tagId ?? 0,
+			name: result?.name ?? 'tag',
+			type: result?.type ?? 'unknown',
+			usages: result?.usages ?? 0
 		} as Tag
 	})
 }
@@ -477,8 +478,10 @@ export function getTagById(id: number, db: Database): Tag | null {
 	let result: any = db.query("SELECT * FROM tags WHERE tagId = ?").get(id)
 	if (!result) return null
 	return {
-		name: result.name,
-		type: result.type
+		id: result?.tagId ?? 0,
+		name: result?.name ?? 'tag',
+		type: result?.type ?? 'unknown',
+		usages: result?.usages ?? 0
 	}
 }
 
@@ -520,8 +523,10 @@ export function decodeTags(encoded: string, db: Database): Tag[] {
 	return ids.map(id => {
 		let result: any = db.query("SELECT * FROM tags WHERE tagId = ?").get(id)
 		return {
-			name: result.name,
-			type: result.type
+			id: result?.tagId ?? 0,
+			name: result?.name ?? 'tag',
+			type: result?.type ?? 'unknown',
+			usages: result?.usages ?? 0
 		}
 	})
 }
