@@ -53,9 +53,10 @@ export default function PostUpload() {
 		if (sourceUrl) formdata.append('sourceUrl', sourceUrl)
 		if (tags) formdata.append('tags', tagsToString(tags))
 
-		upload(null, `post/upload`, formdata, ( response: Response ) => {
-			if (response.ok) window.location.href = `.`
-			else alert("Oopsies!")
+		upload(null, `post/upload`, formdata, async ( response: Response ) => {
+			let res = await response.json()
+			if ( res?.error ) alert( res?.error )
+			else window.location.href = `.`
 		})
 	}
 
@@ -122,6 +123,7 @@ export default function PostUpload() {
 						<TabPanel forceRender={true}>
 							<FileUpload
 								name='Project File'
+								limitTo={FileType.project}
 								currentFile={projectFile}
 								updateFile={updateProjectFile}
 								currentUrl={projectUrl}

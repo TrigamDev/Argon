@@ -12,7 +12,8 @@ import type Tag from "../../data/tag"
 import { BunFile } from "bun"
 
 import { getWebPath } from "../../util/dir"
-import { FileData, validateUrl, compressImage, downloadFile, fetchFileUrl, getFileExtension, getFileFromBlob, getFileName, getFilePath, getFileType } from "../../util/files"
+import { FileData, compressImage, downloadFile, fetchFileUrl, getFileExtension, getFileFromBlob, getFileName, getFilePath, getFileType } from "../../util/files"
+import { validateUrl } from "../../util/url"
 import { notifPostUpload } from "../../util/webhook"
 import { Category, Group, log, Status } from "../../util/debug"
 
@@ -91,10 +92,10 @@ export default async function uploadPost(context: Context, db: Database) {
 	let mainPath = await downloadMainFile(postId, mainFile, input.fileUrl)
 	if (!mainPath) {
 		context.set.status = 500
-		return { error: "Failed to download main file" }
+		return { error: "Failed to download file" }
 	}
 
-	if (!mainPath) { context.set.status = 500; return { error: "Failed to download main file" } }
+	if (!mainPath) { context.set.status = 500; return { error: "Failed to download file" } }
 
 	// Download Thumbnail File
 	let thumbnailPath = await downloadThumbnail(postId, thumbnailFile ?? mainFile, mainFile, input.fileUrl)
@@ -209,6 +210,7 @@ export async function downloadMainFile(postId: number, file: File, url?: string)
 	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(file.name ?? url)
 	let type = getFileType(`${name}.${extension}`)
+	if ( type === FileType.unknown ) return null
 
 	await downloadFile(postId, file, { name, extension, type } as FileData)
 	return `${type}/${name}.${extension}`

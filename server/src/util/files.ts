@@ -12,9 +12,9 @@ import { BunFile } from "bun"
 import FileNotFoundError from "../errors/FileNotFoundError"
 import { existsSync } from "fs"
 
-const imageTypes = [ "png", "jpg", "jpeg", "gif", "webp", "svg" ]
-const videoTypes = [ "mp4", "webm", "mov", "avi" ]
-const audioTypes = [ "mp3", "wav", "ogg", "flac" ]
+export const imageTypes = [ "png", "jpg", "jpeg", "gif", "webp", "svg", "avif", "tiff" ]
+export const videoTypes = [ "mp4", "webm", "mov", "avi" ]
+export const audioTypes = [ "mp3", "wav", "ogg", "flac" ]
 
 // 
 //	File Data
@@ -67,16 +67,6 @@ export function getFileType(url: string | undefined): FileType {
 
 export async function doesFileExist(path: string): Promise<boolean> {
 	return await lstat(path).then(() => true).catch(() => false)
-}
-
-/**
- * Returns either the Url or null based on whether the URL is empty/null
- * @param { string } url The Url to get validate
- * @returns { string | null } Either the Url or null
- */
-export function validateUrl(url: string | undefined): string | null {
-	let isUrlValid = url && url != undefined && url != null && url != "" && url != "null"
-	return isUrlValid ? String(url) : null
 }
 
 //

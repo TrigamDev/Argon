@@ -20,6 +20,7 @@ export enum FileType {
 	image = "image",
 	video = "video",
 	audio = "audio",
+	project = "project",
 	unknown = "unknown"
 }
 

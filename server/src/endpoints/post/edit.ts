@@ -4,7 +4,7 @@ import { Context } from "elysia"
 import { getWebPath } from "../../util/dir"
 
 import { parseInput } from "./upload"
-import { validateUrl } from "../../util/files"
+import { validateUrl } from "../../util/url"
 import { editPostByID } from "../../util/database"
 
 /* Fields
@@ -29,7 +29,7 @@ export default function editPost(context: Context, db: Database) {
 		file: {
 			timestamp: Number(input.timestamp),
 			title: input.title ?? undefined,
-			sourceUrl: validateUrl(input.sourceUrl) ?? undefined
+			sourceUrl: validateUrl(input.sourceUrl)?.toString() ?? undefined
 		}
 	})
 

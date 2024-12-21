@@ -53,7 +53,10 @@ const app = new Elysia()
 	.post("/post/upload", async (context: Context) => await uploadPost(context, db), {
 		type: 'multipart/form-data',
 		body: t.Partial( t.Object({
-			fileUrl: t.String({ format: "uri" }),
+			fileUrl: t.String({
+				format: "uri",
+				error: "Invalid file URL"
+			}),
 			file: t.File(),
 
 			thumbnailUrl: t.String({ format: "uri" }),
