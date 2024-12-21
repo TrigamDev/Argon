@@ -6,6 +6,7 @@ import { dimensions, size, duration } from "../../stores/file"
 import type { Post } from "../../util/types"
 
 import "./post-data.css"
+import { isUrlValid } from "@argon/util/url"
 
 export const prerender = false
 const durationTypes = [ 'video', 'audio' ]
@@ -17,7 +18,7 @@ export default function PostData({ post }: Props) {
 	const $size = useStore(size)
 	const $duration = useStore(duration)
 
-	let isSourceValid = post?.file?.sourceUrl && post?.file?.sourceUrl != "" && post?.file?.sourceUrl != "null"
+	let isSourceValid = isUrlValid(post?.file?.sourceUrl)
 	let sourceName = isSourceValid ? new URL(post?.file?.sourceUrl)?.hostname : null
 
 	let newTab = false
