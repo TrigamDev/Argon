@@ -26,12 +26,8 @@ export default function PostEdit({ post }: Props) {
 	function updateTimestamp(value: Value) {
 		if (value) setNewTimestamp(value.getTime())
 	}
-	function updateTitle(value: string) {
-		if (value) setNewTitle(value)
-	}
-	function updateSourceUrl(value: string) {
-		if (value) setNewSourceUrl(value)
-	}
+	function updateTitle(value: string) { setNewTitle(value) }
+	function updateSourceUrl(value: string) { setNewSourceUrl(value) }
 	function updateTags(tags: Tag[]) { setNewTags( tags ) }
 
 	// Saving
@@ -42,14 +38,18 @@ export default function PostEdit({ post }: Props) {
 		formdata.append('sourceUrl', newSourceUrl || "")
 		formdata.append('tags', JSON.stringify(newTags))
 
-		upload(null, `post/edit/${post.id}`, formdata, () => {
-			window.location.href = `.`
+		upload(null, `post/edit/${post.id}`, formdata, async (response: Response) => {
+			let res = await response.json()
+			if ( res?.error ) alert( res?.error )
+			else window.location.href = `.`
 		})
 	}
 	
 	function deletePost() {
-		apiPost(null, `post/delete/${post.id}`, {}, () => {
-			window.location.href = `../../`
+		apiPost(null, `post/delete/${post.id}`, {}, async (response: Response) => {
+			let res = await response.json()
+			if ( res?.error ) alert( res?.error )
+			else window.location.href = `.`
 		})
 	}
 

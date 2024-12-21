@@ -211,9 +211,9 @@ export function editPostByID(id: number, db: Database, data: PostEditData): Post
 		SET timestamp = ?, title = ?, sourceUrl = ?
 		WHERE postId = ?
 	`).run(
-		data.file.timestamp ?? post.file.timestamp,
+		data.file.timestamp ?? 0,
 		data.file.title ?? post.file.title,
-		data.file.sourceUrl ?? post.file.sourceUrl,
+		data.file.sourceUrl ?? "",
 	id)
 
 	notifPostEdit(post)
