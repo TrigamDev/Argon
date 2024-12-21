@@ -49,7 +49,7 @@ export default function PostEdit({ post }: Props) {
 		apiPost(null, `post/delete/${post.id}`, {}, async (response: Response) => {
 			let res = await response.json()
 			if ( res?.error ) alert( res?.error )
-			else window.location.href = `.`
+			else window.location.href = `/`
 		})
 	}
 

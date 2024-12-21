@@ -56,7 +56,7 @@ export default function PostUpload() {
 		upload(null, `post/upload`, formdata, async ( response: Response ) => {
 			let res = await response.json()
 			if ( res?.error ) alert( res?.error )
-			else window.location.href = `.`
+			else window.location.href = `/`
 		})
 	}
 
@@ -138,7 +138,7 @@ export default function PostUpload() {
 				<button className="button focusable" id="upload-post" onClick={uploadPost}>
 					<img className="button-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
-				<button className="button focusable	" id="cancel-post" onClick={() => window.location.href = "."}>
+				<button className="button focusable	" id="cancel-post" onClick={() => window.location.href = "/"}>
 					<img className="button-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
 				</button>
 			</div>
