@@ -1,5 +1,4 @@
 .navbar {
-
 	/* Display */
 	display: flex;
 
@@ -21,7 +20,6 @@
 
 /* Nav Info */
 .navbar #nav-info {
-
 	/* Display */
 	display: flex;
 	flex-direction: row;
@@ -42,7 +40,6 @@
 }
 
 .navbar .logo {
-
 	/* Display */
 	display: flex;
 
@@ -69,14 +66,12 @@
 }
 
 .navbar .logo #logo-mark {
-
 	/* Layout */
 	width: auto;
 	height: 36px;
 }
 
 .navbar .logo #text-mark {
-
 	/* Layout */
 	width: auto;
 
@@ -85,7 +80,6 @@
 }
 
 .navbar .logo #website-version {
-
 	/* Layout */
 	margin-left: 6px;
 
@@ -96,15 +90,21 @@
 }
 
 /* Nav Buttons */
+.navbar .nav-message {
+	/* Cursor */
+	user-select: none;
+
+	/* Typography */
+	font-size: 1.25rem;
+	font-weight: bold;
+}
 
 .navbar .nav-items {
-
 	/* Display */
 	flex-shrink: 0;
 }
 
 .navbar .nav-buttons {
-
 	/* Display */
 	display: flex;
 	flex-direction: row;
@@ -127,7 +127,6 @@
 
 /* Search Bar */
 .tag-input-container .autocomplete {
-
 	/* Layout */
 	height: 75%;
 	position: relative;
@@ -137,7 +136,6 @@
 }
 
 .tag-input-container .autocomplete .autocomplete-results {
-
 	/* Layout */
 	width: 100%;
 	position: absolute;

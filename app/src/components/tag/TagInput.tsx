@@ -2,14 +2,14 @@ import { useEffect, useState } from "react"
 
 import { get } from "@argon/util/api"
 import type { Tag } from "@argon/util/types"
-import { areTagsEqual, parseTagString, tagsToTagString, tagToString } from "@argon/util/tag"
+import { areTagsEqual, parseTagString, tagsToTagString, } from "@argon/util/tag"
 
 import { Multiselect } from "@argon/libs/multiselect-react-dropdown"
 import { filterTags } from "@argon/stores/postList"
+import TagChip from "@argon/components/tag/TagChip"
 
-import "@argon/components/input/tags.css"
+import "@argon/components/tag/tag-input.css"
 import "@argon/globals.css"
-import { useStore } from "@nanostores/react"
 
 interface Props {
 	search?: boolean,
@@ -63,12 +63,7 @@ export default function Tags ({ search = true, multiline = false, defaultValue =
 		)
 	}
 	function formatChip ( value: string, tag: Tag ) {
-		return (
-			<div className="tag-chip">
-				<img src={`/icons/tag/${ tag.type }.svg`} alt={ tag.name } title={ tag.type } className="tag-icon"/>
-				<span className="tag-name">{ tag.name }</span>
-			</div>
-		)
+		return <TagChip tag={ tag }/>
 	}
 
 	function parseInput ( value: string ): Tag | null {

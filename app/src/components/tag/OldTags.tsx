@@ -6,7 +6,7 @@
 
 // import { filterTags } from "@argon/stores/postList"
 
-// import "@argon/components/input/tags.css"
+// import "@argon/components/tag/tag-input.css"
 // import TrigamAutocomplete from "@argon/libs/trigam-autocomplete/components/TrigamAutocomplete"
 
 // interface Props {

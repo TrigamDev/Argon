@@ -104,6 +104,9 @@ body {
 	/* Layout */
 	width: 42px;
 	height: 42px;
+
+	/* Cursor */
+	user-select: none;
 }
 
 .button-label {
@@ -153,7 +156,7 @@ body {
 	flex-direction: column;
 
 	/* Layout */
-	max-width: 60vw;
+	max-width: 70vw;
 	padding: 16px 32px;
 
 	/* Color */

@@ -7,7 +7,7 @@ import { upload, post as apiPost } from "@argon/util/api"
 import { parseTagString } from "@argon/util/tag"
 
 import EditPostNav from "@argon/components/navbar/post/EditPostNav"
-import Tags from "@argon/components/input/Tags"
+import Tags from "@argon/components/tag/TagInput"
 import Timestamp from "@argon/components/input/Timestamp"
 import Text from "@argon/components/input/Text"
 

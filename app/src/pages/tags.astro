@@ -3,28 +3,57 @@ import Page from '../layouts/Page.astro'
 
 import { getEntry, render } from 'astro:content'
 import type { RenderResult } from 'astro:content'
+import { get } from '@argon/util/api'
+import type { Tag } from '@argon/util/types'
+
+import Navbar from '@argon/components/navbar/Navbar.astro'
+import TagBox from '@argon/components/tag/TagBox.astro'
+
+import '@argon/pages/_tags.css'
+import '@argon/globals.css'
 
 const tagsBlurb = await getEntry('misc', 'tags')
 const { Content } = tagsBlurb ? await render( tagsBlurb ) : {} as RenderResult
 
 const tags: Tag[] | null = await get(Astro.request, `tags/list`, (res: Response) => res.json())
+const grouped = tagsToGrouped( tags ?? [] )
 
-import Navbar from '@argon/components/navbar/Navbar.astro'
+function tagsToGrouped(tags: Tag[]) {
+	let grouped: any = {};
+	tags.forEach( ( tag: Tag ) => {
+		if ( !grouped[ tag.type ] ) grouped[ tag.type ] = []
+		grouped[ tag.type ].push( tag )
+	})
+	// Sort Groups
+	grouped = Object.keys( grouped ).sort().reduce( ( acc: any, type: any ) => {
+		acc[ type ] = grouped[ type ]
+		return acc
+	}, {} )
+	return grouped
+}
 
-import '@argon/pages/_tags.css'
-import '@argon/globals.css'
-import { get } from '@argon/util/api'
-import type { Tag } from '@argon/util/types'
+function toTitleCase( title: string ) {
+	return title.replace(
+		/\w\S*/g,
+		text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+	);
+}
 ---
 
 <Page title="Tags">
-	<Navbar isGallery={false}/>
+	<Navbar isGallery={ false } message={ `Tags: ${tags?.length ?? 0}` }/>
 	<div class="content">
 		<div class="section center-title">
 			{ Content && <Content/> }
 		</div>
-		{ tags && tags.map((tag: Tag) => {
-			return (tag.name)
+		{ grouped && Object.keys( grouped ).map( ( key: string ) => {
+			return <div class="section center-title">
+				<h1 class="tag-title">
+					<img src={`/icons/tag/${ key }.svg`} alt={ key } title={ key } class="tag-icon"/>
+					<span>{ toTitleCase( key ) }</span>
+				</h1>
+				<TagBox tags={ grouped[key] } clickable={ true }/>
+			</div>
 		}) }
 	</div>
 </Page>

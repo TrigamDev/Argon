@@ -2,8 +2,41 @@
 	/* Display */
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 
 	/* Layout */
 	padding-top: 32px;
+	padding-bottom: 32px;
+
+	/* Alignment */
+	align-items: center;
+
+	/* Grid */
+	gap: 32px;
+}
+
+.tag-title {
+	/* Display */
+	display: flex;
+	flex-direction: row;
+
+	/* Layout */
+	margin-bottom: 12px;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: center;
+
+	/* Grid */
+	gap: 12px;
+}
+
+.tag-title .tag-icon {
+	/* Layout */
+	width: 28px;
+	height: 28px;
+}
+
+.tag-title h1 {
+	/* Layout */
+	margin: 0;
 }

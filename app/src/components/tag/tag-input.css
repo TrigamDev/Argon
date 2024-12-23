@@ -87,9 +87,6 @@
 	/* Color */
 	background-color: var(--primary);
 
-	/* Typography */
-	font-size: 1em;
-
 	/* Border */
 	border-radius: 16px;
 }
@@ -99,23 +96,8 @@
 	margin-left: 10px;
 }
 
-.search-bar .tag-chip {
-	/* Display */
-	display: flex;
-	flex-direction: row;
-
-	/* Alignment */
-	align-items: center;
-	justify-content: space-between;
-
-	/* Grid */
-	gap: 10px;
-}
-
-.search-bar .tag-chip .tag-icon {
-	/* Layout */
-	width: 18px;
-	height: 18px;
+.search-wrapper .chip .tag-chip {
+	padding: 0;
 }
 
 /* Results */

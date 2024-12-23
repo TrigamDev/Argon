@@ -1,0 +1,38 @@
+.tag-box {
+	/* Display */
+	display: flex;
+	flex-wrap: wrap;
+
+	/* Layout */
+	padding: 16px;
+
+	/* Alignment */
+	align-items: center;
+	align-content: center;
+	align-self: stretch;
+	justify-content: center;
+
+	/* Color */
+	background-color: var(--secondary);
+
+	/* Grid */
+	gap: 10px;
+
+	/* Border */
+	border-radius: 25px;
+}
+
+.post-tag:hover {
+	/* Style */
+	transform: scale(1.1);
+	background-color: var(--accent);
+}
+
+.post-tag-icon {
+	/* Display */
+	overflow: hidden;
+
+	/* Layout */
+	width: 24px;
+	height: 24px;
+}

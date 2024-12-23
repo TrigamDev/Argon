@@ -3,7 +3,7 @@ import type { Value } from 'node_modules/react-datetime-picker/dist/cjs/shared/t
 
 import Text from '@argon/components/input/Text'
 import Timestamp from '@argon/components/input/Timestamp'
-import Tags from '@argon/components/input/Tags'
+import Tags from '@argon/components/tag/TagInput'
 
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 

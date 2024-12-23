@@ -5,7 +5,7 @@ import { getLatestVersion, isAlpha } from '@argon/util/version'
 
 import NavToggle from '@argon/components/navbar/NavToggle.astro'
 import OptionsMenu from '@argon/components/navbar/options/OptionsMenu.tsx'
-import Tags from '@argon/components/input/Tags'
+import Tags from '@argon/components/tag/TagInput'
 import DropdownButton from '@argon/components/button/DropdownButton.astro'
 
 import '@argon/components/navbar/navbar.css'	
@@ -14,8 +14,9 @@ import '@argon/globals.css'
 
 interface Props {
 	isGallery: boolean
+	message?: string
 }
-const { isGallery } = Astro.props
+const { isGallery, message } = Astro.props
 
 const version = getLatestVersion()
 const alpha: boolean = isAlpha()
@@ -63,6 +64,7 @@ const alpha: boolean = isAlpha()
 			</ul>
 			<MenuItems class="nav-items hidden">
 				<ul class="nav-buttons">
+					{ message && <span class="nav-message">{ message }</span> }
 					{ isGallery &&
 						<li class="nav-button-container search-button-container">
 							<Tags

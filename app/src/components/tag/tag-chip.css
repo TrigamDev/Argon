@@ -1,0 +1,71 @@
+.tag-chip {
+	/* Display */
+	display: flex;
+	flex-direction: row;
+
+	/* Layout */
+	padding: 8px 12px;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: space-between;
+
+	/* Transformations */
+	transform: scale(1);
+
+	/* Cursor */
+	cursor: default;
+	user-select: none;
+
+	/* Color */
+	color: var(--text);
+	background-color: var(--primary);
+
+	/* Typography */
+	font-size: 1rem;
+	font-weight: 600 !important;
+	text-decoration: none;
+
+	/* Grid */
+	gap: 6px;
+
+	/* Border */
+	border-radius: 16px;
+
+	/* Animation */
+	transition: 0.25s;
+}
+.tag-chip:hover {
+	/* Typography */
+	text-decoration: none !important;
+}
+
+.tag-chip.clickable:hover {
+	/* Transformations */
+	transform: scale(1.1);
+
+	/* Cursor */
+	cursor: pointer;
+
+	/* Color */
+	background-color: var(--accent);
+}
+
+.tag-chip .tag-left {
+	/* Display */
+	display: flex;
+	flex-direction: row;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: space-between;
+
+	/* Grid */
+	gap: 10px;
+}
+
+.tag-chip .tag-icon {
+	/* Layout */
+	width: 18px;
+	height: 18px;
+}
