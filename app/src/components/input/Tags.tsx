@@ -50,11 +50,15 @@ export default function Tags ({ search = true, multiline = false, defaultValue =
 	function formatResult ( value: string, tag: Tag ) {
 		return (
 			<div className="search-result">
-				<div id="left">
-					<img src={`/icons/tag/${ tag.type }.svg`} alt={ tag.name } title={ tag.type } className="tag-icon"/>
-					<span className="tag-name">{ tag.name }_({ tag.type })</span>
-				</div>
-				<span className="tag-usages">({ tag.usages })</span>
+				{ tag &&
+					<div id="left">
+						<img src={`/icons/tag/${ tag.type }.svg`} alt={ tag.name } title={ tag.type } className="tag-icon"/>
+						<span className="tag-name">{ tag.name }_({ tag.type })</span>
+					</div>
+				}
+				{ tag?.usages && tag?.usages > 0 &&
+					<span className="tag-usages">({ tag.usages })</span>
+				}
 			</div>
 		)
 	}
@@ -71,7 +75,6 @@ export default function Tags ({ search = true, multiline = false, defaultValue =
 		let parsed = parseTagString( value )
 		let parsedTag = parsed[0]
 		if (parsedTag) {
-			parsedTag.usages = 0
 			return parsedTag
 		} else return null
 	}
