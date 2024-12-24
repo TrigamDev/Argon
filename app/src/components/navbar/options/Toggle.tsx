@@ -20,7 +20,7 @@ export default function Toggle({ option }: Props) {
 	return (
 		<label id={toggleId} className="option toggle" tabIndex={0}>
 			<div className="option-content">
-				<span className="option-label">{option.label}</span>
+				<h3 className="option-label">{option.label}</h3>
 				<input id={id} type="checkbox" role="checkbox" className="toggle-checkbox" defaultChecked={option.toggled}
 					onChange={(event) => onToggle(event)}
 				/>
@@ -28,9 +28,9 @@ export default function Toggle({ option }: Props) {
 					<div className="toggle-thumb"/>
 				</div>
 			</div>
-			<div className="option-description">
+			<p className="option-description">
 				<span className="description-text">{option.description}</span>
-			</div>
+			</p>
 		</label>
 	)
 }

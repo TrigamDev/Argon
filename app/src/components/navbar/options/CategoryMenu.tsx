@@ -14,15 +14,17 @@ export default function CategoryMenu({ category }: Props) {
 
 	return (
 		<div className="category-container astronav-dropdown-submenu">
+			{ /* Option */ }
 			<button className="option category open" id={id} onClick={() => {}}>
 				<div className="option-content">
-					<span className="option-label">{category.label}</span>
+					<h2 className="option-label">{category.label}</h2>
 					<img src="/icons/nav/dropdown.svg" alt="Dropdown" className="option-icon dropdown-icon"/>
 				</div>
-				<div className="option-description">
+				<p className="option-description">
 					<span className="description-text">{category.description}</span>
-				</div>
+				</p>
 			</button>
+			{ /* Dropdown */ }
 			<div className="category-children dropdown-toggle hidden">
 				<OptionsMenu optionsList={category.children}/>
 			</div>

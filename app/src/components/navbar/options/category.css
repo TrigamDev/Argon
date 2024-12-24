@@ -16,10 +16,10 @@
 }
 
 .category-children {
-
 	/* Layout */
 	max-height: 0;
-	padding: 4px 16px;
+	padding-top: 4px;
+	padding-left: 24px;
 
 	/* Animation */
 	transition: 0.45s ease-out;

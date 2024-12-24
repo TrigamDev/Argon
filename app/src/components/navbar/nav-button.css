@@ -47,7 +47,8 @@
 .nav-button-container .nav-dropdown-items-container {
 	/* Display */
 	position: absolute;
-
+	max-height: 75vh;
+	overflow-y: scroll;
 	/* Layout */
 	padding: 16px;
 	margin-top: 26px;

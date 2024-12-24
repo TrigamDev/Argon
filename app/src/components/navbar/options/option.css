@@ -2,13 +2,15 @@
 	/* Display */
 	display: flex;
 	flex-direction: column;
-	align-items: start;
 
 	/* Layout */
-	padding: 2px 8px;
 	max-width: 100%;
+	padding: 2px 8px;
 
-	/* Style */
+	/* Alignment */
+	align-items: start;
+
+	/* Cursor */
 	cursor: pointer;
 	user-select: none;
 
@@ -16,14 +18,12 @@
 	color: var(--text);
 	background-color: var(--primary);
 
-	/* Border */
-	border-radius: 12px;
-	border: transparent solid 2px;
-
-	/* Text */
+	/* Typography */
 	font-family: var(--font);
-	font-weight: 700;
-	font-size: 1.05rem;
+
+	/* Border */
+	border: transparent solid 2px;
+	border-radius: 12px;
 
 	/* Animation */
 	transition: 0.15s;
@@ -39,20 +39,29 @@
 	background-color: var(--accent);
 
 	/* Border */
-	outline: none;
 	border: var(--text) solid 2px;
+	outline: none;
 }
 
 .option-content {
 	/* Display */
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	gap: 16px;
 
 	/* Layout */
 	width: 100%;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: space-between;
+
+	/* Grid */
+	gap: 16px;
+}
+
+.option-label {
+	/* Layout */
+	margin: 0;
 }
 
 .option-icon {
@@ -64,12 +73,17 @@
 .option-description {
 	/* Display */
 	display: flex;
-	justify-content: start;
-	align-items: center;
 
-	/* Text */
-	font-size: 0.725rem;
-	font-weight: 600;
+	/* Layout */
+	margin: 0;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: start;
+
+	/* Typography */
+	font-size: 1rem;
+	text-align: start;
 	white-space: pre-line;
 }
 

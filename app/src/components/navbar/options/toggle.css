@@ -1,5 +1,5 @@
 .toggle {
-	/* Style */
+	/* Cursor */
 	cursor: pointer;
 }
 
@@ -12,6 +12,8 @@
 	/* Display */
 	display: flex;
 	flex-direction: row;
+
+	/* Alignment */
 	align-items: center;
 	justify-self: flex-end;
 }
@@ -21,12 +23,14 @@
 	/* Display */
 	display: flex;
 	flex-direction: row;
-	align-items: center;
-	justify-content: center;
 
 	/* Layout */
 	width: 36px;
 	height: 16px;
+
+	/* Alignment */
+	align-items: center;
+	justify-content: center;
 
 	/* Color */
 	background-color: var(--secondary);
@@ -43,6 +47,8 @@
 	/* Layout */
 	width: 20px;
 	height: 20px;
+
+	/* Transformations */
 	transform: translateX(-50%);
 
 	/* Color */
@@ -52,12 +58,11 @@
 	border-radius: 50%;
 
 	/* Animation */
-	transition: 0.2s
-}
+	transition: 0.2s}
 
 /* Checked */
 .toggle .option-content > input:checked + .toggle-track .toggle-thumb {
-	/* Layout */
+	/* Transformations */
 	transform: translateX(50%);
 }
 

@@ -42,13 +42,13 @@ export default function Dropdown({ option }: Props) {
 	}
 
 	return (
-		<div id={id} className="option toggle" tabIndex={0} onClick={toggleMenu}>
+		<button id={id} className="option toggle" tabIndex={0} onClick={toggleMenu}>
 			<div className="option-content">
-				<span className="option-label">{option.label}</span>
+				<h3 className="option-label">{option.label}</h3>
 			</div>
-			<div className="option-description">
+			<p className="option-description">
 				<span className="description-text">{option.description}</span>
-			</div>
+			</p>
 
 			<Select
 				id={selectId} className="dropdown-container" instanceId={selectId} inputId={`${selectId}-input`}
@@ -74,6 +74,6 @@ export default function Dropdown({ option }: Props) {
 			<div className="option-description dropdown-choice-description">
 				<span className="description-text">{selected.description}</span>
 			</div>
-		</div>
+		</button>
 	)
 }
