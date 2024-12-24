@@ -19,6 +19,7 @@ const { tags, clickable = false } = Astro.props
 				tag={ tag }
 				href={ clickable ? `/?q=${tag.name}_(${tag.type})` : '' }
 				usages = { true }
+				client:only
 			/>
 		)
 	})}
