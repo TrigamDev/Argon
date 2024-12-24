@@ -17,7 +17,6 @@ Argon is private due to the fact it's solely meant for those close to me, though
 - Make sorting actually work
 ## Client
 - Make the config actually affect things
-- Tag list page
 - Random post button
 - Reporting
 - Bookmarking
