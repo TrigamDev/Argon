@@ -104,7 +104,7 @@ function getOrigin (request: Request | null) {
 }
 
 function getProtocol (request: Request | null) {
-	if (request) return new URL(request.url).protocol
+	if (request) return new URL(request.url).protocol.replace(':', '')
 	else {
 		let currentUrl = window.location.href.split("://")
 		return currentUrl[0]
