@@ -11,27 +11,15 @@ interface Props {
 	clickable?: boolean
 }
 const { tags, clickable = false } = Astro.props
-/* Tags:
-	artist, character, copyright, source, medium, meta, content, style,
-	expression, clothing, object, location, characteristic, nsfw
-*/
-
-// interface TagProps { tag: Tag }
-// export function TagChip({ tag }: TagProps) {
-// 	return (
-// 		<a className="post-tag" href={`/?q=${tag.name}_(${tag.type})`}>
-// 			<img src={`/icons/tag/${tag.type}.svg`} alt={tag.type} title={tag.type} className="post-tag-icon"/>
-// 			<span className="post-tag-name">{tag.name}</span>
-// 		</a>
-// 	)
-// }
 ---
 <div class="tag-box">
 	{ tags?.map( ( tag: Tag ) => {
-		return <TagChip
-			tag={ tag }
-			href={ clickable ? `/?q=${tag.name}_(${tag.type})` : '' }
-			usages = { true }
+		return (
+			<TagChip
+				tag={ tag }
+				href={ clickable ? `/?q=${tag.name}_(${tag.type})` : '' }
+				usages = { true }
 			/>
+		)
 	})}
 </div>

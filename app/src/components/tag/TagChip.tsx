@@ -2,6 +2,7 @@ import type { Tag } from "@argon/util/types"
 
 import '@argon/components/tag/tag-chip.css'
 import '@argon/globals.css'
+import TagIcon from "./TagIcon"
 
 interface Props {
 	tag: Tag
@@ -12,7 +13,7 @@ export default function TagChip({ tag, href = '', usages = false }: Props) {
 	return (
 		<a className={ `tag-chip ${ href != '' ? 'clickable' : '' }` } href={ href != '' ? href : '#' }>
 			<div className="tag-left">
-				<img src={`/icons/tag/${ tag.type }.svg`} alt={ tag.name } title={ tag.type } className="tag-icon"/>
+				<TagIcon tag={ tag }/>
 				<span className="tag-name">{ tag.name }</span>
 			</div>
 			<div>

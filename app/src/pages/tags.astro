@@ -11,6 +11,7 @@ import TagBox from '@argon/components/tag/TagBox.astro'
 
 import '@argon/pages/_tags.css'
 import '@argon/globals.css'
+import TagIcon from '@argon/components/tag/TagIcon'
 
 const tagsBlurb = await getEntry('misc', 'tags')
 const { Content } = tagsBlurb ? await render( tagsBlurb ) : {} as RenderResult
@@ -49,7 +50,7 @@ function toTitleCase( title: string ) {
 		{ grouped && Object.keys( grouped ).map( ( key: string ) => {
 			return <div class="section center-title">
 				<h1 class="tag-title">
-					<img src={`/icons/tag/${ key }.svg`} alt={ key } title={ key } class="tag-icon"/>
+					<TagIcon tag={ { type: key } as Tag }/>
 					<span>{ toTitleCase( key ) }</span>
 				</h1>
 				<TagBox tags={ grouped[key] } clickable={ true }/>
