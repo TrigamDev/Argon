@@ -1,5 +1,3 @@
-'use client'
-
 import moment from "moment"
 
 import { useStore } from "@nanostores/react"
