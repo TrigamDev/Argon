@@ -32,8 +32,8 @@ export default function PostData({ post }: Props) {
 		<ul className="post-info">
 			{ /* Post info */}
 			<li className="post-info-field" id="post-id">Post ID: { post?.id }</li>
-			<li className="post-info-field" id="post-file-timestamp">Created: { displayTimestamp(post?.file?.timestamp) }</li>
-			<li className="post-info-field" id="post-timestamp">Posted: { displayTimestamp(post?.timestamp) }</li>
+			<li className="post-info-field" id="post-file-timestamp" suppressHydrationWarning>Created: { displayTimestamp(post?.file?.timestamp) }</li>
+			<li className="post-info-field" id="post-timestamp" suppressHydrationWarning>Posted: { displayTimestamp(post?.timestamp) }</li>
 			{ /* File info */ }
 			{ post?.file?.type != "audio" && <li className="post-info-field" id="post-resolution">Resolution: {$dimensions?.width}x{$dimensions?.height}</li> }
 			<li className="post-info-field" id="post-size">Size: {formatFileSize($size)}</li>
