@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState, type SyntheticEvent } from "react"
 
 import type { Tag } from "@argon/util/types"
 
@@ -6,16 +6,27 @@ interface Props {
 	tag: Tag
 }
 export default function TagIcon({ tag }: Props) {
-	const iconImg = useRef<HTMLImageElement>(null)
+	const [ useDefault, setUseDefault ] = useState<boolean>( false )
+
+	const iconUrl = `/icons/tag/${ tag.type }.svg?t=${ Date.now() }`
+	const defaultIconUrl = `/icons/tag/unknown.svg`
+	
+	useEffect(() => {
+		const checkImage = new Image()
+		checkImage.src = iconUrl
+
+		checkImage.onload = () => {
+			setUseDefault( false )
+		}
+		checkImage.onerror = () => {
+			console.log(`Error on: ${ iconUrl }`)
+			setUseDefault( true )
+		}
+	}, [ iconUrl ])
 
 	return (
-		<img src={ `/icons/tag/${ tag.type }.svg` } alt={ tag.type } title={ tag.type }
-			ref={ iconImg } className="tag-icon"
-			/* Use 'unknown' icon when tag icon doesn't exist */
-			onError={ ({ currentTarget }) => {
-				currentTarget.onerror = null
-				currentTarget.src = `/icons/tag/unknown.svg`
-			}}
+		<img src={ !useDefault ? iconUrl : defaultIconUrl } alt={ tag.type }
+			title={ tag.type } className="tag-icon"
 		/>
 	)
 }

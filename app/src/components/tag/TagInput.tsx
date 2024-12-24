@@ -10,6 +10,7 @@ import TagChip from "@argon/components/tag/TagChip"
 
 import "@argon/components/tag/tag-input.css"
 import "@argon/globals.css"
+import TagIcon from "./TagIcon"
 
 interface Props {
 	search?: boolean,
@@ -52,7 +53,7 @@ export default function Tags ({ search = true, multiline = false, defaultValue =
 			<div className="search-result">
 				{ tag &&
 					<div id="left">
-						<img src={`/icons/tag/${ tag.type }.svg`} alt={ tag.name } title={ tag.type } className="tag-icon"/>
+						<TagIcon tag={ tag }/>
 						<span className="tag-name">{ tag.name }_({ tag.type })</span>
 					</div>
 				}

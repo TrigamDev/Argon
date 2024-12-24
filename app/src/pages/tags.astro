@@ -50,7 +50,7 @@ function toTitleCase( title: string ) {
 		{ grouped && Object.keys( grouped ).map( ( key: string ) => {
 			return <div class="section center-title">
 				<h1 class="tag-title">
-					<TagIcon tag={ { type: key } as Tag }/>
+					<TagIcon tag={ { type: key } as Tag } client:load/>
 					<span>{ toTitleCase( key ) }</span>
 				</h1>
 				<TagBox tags={ grouped[key] } clickable={ true }/>
