@@ -5,30 +5,39 @@ Argon is private due to the fact it's solely meant for those close to me, though
 
 # To Do
 ## Client
+
 ### Features
-- Allow dragging files onto upload page
-- Make the config actually affect things
 - Random post button
+- Allow dragging files onto upload page
+- Fetch the timestamp from possible sources
+- Sort tags
+- Make the config actually affect things
 - Reporting
 - Bookmarking
+
 ### Tweaks
 - Give pop-ups Borders
+
 ### Fixes
 - Allow bigger files
 - Volume slider doesn't match volume when loading page
 - Don't allow `&` in tag names (causes URL searching issues)
+- Fix post file size not being set
 
 ## Server
+
 ### Features
 - More webhook notifications
 - Maybe a login system? Either that or an improved IP whitelist system
 - A Discord bot for managing the server
 - Make sorting actually work
+
 ### Tweaks
 - Check over video uploading
 - Make all the functions easier to read
 - Log grouping?
 - Clean up post editing (move more logic into the endpoint file)
 - Code documentation of endpoints
+
 ### Fixes
 - Fix up files.ts#writeFile
