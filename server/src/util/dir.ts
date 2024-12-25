@@ -7,13 +7,20 @@ export { baseDir }
 export function getWebPath(context: Context): string {
 	if (!context) return ""
 
-	let protocol: string | null = context.request.headers.get('X-Forwarded-Protocol')
+	const origin: string | null = context.request.headers.get( 'origin' )
+	if (origin) return origin
+
 	let host = context.headers.host
 	let port = process.env.PORT
 
-	console.log(protocol)
+	let protocol: string | null = context.request.headers.get( 'x-forwarded-protocol' )
 
 	// Attempt to get from headers
 	const url = `${protocol ?? 'http'}://${host ?? `localhost:${port}`}`
 	return url
+}
+
+export function getProtocolFromUrl ( url: string | null ): string | null {
+	if ( !url ) return null
+	return url.split('://')[0]
 }

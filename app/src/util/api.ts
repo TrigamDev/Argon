@@ -107,7 +107,6 @@ function getProtocol (request: Request | null) {
 	if (request) return new URL(request.url).protocol.replace(':', '')
 	else {
 		let currentUrl = window.location.href.split("://")
-		console.log(currentUrl)
 		return currentUrl[0]
 	}
 }
