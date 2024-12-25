@@ -1,4 +1,8 @@
-import { handleNSFW, handleSuggestive, handleUntagged, animations, tagSuggestions, sortPosts, bumpscuous } from '@argon/stores/options'
+import {
+	handleNSFW, handleSuggestive, handleUntagged,
+	animations, tagSuggestions, sortPosts,
+	bumpscuous
+} from '@argon/stores/options'
 import { PostHandleType, SortDirection } from '@argon/stores/options'
 
 export enum OptionType {

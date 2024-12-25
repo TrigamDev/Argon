@@ -4,9 +4,10 @@ import { dimensions, size } from "@argon/stores/file"
 
 import type { Post } from "@argon/util/types"
 
+import VideoPlayer from "@argon/components/post/file/VideoPlayer.tsx"
+import Visualizer from "@argon/components/post/file/Visualizer.tsx"
+
 import "@argon/components/post/file/post-file.css"
-import VideoPlayer from "@argon/components/post/file/VideoPlayer"
-import Visualizer from "@argon/components/post/file/Visualizer"
 
 export const prerender = false
 

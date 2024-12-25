@@ -1,4 +1,6 @@
-import { getCollection, type CollectionEntry } from "astro:content"
+import { getCollection } from "astro:content"
+
+import type { CollectionEntry } from "astro:content"
 
 const changelogs = await getCollection('changelogs')
 

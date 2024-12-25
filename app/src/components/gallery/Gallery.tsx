@@ -4,13 +4,14 @@ import { useStore } from "@nanostores/react"
 import { postList, pageSize, currentPage, filterTags, sort } from "@argon/stores/postList"
 import { handleNSFW, handleSuggestive, handleUntagged, animations, tagSuggestions } from "@argon/stores/options"
 
-import { getPosts } from "@argon/util/api"
 import type { Post } from "@argon/util/types"
 
-import GalleryFile from "@argon/components/gallery/GalleryFile"
+import { getPosts } from "@argon/util/api"
+import { parseTagString, tagsToTagString } from "@argon/util/tag"
+
+import GalleryFile from "@argon/components/gallery/GalleryFile.tsx"
 
 import "@argon/components/gallery/gallery.css"
-import { parseTagString, tagsToTagString } from "@argon/util/tag"
 
 export default function Gallery() {
 

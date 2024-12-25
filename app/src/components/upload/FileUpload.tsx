@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react"
 
 import { FileType } from "@argon/util/types"
+
 import { extensionList, getFileType, getTypeFromMime } from "@argon/util/files"
 
-import Text from "@argon/components/input/Text"
+import Text from "@argon/components/input/Text.tsx"
 
 import "@argon/components/upload/file-upload.css"
 import "@argon/globals.css"

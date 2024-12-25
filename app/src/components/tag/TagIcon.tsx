@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type SyntheticEvent } from "react"
+import { useEffect, useState } from "react"
 
 import type { Tag } from "@argon/util/types"
 

@@ -1,10 +1,10 @@
-import Options, { labelToId, OptionType } from '@argon/options'
 import type { Option, ToggleOption, DropdownOption, Category } from '@argon/options'
 
-// Option Elements
+import Options, { labelToId, OptionType } from '@argon/options'
+
 import Toggle from '@argon/components/navbar/options/Toggle.tsx'
-import CategoryMenu from '@argon/components/navbar/options/CategoryMenu'
-import Dropdown from '@argon/components/navbar/options/Dropdown'
+import CategoryMenu from '@argon/components/navbar/options/CategoryMenu.tsx'
+import Dropdown from '@argon/components/navbar/options/Dropdown.tsx'
 
 interface Props {
 	optionsList?: Option[]

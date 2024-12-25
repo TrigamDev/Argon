@@ -1,8 +1,9 @@
 import type { Tag } from "@argon/util/types"
 
+import TagIcon from "@argon/components/tag/TagIcon.tsx"
+
 import '@argon/components/tag/tag-chip.css'
 import '@argon/globals.css'
-import TagIcon from "@argon/components/tag/TagIcon"
 
 interface Props {
 	tag: Tag

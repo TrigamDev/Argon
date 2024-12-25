@@ -1,15 +1,14 @@
 import { useState } from "react"
 
 import type { Value } from "node_modules/react-datetime-picker/dist/cjs/shared/types"
-
 import type { Post, Tag } from "@argon/util/types"
-import { upload, post as apiPost } from "@argon/util/api"
-import { parseTagString } from "@argon/util/tag"
 
-import EditPostNav from "@argon/components/navbar/post/EditPostNav"
-import Tags from "@argon/components/tag/TagInput"
-import Timestamp from "@argon/components/input/Timestamp"
-import Text from "@argon/components/input/Text"
+import { upload, post as apiPost } from "@argon/util/api"
+
+import EditPostNav from "@argon/components/navbar/post/EditPostNav.tsx"
+import Tags from "@argon/components/tag/TagInput.tsx"
+import Timestamp from "@argon/components/input/Timestamp.tsx"
+import Text from "@argon/components/input/Text.tsx"
 
 import "@argon/components/edit/post-edit.css"
 import "@argon/globals.css"

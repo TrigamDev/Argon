@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react"
 
-import { get } from "@argon/util/api"
+import { filterTags } from "@argon/stores/postList"
+
 import type { Tag } from "@argon/util/types"
+
+import { get } from "@argon/util/api"
 import { areTagsEqual, parseTagString, tagsToTagString, } from "@argon/util/tag"
 
 import { Multiselect } from "@argon/libs/multiselect-react-dropdown"
-import { filterTags } from "@argon/stores/postList"
-import TagChip from "@argon/components/tag/TagChip"
+import TagChip from "@argon/components/tag/TagChip.tsx"
+import TagIcon from "@argon/components/tag/TagIcon.tsx"
 
 import "@argon/components/tag/tag-input.css"
 import "@argon/globals.css"
-import TagIcon from "@argon/components/tag/TagIcon"
 
 interface Props {
 	search?: boolean,

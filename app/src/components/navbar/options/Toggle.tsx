@@ -1,4 +1,5 @@
 import type { ChangeEvent } from 'react'
+
 import type { ToggleOption } from '@argon/options'
 
 import '@argon/components/navbar/options/option.css'

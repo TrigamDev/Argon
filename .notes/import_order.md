@@ -1,10 +1,16 @@
 - React/Astro imports
 - Other lib imports (moment, etc)
-
+---
+- Stores
+---
 - Types
 - Enums
-
-- Stores
-
+---
+- API
+- Utils
+---
+- Layouts
+- Components
+---
 - CSS
 - Global CSS

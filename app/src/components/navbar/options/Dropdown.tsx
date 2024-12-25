@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
-import { labelToId } from '@argon/options'
+import type { SingleValue } from 'react-select'
 import type { DropdownOption, DropdownSelection } from '@argon/options'
 
-import Select, { type SingleValue } from 'react-select'
+import { labelToId } from '@argon/options'
+
+import Select from 'react-select'
 
 import '@argon/components/navbar/options/option.css'
 import '@argon/components/navbar/options/dropdown.css'

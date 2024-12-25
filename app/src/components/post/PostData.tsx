@@ -5,8 +5,9 @@ import { dimensions, size, duration } from "@argon/stores/file"
 
 import type { Post } from "@argon/util/types"
 
-import "@argon/components/post/post-data.css"
 import { isUrlValid } from "@argon/util/url"
+
+import "@argon/components/post/post-data.css"
 
 export const prerender = false
 const durationTypes = [ 'video', 'audio' ]

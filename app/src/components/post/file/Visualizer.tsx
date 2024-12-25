@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef } from "react"
-import { useStore } from "@nanostores/react"
-
-import { useWavesurfer } from "@wavesurfer/react"
 import moment from "moment"
 
+import { useStore } from "@nanostores/react"
 import { playing, duration, volume, muted, loop } from "@argon/stores/file"
+
+import { useWavesurfer } from "@wavesurfer/react"
 
 import "@argon/components/post/file/visualizer.css"
 

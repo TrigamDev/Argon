@@ -1,6 +1,6 @@
 import type { Category } from "@argon/options"
 
-import OptionsMenu from "@argon/components/navbar/options/OptionsMenu"
+import OptionsMenu from "@argon/components/navbar/options/OptionsMenu.tsx"
 
 import '@argon/components/navbar/options/option.css'
 import '@argon/components/navbar/options/category.css'

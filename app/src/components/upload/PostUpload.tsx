@@ -1,23 +1,19 @@
 import { useState } from 'react'
-import type { Value } from 'node_modules/react-datetime-picker/dist/cjs/shared/types'
 
-import Text from '@argon/components/input/Text'
-import Timestamp from '@argon/components/input/Timestamp'
-import Tags from '@argon/components/tag/TagInput'
+import type { Value } from 'node_modules/react-datetime-picker/dist/cjs/shared/types'
+import { FileType, type Tag } from '@argon/util/types'
+import { upload } from '@argon/util/api'
+import { tagsToString } from '@argon/util/tag'
 
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import FileUpload from '@argon/components/upload/FileUpload.tsx'
+import Text from '@argon/components/input/Text.tsx'
+import Timestamp from '@argon/components/input/Timestamp.tsx'
+import Tags from '@argon/components/tag/TagInput.tsx'
 
-import FileUpload from './FileUpload'
-
-import { upload } from '@argon/util/api'
-
-import { FileType, type Tag } from '@argon/util/types'
-import { parseTagString, tagsToString } from '@argon/util/tag'
-
-import '@argon/components/upload/post-upload.css'
 import 'react-tabs/style/react-tabs.css'
+import '@argon/components/upload/post-upload.css'
 import '@argon/globals.css'
-
 
 export default function PostUpload() {
 

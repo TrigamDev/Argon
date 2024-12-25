@@ -4,6 +4,7 @@ import { handleNSFW, handleSuggestive, handleUntagged, animations, tagSuggestion
 import type { Post } from "@argon/util/types"
 
 import { hasTag } from "@argon/util/tag"
+
 import "@argon/components/gallery/gallery-file.css"
 
 interface Props { post: Post }

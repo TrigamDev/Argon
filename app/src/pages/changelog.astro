@@ -1,6 +1,5 @@
 ---
 import { getSortedVersions } from '@argon/util/version'
-const changelogs = getSortedVersions()
 
 import Page from '../layouts/Page.astro'
 import Navbar from '@argon/components/navbar/Navbar.astro'
@@ -9,6 +8,8 @@ import VersionList from '@argon/components/changelog/version-list.astro'
 
 import '@argon/pages/_changelog.css'
 import '@argon/globals.css'
+
+const changelogs = getSortedVersions()
 ---
 
 <Page title="Upload post">
