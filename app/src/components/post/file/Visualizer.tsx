@@ -9,7 +9,7 @@ import { playing, duration, volume, muted, loop } from "@argon/stores/file"
 import "@argon/components/post/file/visualizer.css"
 
 export default function Visualizer({ post, bars }: { post: any, bars: boolean }) {
-	const containerRef = useRef<HTMLDivElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null)
 
 	const $playing = useStore(playing)
 	const $duration = useStore(duration)
@@ -18,7 +18,7 @@ export default function Visualizer({ post, bars }: { post: any, bars: boolean })
 	const $loop = useStore(loop)
 
 	// Create waveform
-	var style = window.getComputedStyle(document.body);
+	var style = window.getComputedStyle(document.body)
 	const { wavesurfer, isPlaying, currentTime } = useWavesurfer({
 		container: containerRef,
 		height: 150,
@@ -28,28 +28,28 @@ export default function Visualizer({ post, bars }: { post: any, bars: boolean })
 		url: post?.file?.url,
 		normalize: true,
 		barWidth: bars ? 4 : 0
-	});
+	})
 
 
 	// Load settings from local storage
 	useEffect(() => {
-		localStorage.getItem('volume') && volume.set(Number(localStorage.getItem('volume')));
-		localStorage.getItem('muted') && muted.set(localStorage.getItem('muted') === 'true');
-	}, []);
+		localStorage.getItem('volume') && volume.set(Number(localStorage.getItem('volume')))
+		localStorage.getItem('muted') && muted.set(localStorage.getItem('muted') === 'true')
+	}, [])
 
 	// Apply settings on change
 	useEffect(() => {
-		wavesurfer?.setVolume($volume / 100);
-		wavesurfer?.setMuted($muted);
+		wavesurfer?.setVolume($volume / 100)
+		wavesurfer?.setMuted($muted)
 
-		localStorage.setItem('volume', $volume.toString());
-		localStorage.setItem('muted', $muted.toString());
-	}, [$volume, $muted]);
+		localStorage.setItem('volume', $volume.toString())
+		localStorage.setItem('muted', $muted.toString())
+	}, [$volume, $muted])
 
 	// Load data on ready
 	wavesurfer?.on('ready', () => {
-		duration.set(wavesurfer?.getDuration());
-	});
+		duration.set(wavesurfer?.getDuration())
+	})
 
 	// Play/Pause
 	const onPlayPause = useCallback(() => {
@@ -57,27 +57,27 @@ export default function Visualizer({ post, bars }: { post: any, bars: boolean })
 			wavesurfer.playPause()
 			playing.set(wavesurfer.isPlaying())
 		}
-	}, [wavesurfer]);
+	}, [wavesurfer])
 
 	// Loop on finish
 	wavesurfer?.on('finish', () => {
-		if ($loop) wavesurfer?.play();
-		else wavesurfer?.stop();
+		if ($loop) wavesurfer?.play()
+		else wavesurfer?.stop()
 	})
 
 	// Get current time
-	const currentDuration = moment.duration(currentTime, "s");
+	const currentDuration = moment.duration(currentTime, "s")
 	const currentLabel = [
 		currentDuration.minutes(),
 		currentDuration.seconds()
-	].map(v => v.toString().padStart(2, '0')).join(':');
+	].map(v => v.toString().padStart(2, '0')).join(':')
 
 	// Get total duration
-	const totalDuration = moment.duration($duration, "s");
+	const totalDuration = moment.duration($duration, "s")
 	const totalLabel = [
 		totalDuration.minutes(),
 		totalDuration.seconds()
-	].map(v => v.toString().padStart(2, '0')).join(':');
+	].map(v => v.toString().padStart(2, '0')).join(':')
 
 	return (
 		<div className="post-audio">
@@ -107,8 +107,8 @@ export default function Visualizer({ post, bars }: { post: any, bars: boolean })
 
 				{ /* Volume Controls */ }
 				<div className="volume-controls">
-					{ !$muted && <button id="audio-mute" className="audio-button" onClick={() => { muted.set(true); }}><img src="/icons/audio/volume_loud.svg" alt="Mute"/></button> }
-					{ $muted && <button id="audio-unmute" className="audio-button" onClick={() => { muted.set(false); }}><img src="/icons/audio/volume_muted.svg" alt="Unmute"/></button> }
+					{ !$muted && <button id="audio-mute" className="audio-button" onClick={() => { muted.set(true) }}><img src="/icons/audio/volume_loud.svg" alt="Mute"/></button> }
+					{ $muted && <button id="audio-unmute" className="audio-button" onClick={() => { muted.set(false) }}><img src="/icons/audio/volume_muted.svg" alt="Unmute"/></button> }
 					<input type="range" id="audio-volume" className={"audio-slider " + ($muted ? 'muted' : '')} min="0" max="100" disabled={$muted} value={$volume} onChange={(e) => { volume.set(Number(e.target.value)) }}/>
 				</div>
 				<div id="spacer"/>

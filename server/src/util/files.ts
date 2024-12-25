@@ -322,7 +322,7 @@ export function getStreamFromBuffer(buffer: Buffer): Readable {
  * @returns { Promise<Buffer> } The converted buffer
  */
 export async function getBufferFromBlob(blob: Blob | Buffer): Promise<Buffer> {
-	if (!blob || (blob instanceof Blob && !blob.arrayBuffer)) return Buffer.of();
+	if (!blob || (blob instanceof Blob && !blob.arrayBuffer)) return Buffer.of()
 	if (blob instanceof Buffer) return blob
 	return Buffer.from(await blob.arrayBuffer())
 }

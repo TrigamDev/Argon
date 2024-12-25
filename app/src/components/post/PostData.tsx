@@ -51,11 +51,11 @@ function displayTimestamp(timestamp: number) {
 }
 
 function formatFileSize(fileSize: number) {
-	if (!fileSize) return "0 B";
-	if (fileSize < 1000) return `${fileSize} B`;
-	else if (fileSize < 1000000) return `${roundToTwo(fileSize / 1000)} KB`;
-	else if (fileSize < 1000000000) return `${roundToTwo(fileSize / 1000000)} MB`;
-	else return `${roundToTwo(fileSize / 1000000000)} GB`;
+	if (!fileSize) return "0 B"
+	if (fileSize < 1000) return `${fileSize} B`
+	else if (fileSize < 1000000) return `${roundToTwo(fileSize / 1000)} KB`
+	else if (fileSize < 1000000000) return `${roundToTwo(fileSize / 1000000)} MB`
+	else return `${roundToTwo(fileSize / 1000000000)} GB`
 }
 
 function roundToTwo(num: number) {

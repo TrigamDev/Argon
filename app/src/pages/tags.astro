@@ -20,7 +20,7 @@ const tags: Tag[] | null = await get(Astro.request, `tags/list`, (res: Response)
 const grouped = tagsToGrouped( tags ?? [] )
 
 function tagsToGrouped(tags: Tag[]) {
-	let grouped: any = {};
+	let grouped: any = {}
 	tags.forEach( ( tag: Tag ) => {
 		if ( !grouped[ tag.type ] ) grouped[ tag.type ] = []
 		grouped[ tag.type ].push( tag )
@@ -37,7 +37,7 @@ function toTitleCase( title: string ) {
 	return title.replace(
 		/\w\S*/g,
 		text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
-	);
+	)
 }
 ---
 

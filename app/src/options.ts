@@ -8,34 +8,34 @@ export enum OptionType {
 }
 
 export interface Option {
-	label: string;
-	description: string;
-	set: Function;
-	type: OptionType;
+	label: string
+	description: string
+	set: Function
+	type: OptionType
 }
 
 export interface ToggleOption extends Option {
 	set: (value: boolean) => {}
-	type: OptionType.Toggle;
-	toggled: boolean;
+	type: OptionType.Toggle
+	toggled: boolean
 }
 
 export interface DropdownOption<SelectionType> extends Option {
-	type: OptionType.Dropdown;
-	options: DropdownSelection<SelectionType>[];
+	type: OptionType.Dropdown
+	options: DropdownSelection<SelectionType>[]
 }
 
 export interface DropdownSelection<SelectionType> {
-	label: string;
-	description: string;
-	value: SelectionType;
-	selected: boolean;
+	label: string
+	description: string
+	value: SelectionType
+	selected: boolean
 }
 
 export interface Category extends Option {
-	type: OptionType.Category;
-	open: boolean;
-	children: Option[];
+	type: OptionType.Category
+	open: boolean
+	children: Option[]
 }
 
 export default [

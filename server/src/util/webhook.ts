@@ -1,5 +1,5 @@
-import Post from "../data/post";
-import { Category, log, Status } from "./debug";
+import Post from "../data/post"
+import { Category, log, Status } from "./debug"
 import config from "../../argonConfig"
 
 export async function notifPostUpload(post: Post) {

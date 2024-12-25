@@ -1,15 +1,15 @@
 export interface ArgonConfig {
-	publicWebhook: WebhookConfig;
-	privateWebhook: WebhookConfig;
+	publicWebhook: WebhookConfig
+	privateWebhook: WebhookConfig
 }
 
 export interface WebhookConfig {
-	url: string;
+	url: string
 	notifications: {
-		postUpload: boolean;
-		postEdit: boolean;
-		postDelete: boolean;
-		error: boolean;
+		postUpload: boolean
+		postEdit: boolean
+		postDelete: boolean
+		error: boolean
 	}
 }
 

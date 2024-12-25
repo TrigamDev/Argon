@@ -1,4 +1,4 @@
-import type { Post } from "@argon/util/types";
+import type { Post } from "@argon/util/types"
 
 import '@argon/components/post/post-actions.css'
 
