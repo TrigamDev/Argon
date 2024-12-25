@@ -2,7 +2,7 @@ import type { Tag } from "@argon/util/types"
 
 import '@argon/components/tag/tag-chip.css'
 import '@argon/globals.css'
-import TagIcon from "./TagIcon"
+import TagIcon from "@argon/components/tag/TagIcon"
 
 interface Props {
 	tag: Tag

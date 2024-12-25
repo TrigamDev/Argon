@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react"
 
-import { dimensions, duration } from "../../../stores/file"
+import { dimensions, duration } from "@argon/stores/file"
 
-import type { Post } from "../../../util/types"
+import type { Post } from "@argon/util/types"
 
-import "./post-file.css"
+import "@argon/components/post/file/post-file.css"
 
 export const prerender = false
 

@@ -1,11 +1,11 @@
 import moment from "moment"
 
 import { useStore } from "@nanostores/react"
-import { dimensions, size, duration } from "../../stores/file"
+import { dimensions, size, duration } from "@argon/stores/file"
 
-import type { Post } from "../../util/types"
+import type { Post } from "@argon/util/types"
 
-import "./post-data.css"
+import "@argon/components/post/post-data.css"
 import { isUrlValid } from "@argon/util/url"
 
 export const prerender = false

@@ -1,4 +1,4 @@
-import { FileType } from "./types"
+import { FileType } from "@argon/util/types"
 
 export const imageTypes = [ "png", "jpg", "jpeg", "gif", "webp", "svg", "avif", "tiff" ]
 export const videoTypes = [ "mp4", "webm", "mov", "avi", "flv", "vob", "mpeg", "m4v" ]

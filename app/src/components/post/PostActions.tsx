@@ -1,6 +1,6 @@
-import type { Post } from "../../util/types";
+import type { Post } from "@argon/util/types";
 
-import './post-actions.css'
+import '@argon/components/post/post-actions.css'
 
 interface Props { post: Post }
 export default function PostActions({ post }: Props) {

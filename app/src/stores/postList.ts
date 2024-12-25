@@ -1,7 +1,7 @@
 import { atom } from "nanostores"
 
-import type { Post, Tag } from "../util/types"
-import { Sorts } from "../util/types"
+import type { Post, Tag } from "@argon/util/types"
+import { Sorts } from "@argon/util/types"
 
 export const postList = atom<Post[]>([])
 

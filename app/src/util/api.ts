@@ -1,4 +1,4 @@
-import type { Post, Tag } from "./types"
+import type { Post, Tag } from "@argon/util/types"
 
 // Get client IP address (used for verification)
 export async function getIpAddress(): Promise<string | null> {

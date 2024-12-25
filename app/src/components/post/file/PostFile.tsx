@@ -1,12 +1,12 @@
 import { useEffect } from "react"
 
-import { dimensions, size } from "../../../stores/file"
+import { dimensions, size } from "@argon/stores/file"
 
-import type { Post } from "../../../util/types"
+import type { Post } from "@argon/util/types"
 
-import "./post-file.css"
-import VideoPlayer from "./VideoPlayer"
-import Visualizer from "./Visualizer"
+import "@argon/components/post/file/post-file.css"
+import VideoPlayer from "@argon/components/post/file/VideoPlayer"
+import Visualizer from "@argon/components/post/file/Visualizer"
 
 export const prerender = false
 

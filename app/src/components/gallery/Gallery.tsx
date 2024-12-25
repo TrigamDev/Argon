@@ -1,15 +1,15 @@
 import { useEffect } from "react"
 
 import { useStore } from "@nanostores/react"
-import { postList, pageSize, currentPage, filterTags, sort } from "../../stores/postList"
+import { postList, pageSize, currentPage, filterTags, sort } from "@argon/stores/postList"
 import { handleNSFW, handleSuggestive, handleUntagged, animations, tagSuggestions } from "@argon/stores/options"
 
-import { getPosts } from "../../util/api"
-import type { Post } from "../../util/types"
+import { getPosts } from "@argon/util/api"
+import type { Post } from "@argon/util/types"
 
-import GalleryFile from "./GalleryFile"
+import GalleryFile from "@argon/components/gallery/GalleryFile"
 
-import "./gallery.css"
+import "@argon/components/gallery/gallery.css"
 import { parseTagString, tagsToTagString } from "@argon/util/tag"
 
 export default function Gallery() {

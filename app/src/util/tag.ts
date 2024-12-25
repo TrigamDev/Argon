@@ -1,4 +1,4 @@
-import type { Tag } from "./types";
+import type { Tag } from "@argon/util/types";
 
 export function parseTagString(tagString: string): Tag[] {
 	let tags = tagString.split(' ').map((tag: string) => {

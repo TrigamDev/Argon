@@ -10,7 +10,7 @@ import TagChip from "@argon/components/tag/TagChip"
 
 import "@argon/components/tag/tag-input.css"
 import "@argon/globals.css"
-import TagIcon from "./TagIcon"
+import TagIcon from "@argon/components/tag/TagIcon"
 
 interface Props {
 	search?: boolean,
