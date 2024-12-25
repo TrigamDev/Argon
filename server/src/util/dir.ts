@@ -1,5 +1,5 @@
-import { Context } from 'elysia'
-import { fileURLToPath } from 'url'
+import { Context } from "elysia"
+import { fileURLToPath } from "url"
 const baseDir = fileURLToPath(import.meta.url).replace(/\\/g, '/').replace('/src/util/dir.ts', '')
 
 export { baseDir }

@@ -1,10 +1,10 @@
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent } from "react"
 
-import type { ToggleOption } from '@argon/options'
+import type { ToggleOption } from "@argon/options"
 
-import '@argon/components/navbar/options/option.css'
-import '@argon/components/navbar/options/toggle.css'
-import '@argon/globals.css'
+import "@argon/components/navbar/options/option.css"
+import "@argon/components/navbar/options/toggle.css"
+import "@argon/globals.css"
 
 interface Props {
 	option: ToggleOption

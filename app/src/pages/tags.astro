@@ -1,18 +1,18 @@
 ---
-import { getEntry, render } from 'astro:content'
+import { getEntry, render } from "astro:content"
 
-import type { RenderResult } from 'astro:content'
-import type { Tag } from '@argon/util/types'
+import type { RenderResult } from "astro:content"
+import type { Tag } from "@argon/util/types"
 
-import { get } from '@argon/util/api'
+import { get } from "@argon/util/api"
 
-import Page from '@argon/layouts/Page.astro'
-import Navbar from '@argon/components/navbar/Navbar.astro'
-import TagBox from '@argon/components/tag/TagBox.astro'
-import TagIcon from '@argon/components/tag/TagIcon.tsx'
+import Page from "@argon/layouts/Page.astro"
+import Navbar from "@argon/components/navbar/Navbar.astro"
+import TagBox from "@argon/components/tag/TagBox.astro"
+import TagIcon from "@argon/components/tag/TagIcon.tsx"
 
-import '@argon/pages/_tags.css'
-import '@argon/globals.css'
+import "@argon/pages/_tags.css"
+import "@argon/globals.css"
 
 const tagsBlurb = await getEntry('misc', 'tags')
 const { Content } = tagsBlurb ? await render( tagsBlurb ) : {} as RenderResult

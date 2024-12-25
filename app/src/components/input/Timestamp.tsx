@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react"
 
-import type { Value } from 'node_modules/react-datetime-picker/dist/esm/shared/types'
+import type { Value } from "node_modules/react-datetime-picker/dist/esm/shared/types"
 
-import DateTimePicker from 'react-datetime-picker'
+import DateTimePicker from "react-datetime-picker"
 
-import 'react-datetime-picker/dist/DateTimePicker.css'
-import 'react-calendar/dist/Calendar.css'
-import 'react-clock/dist/Clock.css'
+import "react-datetime-picker/dist/DateTimePicker.css"
+import "react-calendar/dist/Calendar.css"
+import "react-clock/dist/Clock.css"
 
-import '@argon/components/input/timestamp.css'
-import '@argon/globals.css'
+import "@argon/components/input/timestamp.css"
+import "@argon/globals.css"
 
 interface Props {
 	currentTimestamp?: number,

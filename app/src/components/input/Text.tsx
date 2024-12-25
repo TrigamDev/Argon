@@ -1,7 +1,7 @@
-import { useEffect, useState, type ChangeEvent } from 'react'
+import { useEffect, useState, type ChangeEvent } from "react"
 
-import '@argon/components/input/text.css'
-import '@argon/globals.css'
+import "@argon/components/input/text.css"
+import "@argon/globals.css"
 
 interface Props { currentText?: string, resetButton?: boolean, disabled?: boolean, onChange: ((value: string) => void) }
 export default function Text({ currentText = "", resetButton = true, disabled = false, onChange }: Props) {

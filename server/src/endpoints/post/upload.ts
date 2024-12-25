@@ -3,7 +3,7 @@ import { Context } from "elysia"
 import Database from "bun:sqlite"
 import { getLastPostId, insertPost } from "../../util/database"
 
-import { readFile } from 'fs/promises'
+import { readFile } from "fs/promises"
 
 import type Post from "../../data/post"
 import type ArgonFile from "../../data/file"

@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react"
 
-import type { SingleValue } from 'react-select'
-import type { DropdownOption, DropdownSelection } from '@argon/options'
+import type { SingleValue } from "react-select"
+import type { DropdownOption, DropdownSelection } from "@argon/options"
 
-import { labelToId } from '@argon/options'
+import { labelToId } from "@argon/options"
 
-import Select from 'react-select'
+import Select from "react-select"
 
-import '@argon/components/navbar/options/option.css'
-import '@argon/components/navbar/options/dropdown.css'
-import '@argon/globals.css'
+import "@argon/components/navbar/options/option.css"
+import "@argon/components/navbar/options/dropdown.css"
+import "@argon/globals.css"
 
 interface Props {
 	option: DropdownOption<any>

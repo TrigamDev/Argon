@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useRef, useEffect } from "react"
 import "./styles.css"
-import DeleteTag from '/icons/tag/delete.svg?url'
+import DeleteTag from "/icons/tag/delete.svg?url"
 
 export interface IMultiselectProps {
 	options: any,

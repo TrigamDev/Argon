@@ -1,5 +1,5 @@
 import sharp from "sharp"
-import FfmpegCommand from 'fluent-ffmpeg'
+import FfmpegCommand from "fluent-ffmpeg"
 import { PassThrough, Readable } from "stream"
 import { unlink, lstat, rm, readFile, exists, mkdir } from "fs/promises"
 

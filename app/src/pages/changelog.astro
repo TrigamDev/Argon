@@ -1,13 +1,13 @@
 ---
-import { getSortedVersions } from '@argon/util/version'
+import { getSortedVersions } from "@argon/util/version"
 
-import Page from '../layouts/Page.astro'
-import Navbar from '@argon/components/navbar/Navbar.astro'
-import Version from '@argon/components/changelog/version.astro'
-import VersionList from '@argon/components/changelog/version-list.astro'
+import Page from "@argon/layouts/Page.astro"
+import Navbar from "@argon/components/navbar/Navbar.astro"
+import Version from "@argon/components/changelog/version.astro"
+import VersionList from "@argon/components/changelog/version-list.astro"
 
-import '@argon/pages/_changelog.css'
-import '@argon/globals.css'
+import "@argon/pages/_changelog.css"
+import "@argon/globals.css"
 
 const changelogs = getSortedVersions()
 ---
