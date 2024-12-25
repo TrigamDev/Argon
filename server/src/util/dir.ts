@@ -11,6 +11,8 @@ export function getWebPath(context: Context): string {
 	let host = context.headers.host
 	let port = process.env.PORT
 
+	console.log(protocol)
+
 	// Attempt to get from headers
 	const url = `${protocol ?? 'http'}://${host ?? `localhost:${port}`}`
 	return url
