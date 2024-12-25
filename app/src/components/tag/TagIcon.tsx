@@ -8,7 +8,7 @@ interface Props {
 export default function TagIcon({ tag }: Props) {
 	const [ useDefault, setUseDefault ] = useState<boolean>( false )
 
-	const iconUrl = `/icons/tag/${ tag.type }.svg?t=${ Date.now() }`
+	const iconUrl = `/icons/tag/${ tag.type }.svg`
 	const defaultIconUrl = `/icons/tag/unknown.svg`
 	
 	useEffect(() => {
