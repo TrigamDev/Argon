@@ -8,15 +8,16 @@ export function getWebPath(context: Context): string {
 	if (!context) return ""
 
 	const origin: string | null = context.request.headers.get( 'origin' )
-	if (origin) return origin
-
 	let host = context.headers.host
 	let port = process.env.PORT
 
-	let protocol: string | null = context.request.headers.get( 'x-forwarded-protocol' )
+	let protocol: string | null = null
+	if ( !protocol ) protocol = getProtocolFromUrl( origin )
+	if ( !protocol ) protocol = context.request.headers.get( 'x-forwarded-protocol' )
 
 	// Attempt to get from headers
 	const url = `${protocol ?? 'http'}://${host ?? `localhost:${port}`}`
+	console.log(url)
 	return url
 }
 
