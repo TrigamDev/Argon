@@ -15,9 +15,6 @@ Argon is private due to the fact it's solely meant for those close to me, though
 - Reporting
 - Bookmarking
 
-### Tweaks
-- Give pop-ups Borders
-
 ### Fixes
 - Allow bigger files
 - Volume slider doesn't match volume when loading page
