@@ -148,6 +148,23 @@ body {
 	height: 36px;
 }
 
+/* Pop Up */
+.pop-up {
+	/* Display */
+	overflow-y: scroll;
+
+	/* Layout */
+	max-height: 75vh;
+	padding: 16px;
+
+	/* Color */
+	background-color: var(--primary) !important;
+
+	/* Border */
+	border: 3px solid var(--secondary);
+	border-radius: 32px;
+}
+
 /* Section */
 .section {
 	/* Display */

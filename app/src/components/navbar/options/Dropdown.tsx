@@ -63,7 +63,7 @@ export default function Dropdown({ option }: Props) {
 				onChange={(value) => onChange(value)}
 				classNames={{
 					control: () => "dropdown",
-					menu: () => "dropdown-menu",
+					menu: () => "dropdown-menu pop-up",
 					menuList: () => "astronav-dropdown-submenu",
 					option: () => "dropdown-choice dont-close",
 					input: () => "dont-close",

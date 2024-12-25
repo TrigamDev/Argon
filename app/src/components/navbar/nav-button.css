@@ -46,18 +46,19 @@
 
 .nav-button-container .nav-dropdown-items-container {
 	/* Display */
-	position: absolute;
-	max-height: 75vh;
 	overflow-y: scroll;
+
 	/* Layout */
+	max-height: 75vh;
 	padding: 16px;
 	margin-top: 26px;
-
-	/* Style */
-	border-radius: 32px;
+	position: absolute;
 
 	/* Color */
 	background-color: var(--primary);
+
+	/* Border */
+	border-radius: 32px;
 }
 
 .nav-dropdown-items-container ul {
