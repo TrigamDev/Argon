@@ -1,6 +1,6 @@
-import type { Category } from "../options";
+import type { Category } from "@argon/options";
 
-import OptionsMenu from "./OptionsMenu";
+import OptionsMenu from "@argon/components/navbar/options/OptionsMenu";
 
 import '@argon/components/navbar/options/option.css'
 import '@argon/components/navbar/options/category.css'

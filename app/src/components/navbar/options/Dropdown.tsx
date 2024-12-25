@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { labelToId } from '../options';
-import type { DropdownOption, DropdownSelection } from '../options';
+import { labelToId } from '@argon/options';
+import type { DropdownOption, DropdownSelection } from '@argon/options';
 
 import Select, { type SingleValue } from 'react-select';
 
@@ -42,7 +42,7 @@ export default function Dropdown({ option }: Props) {
 	}
 
 	return (
-		<button id={id} className="option toggle" tabIndex={0} onClick={toggleMenu}>
+		<button id={id} className="option drop-down" tabIndex={0} onClick={toggleMenu}>
 			<div className="option-content">
 				<h3 className="option-label">{option.label}</h3>
 			</div>

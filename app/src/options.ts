@@ -164,6 +164,44 @@ export default [
 	} as ToggleOption,
 
 	{
+		label: "Sort Posts",
+		description: "The method used to sort posts",
+		set: sortPosts.set,
+		type: OptionType.Dropdown,
+		options: [{
+			label: "Newest to Oldest",
+			description: "Sort posts with the newest being first",
+			value: SortDirection.timestamp,
+			selected: sortPosts.get() == SortDirection.timestamp
+		}, {
+			label: "Oldest to Newest",
+			description: "Sort posts with the oldest being first",
+			value: SortDirection.timestampReverse,
+			selected: sortPosts.get() == SortDirection.timestampReverse
+		}, {
+			label: "Highest Tag Count",
+			description: "Sort posts with the posts with the most tags being first",
+			value: SortDirection.tagCount,
+			selected: sortPosts.get() == SortDirection.tagCount
+		}, {
+			label: "Lowest Tag Count",
+			description: "Sort posts with the posts with the least tags being first",
+			value: SortDirection.tagCountReverse,
+			selected: sortPosts.get() == SortDirection.tagCountReverse
+		}, {
+			label: "Highest ID to Lowest",
+			description: "Sort posts with the posts with the highest ID being first",
+			value: SortDirection.postId,
+			selected: sortPosts.get() == SortDirection.postId
+		}, {
+			label: "Lowest ID to Highest",
+			description: "Sort posts with the posts with the lowest ID being first",
+			value: SortDirection.postIdReverse,
+			selected: sortPosts.get() == SortDirection.postIdReverse
+		}]
+	} as DropdownOption<SortDirection>,
+
+	{
 		label: "Suggest Tags",
 		description: "When searching, show suggestions/autocomplete tags",
 		set: (value: boolean) => tagSuggestions.set(value),

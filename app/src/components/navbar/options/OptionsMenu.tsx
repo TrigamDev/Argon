@@ -1,5 +1,5 @@
-import Options, { labelToId, OptionType } from '@argon/components/navbar/options'
-import type { Option, ToggleOption, DropdownOption, Category } from '@argon/components/navbar/options'
+import Options, { labelToId, OptionType } from '@argon/options'
+import type { Option, ToggleOption, DropdownOption, Category } from '@argon/options'
 
 // Option Elements
 import Toggle from '@argon/components/navbar/options/Toggle.tsx'
