@@ -13,7 +13,6 @@ export default function VideoPlayer({ post }: Props) {
 	let self = useRef<HTMLVideoElement>(null)
 
 	useEffect(() => {
-		// create video element
 		let dataVideo = document.createElement('video')
 		dataVideo.src = post.file.url
 		dataVideo.load()
@@ -24,10 +23,8 @@ export default function VideoPlayer({ post }: Props) {
 	}, [ post ])
 
 	return (
-		<>
-			<video ref={self} id="post-video" className="post-file" controls>
-				<source src={post.file.url} type="video/mp4" title={post.file.title} data-fluid-hd/>
-			</video>
-		</>
+		<video ref={self} id="post-video" className="post-file" controls>
+			<source src={post.file.url} type="video/mp4" title={post.file.title} data-fluid-hd/>
+		</video>
 	)
 }
