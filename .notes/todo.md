@@ -4,7 +4,6 @@
 - Random post button
 - Allow dragging files onto upload page
 - Fetch the timestamp from possible sources
-- Sort tags
 - Make the config actually affect things
 - Reporting
 - Bookmarking
