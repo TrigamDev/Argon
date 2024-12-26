@@ -1,0 +1,41 @@
+---
+import { sortTagsByType } from "@argon/util/tag"
+
+import type { Post } from "@argon/util/types"
+
+import Page from "@argon/layouts/Page.astro"
+import PostFile from "@argon/components/post/file/PostFile.tsx"
+
+import PostNav from "@argon/components/navbar/post/PostNav.astro"
+import PostData from "@argon/components/post/PostData.tsx"
+import PostActions from "@argon/components/post/PostActions.tsx"
+import TagBox from "@argon/components/tag/TagBox.astro"
+
+import "@argon/pages/post/_post.css"
+import "@argon/globals.css"
+
+interface Props {
+	post: Post
+}
+const { post } = Astro.props
+---
+
+<Page title={post?.file?.title ?? "Argon"}>
+	<div class="post">
+		<div id="left">
+			{ post && <PostNav post={ post }/> }
+			
+			<div id="post-content">
+				{ post &&
+					<span class="post-title">{ post?.file?.title }</span>
+					<PostData post={ post } client:load />
+					<PostActions post={ post } client:load />
+					<TagBox tags={ sortTagsByType( post.tags ) } clickable={ true }/>
+				}
+			</div>
+		</div>
+		<div id="right">
+			{ post && <PostFile post={ post } client:only="react" /> }
+		</div>
+	</div>
+</Page>

@@ -281,7 +281,43 @@ export function getPostById(id: number, db: Database): Post | null {
 			extension: file.extension
 		}
 	}
+}
 
+/**
+ * Gets a random post from the database
+ * @param { Database } db The database to get the post from 
+ * @returns { Post | null } The post if it exists, otherwise null
+ */
+export function getRandomPostFromDB(db: Database): Post | null {
+	let post: any = db.query(`
+		SELECT * FROM posts
+		ORDER BY RANDOM()
+		LIMIT 1
+	`).get()
+	if ( !post || !post.id ) return null
+	
+	let file: any = db.query(`
+		SELECT * FROM files
+		WHERE postId = ?
+	`).get( post?.id )
+
+	if (!post || !file) return null
+	
+	return {
+		id: post.id,
+		timestamp: post.timestamp,
+		tags: decodeTags(post.tags, db),
+		file: {
+			url: file.url,
+			thumbnailUrl: file.thumbnailUrl,
+			projectUrl: file.projectUrl,
+			sourceUrl: file.sourceUrl,
+			timestamp: file.timestamp,
+			title: file.title,
+			type: file.type,
+			extension: file.extension
+		}
+	}
 }
 
 /**

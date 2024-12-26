@@ -1,7 +1,6 @@
 # Client
 
 ## Features
-- Random post button
 - Allow dragging files onto upload page
 - Fetch the timestamp from possible sources
 - Make the config actually affect things
@@ -11,6 +10,7 @@
 ## Fixes
 - Allow bigger files
 - Volume slider doesn't match volume when loading page
+- Tag character limit
 
 
 

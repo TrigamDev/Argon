@@ -8,6 +8,7 @@ import { Database } from "bun:sqlite"
 import { clearDatabase, createTables, getSQLiteVersion } from "./util/database"
 
 import { log, Category, Status } from "./util/debug"
+import { clearFiles } from "./util/files"
 
 import uploadPost from "./endpoints/post/upload"
 import getPost from "./endpoints/post/get"
@@ -15,7 +16,7 @@ import search from "./endpoints/search"
 import deletePost from "./endpoints/post/delete"
 import getTagList from "./endpoints/tag/list"
 import editPost from "./endpoints/post/edit"
-import { clearFiles } from "./util/files"
+import getRandomPost from "./endpoints/post/random"
 
 // Database shit
 const db = new Database("argon.db")
@@ -95,6 +96,7 @@ const app = new Elysia()
 	} )
 	.get("/post/:id", async (context: Context) => getPost(context, db) )
 	.post("/post/delete/:id", (context: Context) => deletePost(context, db) )
+	.get("/post/random", async (context: Context) => getRandomPost(context, db) )
 
 	// Search
 	.post("/search", async (context: Context) => search(context, db), {

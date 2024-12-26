@@ -1,0 +1,12 @@
+---
+export const prerender = false
+
+import { get, getPostById } from "@argon/util/api"
+import type { Post } from "@argon/util/types"
+
+import PostLayout from "@argon/layouts/Post.astro"
+
+const post: Post | null = await get( Astro.request, `post/random`, (res: Response) => res.json() )
+---
+
+{ post && <PostLayout post={ post } /> }
