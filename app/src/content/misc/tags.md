@@ -8,3 +8,5 @@ Other important formatting guidelines:
   - (`home-con_(character)` instead of `Home-Con_(Character)`)
 - Tags should have no spaces whatsoever, as tags are seperated by spaces. Spaces should instead be replaced with underscores (`_`).
   - (`spook_lass_(artist)` instead of `spook lass_(artist)`)
+- Tags should only contain alpha-numeric characters, meaning no special characters like `@`, `&`, `*`, etc.
+  - (`ben_and_jerrys_(object)` instead of `ben_&_jerry's_(object)`)

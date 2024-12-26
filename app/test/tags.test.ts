@@ -6,7 +6,7 @@ import { parseTagString, removeDuplicates, tagsToTagString } from "@argon/util/t
 
 test('Parse Tag String', () => {
 	expect(
-		parseTagString('trigam_(artist) error(meta) !amber_(character) broken_(meta')
+		parseTagString('trigam_(artist) error(meta) !amber_(character) the_creature_(character) broken_(meta the bruh (12)')
 	).toMatchObject(
 		[
 			{
@@ -18,6 +18,30 @@ test('Parse Tag String', () => {
 				name: 'amber',
 				type: 'character',
 				exclude: true
+			},
+			{
+				name: 'the_creature',
+				type: 'character',
+				exclude: false
+			}
+		]
+	)
+})
+
+test('Exclude Invalid Tags', () => {
+	expect(
+		parseTagString('error(meta) ben_&_jerrys_(object) -- feiaonfvi trigam_(artist) oe my balls broken_(meta the bruh (12) home-con_(character)')
+	).toMatchObject(
+		[
+			{
+				name: 'trigam',
+				type: 'artist',
+				exclude: false
+			},
+			{
+				name: 'home-con',
+				type: 'character',
+				exclude: false
 			}
 		]
 	)

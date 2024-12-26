@@ -1,16 +1,37 @@
 import type { Tag } from "@argon/util/types"
 
+// Parse tags
 export function parseTagString(tagString: string): Tag[] {
-	let tags = tagString.split(' ').map((tag: string) => {
-		const match = tag?.match(/^(.*)_\((.*)\)$/)
-		if (!match || match.length < 2) return null
-		const name = match[1].replace(/^!/, '').toLowerCase()
-		const type = match[2].toLowerCase()
-		const exclude = match[1].startsWith('!') ?? false
-		return { name, type, exclude } as Tag
-	})
+	const split = tagString.split(/\s+/)
+	const tags: Tag[] = []
+
+	for ( const tag of split ) {
+		if ( !isTagValid( tag ) ) continue
+		
+		const [ exclude, name, type ] = parseTagComponents( tag )
+		const parsed: Tag = {
+			name: name?.toLowerCase() ?? '',
+			type: type?.toLowerCase() ?? '',
+			exclude: exclude === '!'
+		}
+
+		tags.push( parsed )
+	}
+
 	return removeDuplicates(tags.filter(tag => tag !== null) as Tag[])
 }
+
+export function isTagValid( tag: string ): boolean {
+	return /^[!]?[\w\-]+_\(.*\)$/i.test( tag )
+}
+
+export function parseTagComponents( tag: string ): [ string | null, string | null, string | null ] {
+	const match = tag.match( /^(!)?([\w\-]+)_\((.*?)\)$/i )
+	return match ? [ match[1], match[2], match[3] ] : [ null, null, null ]
+}
+
+
+// Convert between tags and tag strings
 
 export function tagsToTagString(tags: Tag[]): string {
 	let strings = []
