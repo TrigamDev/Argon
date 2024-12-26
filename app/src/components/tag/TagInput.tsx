@@ -5,7 +5,7 @@ import { filterTags } from "@argon/stores/postList"
 import type { Tag } from "@argon/util/types"
 
 import { get } from "@argon/util/api"
-import { areTagsEqual, parseTagString, tagsToTagString, } from "@argon/util/tag"
+import { areTagsEqual, parseTagString, sortTagsByUsages, tagsToTagString, } from "@argon/util/tag"
 
 import { Multiselect } from "@argon/libs/multiselect-react-dropdown"
 import TagChip from "@argon/components/tag/TagChip.tsx"
@@ -98,6 +98,7 @@ export default function Tags ({ search = true, multiline = false, defaultValue =
 
 					evaluateValue={ parseInput }
 					areOptionsEqual={ areTagsEqual }
+					sortOptions={ sortTagsByUsages }
 				/>
 			</div>
 			{ /*search &&

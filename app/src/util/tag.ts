@@ -45,3 +45,52 @@ export function hasTag(tags: Tag[], tag: Tag) {
 export function areTagsEqual(tagA: Tag, tagB: Tag): boolean {
 	return tagA?.name === tagB?.name && tagA?.type === tagB?.type
 }
+
+export function sortTagsByName( tags: Tag[] ): Tag[] {
+	return tags?.sort( ( tagA: Tag, tagB: Tag ) => tagA.name.localeCompare( tagB.name ) )
+}
+
+export function sortTagsByUsages( tags: Tag[] ): Tag[] {
+	let alphabetical = sortTagsByName( tags )
+	return alphabetical?.sort( ( tagA: Tag, tagB: Tag ) => (tagB.usages ?? 0) - (tagA.usages ?? 0) )
+}
+
+export function sortTagsByType( tags: Tag[] ): Tag[] {
+	let grouped = groupTags( tags )
+	const typeOrder = [
+		'artist', 'character',
+		'expression', 'characteristic', 'action', 'clothing', 'location',
+		'object', 'copyright',
+		'nsfw',
+		'medium', 'style', 'source', 'meta'
+	]
+
+	// Specified types
+	let sorted: Tag[] = []
+	for ( const type of typeOrder ) {
+		if ( type in grouped ) {
+			let sortedType = sortTagsByUsages( grouped[ type ] ) ?? []
+			sorted?.push( ...sortedType )
+		}
+	}
+
+	// Remaining types
+	const remainingTypes = Object.keys( grouped ).filter( type => !typeOrder.includes( type ) )
+	remainingTypes.sort()
+
+	for ( const type of remainingTypes ) {
+		let sortedType = sortTagsByUsages( grouped[ type ] ) ?? []
+		sorted?.push( ...sortedType )
+	}
+
+	return sorted
+}
+
+export function groupTags( tags: Tag[] ): { [ key: string]: Tag[] } {
+	let grouped: { [ key: string ]: Tag[] } = {}
+	tags.forEach( ( tag: Tag ) => {
+		if ( !grouped[ tag.type ] ) grouped[ tag.type ] = []
+		grouped[ tag.type ].push( tag )
+	})
+	return grouped
+}

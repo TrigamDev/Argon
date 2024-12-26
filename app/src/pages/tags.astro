@@ -5,6 +5,7 @@ import type { RenderResult } from "astro:content"
 import type { Tag } from "@argon/util/types"
 
 import { get } from "@argon/util/api"
+import { groupTags } from "@argon/util/tag"
 
 import Page from "@argon/layouts/Page.astro"
 import Navbar from "@argon/components/navbar/Navbar.astro"
@@ -18,21 +19,7 @@ const tagsBlurb = await getEntry('misc', 'tags')
 const { Content } = tagsBlurb ? await render( tagsBlurb ) : {} as RenderResult
 
 const tags: Tag[] | null = await get(Astro.request, `tags/list`, (res: Response) => res.json())
-const grouped = tagsToGrouped( tags ?? [] )
-
-function tagsToGrouped(tags: Tag[]) {
-	let grouped: any = {}
-	tags.forEach( ( tag: Tag ) => {
-		if ( !grouped[ tag.type ] ) grouped[ tag.type ] = []
-		grouped[ tag.type ].push( tag )
-	})
-	// Sort Groups
-	grouped = Object.keys( grouped ).sort().reduce( ( acc: any, type: any ) => {
-		acc[ type ] = grouped[ type ]
-		return acc
-	}, {} )
-	return grouped
-}
+const grouped = groupTags( tags ?? [] )
 
 function toTitleCase( title: string ) {
 	return title.replace(
@@ -48,13 +35,13 @@ function toTitleCase( title: string ) {
 		<div class="section center-title">
 			{ Content && <Content/> }
 		</div>
-		{ grouped && Object.keys( grouped ).map( ( key: string ) => {
+		{ grouped && Object.keys( grouped ).map( ( type: string ) => {
 			return <div class="section center-title">
 				<h1 class="tag-title">
-					<TagIcon tag={ { type: key } as Tag } client:load/>
-					<span>{ toTitleCase( key ) }</span>
+					<TagIcon tag={ { type: type } as Tag } client:load/>
+					<span>{ toTitleCase( type ) }</span>
 				</h1>
-				<TagBox tags={ grouped[key] } clickable={ true }/>
+				<TagBox tags={ grouped[ type ] } clickable={ true }/>
 			</div>
 		}) }
 	</div>

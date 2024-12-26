@@ -38,6 +38,7 @@ export interface IMultiselectProps {
 	hideSelectedList?: boolean
 	evaluateValue?: ( value: string ) => any | null
 	areOptionsEqual?: ( optionA: any, optionB: any ) => boolean
+	sortOptions?: ( options: any ) => any
 }
 
 const closeIconTypes = {
@@ -115,7 +116,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
 	}
 
 	initialSetValue() {
-		const { showCheckbox, groupBy, singleSelect } = this.props
+		const { showCheckbox, groupBy, singleSelect, sortOptions } = this.props
 		const { options } = this.state
 		if (!showCheckbox && !singleSelect) {
 			this.removeSelectedValuesFromOptions(false)
@@ -123,9 +124,8 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
 		// if (singleSelect) {
 		//	 this.hideOnClickOutside()
 		// }
-		if (groupBy) {
-			this.groupByOptions(options)
-		}
+		if (groupBy) this.groupByOptions(options)
+		if ( sortOptions ) this.setState({ options: sortOptions( options ) })
 	}
 	
 	resetSelectedValues() {
@@ -253,13 +253,16 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
 
 	filterOptionsByInput() {
 		let { options, filteredOptions, inputValue } = this.state
-		const { isObject, displayValue } = this.props
+		const { isObject, displayValue, sortOptions } = this.props
 		if (isObject) {
 			options = filteredOptions.filter(i => this.matchValues(i[displayValue], inputValue))
 		} else {
 			options = filteredOptions.filter(i => this.matchValues(i, inputValue))
 		}
+
 		this.groupByOptions(options)
+
+		if ( sortOptions ) options = sortOptions( options )
 		this.setState({ options })
 	}
 
