@@ -11,7 +11,6 @@
 ## Fixes
 - Allow bigger files
 - Volume slider doesn't match volume when loading page
-- Don't allow `&` in tag names (causes URL searching issues)
 
 
 
