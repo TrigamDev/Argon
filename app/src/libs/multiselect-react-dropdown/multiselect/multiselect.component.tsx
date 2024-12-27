@@ -253,7 +253,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
 
 	filterOptionsByInput() {
 		let { options, filteredOptions, inputValue } = this.state
-		const { isObject, displayValue, sortOptions } = this.props
+		const { isObject, displayValue, sortOptions, autocomplete } = this.props
 		
 		let excluding = false
 		if (inputValue.startsWith('!')) excluding = true

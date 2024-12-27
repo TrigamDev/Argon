@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 
 import { filterTags } from "@argon/stores/postList"
+import { useStore } from "@nanostores/react"
+import { tagSuggestions } from "@argon/stores/options"
 
 import type { Tag } from "@argon/util/types"
 
@@ -23,6 +25,7 @@ interface Props {
 export default function Tags ({ search = true, multiline = false, defaultValue = [], onChange, ...props }: Props) {
 	
 	const [tags, setTags] = useState<Tag[]>([])
+	const $tagSuggestions = useStore( tagSuggestions )
 
 	useEffect(() => {
 		async function loadTags() {
@@ -82,13 +85,13 @@ export default function Tags ({ search = true, multiline = false, defaultValue =
 			<div className="tag-input">
 				<Multiselect
 					className={`search-bar ${ multiline ? 'multiline' : '' }`}
-		
-					options={ tags }
+
+					options={ $tagSuggestions ? tags : [] }
 					selectedValues={ defaultValue }
 
 					displayValue="name"
 					placeholder="Search"
-					emptyRecordMsg="No Tags Available"
+					emptyRecordMsg={ $tagSuggestions ? "No tags available" : "Tag suggestions are disabled" }
 		
 					onSelect={ onItemChange }
 					onRemove={ onItemChange }
