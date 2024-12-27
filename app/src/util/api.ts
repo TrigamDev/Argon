@@ -91,8 +91,7 @@ export async function upload<T>(request: Request | null, endpoint: string, data:
 		body: data
 	})
 	
-	if (!response || !response?.ok) { return null }
-	return callback(response)
+	return callback(response, response.status)
 }
 
 function getOrigin (request: Request | null) {

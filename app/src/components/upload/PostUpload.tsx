@@ -49,12 +49,8 @@ export default function PostUpload() {
 		if (sourceUrl) formdata.append('sourceUrl', sourceUrl)
 		if (tags) formdata.append('tags', tagsToString(tags))
 
-		upload(null, `post/upload`, formdata, async ( response: Response ) => {
-			let res = await response.json()
-
-			// Error handling
-			if ( res?.error ) alert( res?.error )
-			else if ( response.status === 413 ) alert(
+		upload(null, `post/upload`, formdata, async ( response: Response, status: number ) => {
+			if ( status === 413 ) alert(
 				`The file size exceeds the 4.5MB limit!
 				Unfortunately, this is a limitation of Vercel, not Argon.
 				Try uploading the file on Discord and using it's
@@ -62,6 +58,8 @@ export default function PostUpload() {
 				`
 			)
 
+			let res = await response.json()
+			if ( res?.error ) alert( res?.error )
 			else window.location.href = `/`
 		})
 	}
