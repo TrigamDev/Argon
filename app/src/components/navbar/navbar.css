@@ -84,33 +84,39 @@
 	margin-left: 6px;
 
 	/* Typography */
-	font-size: 1rem;
+	font-size: 0.85rem;
 	font-weight: 700;
 	text-wrap: nowrap;
 }
 
 /* Nav Buttons */
 .navbar .nav-message {
+	/* Layout */
+	margin-left: 12px;
+
 	/* Cursor */
 	user-select: none;
 
 	/* Typography */
 	font-size: 1.25rem;
 	font-weight: bold;
+	white-space: nowrap;
 }
 
 .navbar .nav-items {
 	/* Display */
-	flex-shrink: 0;
+	flex-grow: 1;
+	flex-shrink: 1;
 }
 
 .navbar .nav-buttons {
 	/* Display */
 	display: flex;
 	flex-direction: row;
+	flex-grow: 1;
+	flex-shrink: 1;
 
 	/* Layout */
-	width: 70vw;
 	padding: 0;
 	margin: 0;
 
@@ -147,34 +153,29 @@
 /* Large width */
 @media (width <= 1035px) {
 	.navbar .logo #website-version {
-
 		/* Display */
 		display: none;
 	}
 }
 @media (width >= 915px) {
 	.navbar #nav-toggle {
-
 		/* Display */
 		display: none;
 	}
 
 	.navbar .nav-items {
-
 		/* Display */
-		display: block;
+		display: flex;
 	}	
 }
 
 @media (width < 915px) {
 	.navbar {
-
 		/* Display */
 		flex-direction: column;
 	}
 
 	.navbar .nav-items {
-
 		/* Display */
 		display: flex;
 		flex-direction: column;
@@ -184,19 +185,16 @@
 	}
 
 	.navbar .nav-items.hidden {
-
 		/* Display */
 		display: none;
 	}
 
 	.navbar .nav-buttons {
-
 		/* Display */
 		flex-direction: column;
 	}
 
 	.navbar .nav-button {
-
 		/* Layout */
 		margin-bottom: 12px;
 	}
@@ -204,13 +202,11 @@
 
 @media (width < 485px) {
 	.navbar {
-
 		/* Layout */
 		min-width: 100px;
 	}
 
 	.navbar .logo #text-mark {
-
 		/* Display */
 		display: none;
 	}
@@ -218,13 +214,11 @@
 
 @media (width < 275px) {
 	.navbar {
-
 		/* Layout */
 		min-width: 100px;
 	}
 
 	.navbar .logo #text-mark {
-		
 		/* Display */
 		display: none;
 	}

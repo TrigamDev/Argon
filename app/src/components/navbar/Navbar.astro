@@ -13,10 +13,10 @@ import "@argon/components/navbar/nav-button.css"
 import "@argon/globals.css"
 
 interface Props {
-	isGallery: boolean
+	search?: boolean
 	message?: string
 }
-const { isGallery, message } = Astro.props
+const { search = true, message } = Astro.props
 
 const version = getLatestVersion()
 const alpha: boolean = isAlpha()
@@ -26,6 +26,8 @@ const alpha: boolean = isAlpha()
 	<Astronav>
 		<div class="navbar">
 			<ul id="nav-info">
+
+				{ /* More buttons dropdown */ }
 				<li class="nav-button-container">
 					<Dropdown class="group more-dropdown">
 						<button id="more-button" class="nav-button button">
@@ -33,16 +35,19 @@ const alpha: boolean = isAlpha()
 						</button>
 						<DropdownItems class="dont-close nav-dropdown-items-container pop-up">
 							<ul>
+								{ /* Tags page */ }
 								<DropdownButton
 									id="tags-button"
 									label="Tags" icon="/icons/nav/tag.svg"
 									alt="Tags" href="tags"
 								/>
+								{ /* Random post */ }
 								<DropdownButton
 									id="random-button"
 									label="Random Post" icon="/icons/nav/random.svg"
 									alt="Random Post" href="random"
 								/>
+								{ /* Changelog page */ }
 								<DropdownButton
 									id="changelog-button"
 									label="Changelog" icon="/icons/nav/changelog.svg"
@@ -52,6 +57,8 @@ const alpha: boolean = isAlpha()
 						</DropdownItems>
 					</Dropdown>
 				</li>
+
+				{ /* Argon logo */ }
 				<li>
 					<a class="logo" href="." tabindex="-1">
 						<span id="text-mark">Argon</span>
@@ -59,13 +66,17 @@ const alpha: boolean = isAlpha()
 					</a>
 				</li>
 				<li>
+					{ /* Message */ }
+					{ message && <span class="nav-message">{ message }</span> }
+				</li>
+				<li>
 					<NavToggle class="nav-items-toggle"/>
 				</li>
 			</ul>
 			<MenuItems class="nav-items hidden">
 				<ul class="nav-buttons">
-					{ message && <span class="nav-message">{ message }</span> }
-					{ isGallery &&
+					{ /* Search bar */ }
+					{ search &&
 						<li class="nav-button-container search-button-container">
 							<Tags
 								search={true}
@@ -74,18 +85,22 @@ const alpha: boolean = isAlpha()
 							/>
 						</li>
 					}
+
+					{ /* Upload */ }
 					<li class="nav-button-container">
 						<a id="upload-button" class="nav-button button focusable" href="upload">
 							<img src="/icons/nav/upload.svg" alt="Upload" class="button-icon"/>
 						</a>
 					</li>
-					{ isGallery &&
-						<li class="nav-button-container">
-							<button id="bookmarks-button" class="nav-button button focusable" onclick="">
-								<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="button-icon"/>
-							</button>
-						</li>
-					}
+
+					{ /* Bookmarks */ }
+					<li class="nav-button-container">
+						<button id="bookmarks-button" class="nav-button button focusable" onclick="">
+							<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="button-icon"/>
+						</button>
+					</li>
+
+					{ /* Settings dropdown */ }
 					<li class="nav-button-container">
 						<Dropdown class="group settings-dropdown">
 							<button id="settings-button" class="focusable nav-button button">
@@ -101,21 +116,3 @@ const alpha: boolean = isAlpha()
 		</div>
 	</Astronav>
 </StickyHeader>
-
-<script>
-
-// function parseOptions() {
-// 	const list = document.getElementById('options-list')
-// 	if (!list) return
-
-// 	for (let option of options) {
-// 		if (option.type == OptionType.Toggle) {
-// 			let listElem = document.createElement('li')
-// 			let toggle = document.createElement('Toggle')
-// 			toggle.id = option.label.toLowerCase().replace(/ /g, '-')
-// 			toggle.label = option.label
-
-// 		}
-// 	}
-// }
-</script>

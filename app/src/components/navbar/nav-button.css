@@ -8,7 +8,9 @@
 
 .search-button-container {
 	/* Layout */
-	width: 65%;
+	max-width: 55vw;
+	flex-grow: 1;
+	flex-shrink: 1;
 }
 
 .nav-button {
