@@ -3,7 +3,6 @@
 ## Features
 - Allow dragging files onto upload page
 - Fetch the timestamp from possible sources
-- Make the config actually affect things
 - Reporting
 - Bookmarking
 
