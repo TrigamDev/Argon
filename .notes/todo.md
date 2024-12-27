@@ -8,7 +8,6 @@
 
 ## Fixes
 - Volume slider doesn't match volume when loading page
-- Tag character limit
 
 
 
