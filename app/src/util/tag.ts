@@ -10,8 +10,8 @@ export function parseTagString(tagString: string): Tag[] {
 		
 		const [ exclude, name, type ] = parseTagComponents( tag )
 		const parsed: Tag = {
-			name: name?.toLowerCase() ?? '',
-			type: type?.toLowerCase() ?? '',
+			name: name?.toLowerCase().slice(0, 48) ?? '',
+			type: type?.toLowerCase().slice(0, 24) ?? '',
 			exclude: exclude === '!'
 		}
 
