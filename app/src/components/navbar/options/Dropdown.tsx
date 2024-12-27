@@ -1,7 +1,8 @@
 import { useState } from "react"
+import { useStore } from "@nanostores/react"
 
 import type { SingleValue } from "react-select"
-import type { DropdownOption, DropdownSelection } from "@argon/options"
+import type { DropdownOption } from "@argon/options"
 
 import { labelToId } from "@argon/options"
 
@@ -18,11 +19,8 @@ export default function Dropdown({ option }: Props) {
 	const id = labelToId(option.label)
 	const selectId = `${id}-select`
 
-	const [selected, setSelected] = useState(
-		option.options.filter(
-			potentialChoice => potentialChoice.selected == true
-		)[0] as DropdownSelection<any>
-	)
+	const $selected = useStore( option.store )
+
 	const [menuIsOpen, setMenuIsOpen] = useState(false)
 
 	function toggleMenu() {
@@ -34,7 +32,6 @@ export default function Dropdown({ option }: Props) {
 
 		let chosenOption = getChoiceFromValue(selectedValue.value)
 		if (option.set) option.set(chosenOption.value)
-		setSelected(chosenOption)
 		setMenuIsOpen(false)
 	}
 
@@ -61,7 +58,10 @@ export default function Dropdown({ option }: Props) {
 				openMenuOnClick={true}
 				openMenuOnFocus={true}
 				options={option?.options?.map(choice => ({ label: choice.label, value: choice.value }) )}
-				defaultValue={{ label: selected.label, value: selected.value }}
+				value={{
+					label: getChoiceFromValue( $selected )?.label,
+					value: getChoiceFromValue( $selected )?.value
+				}}
 				onChange={(value) => onChange(value)}
 				classNames={{
 					control: () => "dropdown",
@@ -74,7 +74,7 @@ export default function Dropdown({ option }: Props) {
 				}}
 			/>
 			<div className="option-description dropdown-choice-description">
-				<span className="description-text">{selected.description}</span>
+				<span className="description-text">{ getChoiceFromValue( $selected )?.description }</span>
 			</div>
 		</button>
 	)

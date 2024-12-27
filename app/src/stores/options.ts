@@ -2,7 +2,9 @@ import { atom } from "nanostores"
 
 // Handle post types
 export enum PostHandleType {
-	Show, Blur, Hide
+	Show = "Show",
+	Blur = "Blur",
+	Hide = "Hide"
 }
 export const handleNSFW = atom<PostHandleType>(PostHandleType.Blur)
 export const handleSuggestive = atom<PostHandleType>(PostHandleType.Show)

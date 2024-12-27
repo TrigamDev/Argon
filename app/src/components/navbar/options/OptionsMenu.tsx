@@ -1,6 +1,8 @@
+import { useEffect } from "react"
+
 import type { Option, ToggleOption, DropdownOption, Category } from "@argon/options"
 
-import Options, { labelToId, OptionType } from "@argon/options"
+import Options, { labelToId, loadSettingsFromStorage, OptionType } from "@argon/options"
 
 import Toggle from "@argon/components/navbar/options/Toggle.tsx"
 import CategoryMenu from "@argon/components/navbar/options/CategoryMenu.tsx"
@@ -10,6 +12,11 @@ interface Props {
 	optionsList?: Option[]
 }
 export default function OptionsMenu({ optionsList }: Props) {
+
+	useEffect(() => {
+		loadSettingsFromStorage()
+	})
+
 	let displayOptions = optionsList ?? Options
 	return (
 		<ul>

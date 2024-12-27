@@ -1,4 +1,6 @@
-import type { ChangeEvent } from "react"
+import type { FormEvent } from "react"
+
+import { useStore } from "@nanostores/react"
 
 import type { ToggleOption } from "@argon/options"
 
@@ -13,17 +15,21 @@ export default function Toggle({ option }: Props) {
 	const id = option.label.toLowerCase().replace(/ /g, '-')
 	const toggleId = `${option.label}-toggle`
 
-	function onToggle(event: ChangeEvent<HTMLInputElement>) {
-		let newValue = event.target.checked
+	function onToggle(event: FormEvent<HTMLInputElement>) {
+		let newValue = (event as any).target.checked
 		if (option.set) option.set(newValue)
 	}
+
+	const $toggled = useStore( option.store )
 
 	return (
 		<label id={toggleId} className="option toggle" tabIndex={0}>
 			<div className="option-content">
 				<h3 className="option-label">{option.label}</h3>
-				<input id={id} type="checkbox" role="checkbox" className="toggle-checkbox" defaultChecked={option.toggled}
-					onChange={(event) => onToggle(event)}
+				<input
+					id={id} type="checkbox" role="checkbox"
+					className="toggle-checkbox" defaultChecked={ $toggled }
+					onInput={(event) => onToggle(event)}
 				/>
 				<div className="toggle-track">
 					<div className="toggle-thumb"/>
