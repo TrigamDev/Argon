@@ -51,7 +51,12 @@ export default function PostUpload() {
 
 		upload(null, `post/upload`, formdata, async ( response: Response ) => {
 			let res = await response.json()
+			console.log(res)
+
+			// Error handling
 			if ( res?.error ) alert( res?.error )
+			// else if ( res )
+
 			else window.location.href = `/`
 		})
 	}
