@@ -2,12 +2,12 @@ import { useEffect } from "react"
 
 import { useStore } from "@nanostores/react"
 import { postList, pageSize, currentPage, filterTags, sort } from "@argon/stores/postList"
-import { handleNSFW, handleSuggestive, handleUntagged, animations, tagSuggestions } from "@argon/stores/options"
+import { handleNSFW, handleSuggestive, handleUntagged, animations, PostHandleType } from "@argon/stores/options"
 
 import type { Post } from "@argon/util/types"
 
 import { getPosts } from "@argon/util/api"
-import { parseTagString, tagsToTagString } from "@argon/util/tag"
+import { hasTag, parseTagString, tagsToTagString } from "@argon/util/tag"
 
 import GalleryFile from "@argon/components/gallery/GalleryFile.tsx"
 
@@ -26,15 +26,31 @@ export default function Gallery() {
 	const $filterTags = useStore(filterTags)
 	const $sort = useStore(sort)
 
+	// Handle post types
+	const $handleNSFW = useStore( handleNSFW )
+	const $handleSuggestive = useStore( handleSuggestive )
+	const $handleUntagged = useStore( handleUntagged )
+
 	// Load posts
 	async function loadPosts() {
 		loadUrlSearch()
-		let posts = await getPosts( new Request('/api/search'), parseTagString( $filterTags ) )
+		let searchTags = parseTagString( $filterTags )
+
+		// Post type
+		if ( $handleNSFW === PostHandleType.Hide )
+			searchTags.push({ name: 'nsfw', type: 'nsfw', exclude: true })
+		if ( $handleSuggestive === PostHandleType.Hide )
+			searchTags.push({ name: 'suggestive', type: 'nsfw', exclude: true })
+		if ( $handleUntagged === PostHandleType.Hide )
+			searchTags.push({ name: 'untagged', type: 'meta', exclude: true })
+
+		let posts = await getPosts( new Request('/api/search'), searchTags )
 		if (posts) postList.set(posts)
 	}
 
 	useEffect(() => { loadPosts() }, [
-		$pageSize, $currentPage, $filterTags, $sort
+		$pageSize, $currentPage, $filterTags, $sort,
+		$handleNSFW, $handleSuggestive, $handleUntagged
 	])
 
 	function loadUrlSearch() {

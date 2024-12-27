@@ -14,11 +14,11 @@ export default function GalleryImage({ post }: Props) {
 	const $handleSuggestive = useStore(handleSuggestive)
 	const $handleUntagged = useStore(handleUntagged)
 
-	let thumbnailUrl = encodeURI(post.file.thumbnailUrl)
+	const thumbnailUrl = encodeURI(post.file.thumbnailUrl)
 
-	let isNsfw = hasTag(post.tags, { name: 'nsfw', type: 'nsfw' })
-	let isSuggestive = hasTag(post.tags, { name: 'suggestive', type: 'nsfw' })
-	let isUntagged = post.tags.length < 1
+	const isNsfw = hasTag(post.tags, { name: 'nsfw', type: 'nsfw' })
+	const isSuggestive = hasTag(post.tags, { name: 'suggestive', type: 'nsfw' })
+	const isUntagged = post.tags.length < 1
 
 	let blur =
 		($handleNSFW == PostHandleType.Blur && isNsfw)
