@@ -31,8 +31,12 @@ export default function PostUpload() {
 
 	const [tags, setTags] = useState<Tag[]>([])
 
+	const [ uploading, setUploading ] = useState<boolean>( false )
+
 	function uploadPost() {
 		if (!file && (!fileUrl || fileUrl == "")) return alert("You must provide a file")
+
+		setUploading( true )
 
 		let formdata = new FormData()
 		if (file) formdata.append('file', file)
@@ -50,6 +54,7 @@ export default function PostUpload() {
 		if (tags) formdata.append('tags', tagsToString(tags))
 
 		upload(null, `post/upload`, formdata, async ( response: Response, status: number ) => {
+			setUploading( false )
 			if ( status === 413 ) alert(
 				`The file size exceeds the 4.5MB limit!\n`
 				+ `Unfortunately, this is a limitation of Vercel, not Argon.\n`
@@ -137,7 +142,10 @@ export default function PostUpload() {
 			</div>
 
 			<div className="upload-menu">
-				<button className="button focusable" id="upload-post" onClick={uploadPost}>
+				<button
+					className={ `button focusable ${ uploading && 'disabled' }` } id="upload-post"
+					onClick={ uploadPost } disabled={ uploading }
+				>
 					<img className="button-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
 				<button className="button focusable	" id="cancel-post" onClick={() => window.location.href = "/"}>
