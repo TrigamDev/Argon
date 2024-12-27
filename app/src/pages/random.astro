@@ -1,12 +1,28 @@
 ---
 export const prerender = false
 
-import { get, getPostById } from "@argon/util/api"
 import type { Post } from "@argon/util/types"
 
+import { get } from "@argon/util/api"
+import { sortTagsByType } from "@argon/util/tag"
+
 import PostLayout from "@argon/layouts/Post.astro"
+import PostData from "@argon/components/post/PostData.tsx"
+import PostActions from "@argon/components/post/PostActions.tsx"
+import TagBox from "@argon/components/tag/TagBox.astro"
 
 const post: Post | null = await get( Astro.request, `post/random`, (res: Response) => res.json() )
 ---
 
-{ post && <PostLayout post={ post } /> }
+{ post &&
+	<PostLayout post={ post }>
+		<div id="post-content">
+			{ post &&
+				<span class="post-title">{ post?.file?.title }</span>
+				<PostData post={ post } client:load />
+				<PostActions post={ post } client:load />
+				<TagBox tags={ sortTagsByType( post.tags ) } clickable={ true }/>
+			}
+		</div>
+	</PostLayout>
+}

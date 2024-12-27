@@ -2,11 +2,26 @@
 export const prerender = false
 
 import { getPostById } from "@argon/util/api"
+import { sortTagsByType } from "@argon/util/tag"
 
 import Post from "@argon/layouts/Post.astro"
+import PostData from "@argon/components/post/PostData.tsx"
+import PostActions from "@argon/components/post/PostActions.tsx"
+import TagBox from "@argon/components/tag/TagBox.astro"
 
 const { id } = Astro.params
 const post = await getPostById( Astro.request, Number(id) )
 ---
 
-{ post && <Post post={ post } /> }
+{ post &&
+	<Post post={ post }>
+		<div id="post-content">
+			{ post &&
+				<span class="post-title">{ post?.file?.title }</span>
+				<PostData post={ post } client:load />
+				<PostActions post={ post } client:load />
+				<TagBox tags={ sortTagsByType( post.tags ) } clickable={ true }/>
+			}
+		</div>
+	</Post>
+}
