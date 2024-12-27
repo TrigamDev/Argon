@@ -51,11 +51,10 @@ export default function PostUpload() {
 
 		upload(null, `post/upload`, formdata, async ( response: Response, status: number ) => {
 			if ( status === 413 ) alert(
-				`The file size exceeds the 4.5MB limit!
-				Unfortunately, this is a limitation of Vercel, not Argon.
-				Try uploading the file on Discord and using it's
-				link instead to work around this!
-				`
+				`The file size exceeds the 4.5MB limit!\n`
+				+ `Unfortunately, this is a limitation of Vercel, not Argon.\n`
+				+ `Try uploading the file on Discord and using it's\n`
+				+ `link instead to work around this!\n`
 			)
 
 			let res = await response.json()
