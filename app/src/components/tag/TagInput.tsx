@@ -56,7 +56,7 @@ export default function Tags ({ search = true, multiline = false, defaultValue =
 				{ tag &&
 					<div id="left">
 						<TagIcon tag={ tag }/>
-						<span className="tag-name">{ tag.name }_({ tag.type })</span>
+						<span className="tag-name">{ tag.exclude && '!' }{ tag.name }_({ tag.type })</span>
 					</div>
 				}
 				{ tag?.usages && tag?.usages > 0 &&

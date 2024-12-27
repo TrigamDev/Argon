@@ -254,6 +254,11 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
 	filterOptionsByInput() {
 		let { options, filteredOptions, inputValue } = this.state
 		const { isObject, displayValue, sortOptions } = this.props
+		
+		let excluding = false
+		if (inputValue.startsWith('!')) excluding = true
+		inputValue = inputValue.replace('!', '')
+
 		if (isObject) {
 			options = filteredOptions.filter(i => this.matchValues(i[displayValue], inputValue))
 		} else {
@@ -263,6 +268,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
 		this.groupByOptions(options)
 
 		if ( sortOptions ) options = sortOptions( options )
+		options.map(( option ) => option.exclude = excluding )
 		this.setState({ options })
 	}
 

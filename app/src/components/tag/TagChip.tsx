@@ -15,7 +15,7 @@ export default function TagChip({ tag, href = '', usages = false }: Props) {
 		<a className={ `tag-chip ${ href != '' ? 'clickable' : '' }` } href={ href != '' ? href : '#' }>
 			<div className="tag-left">
 				<TagIcon tag={ tag }/>
-				<span className="tag-name">{ tag.name }</span>
+				<span className="tag-name">{ tag.exclude && '!' }{ tag.name }</span>
 			</div>
 			<div>
 				{ usages && <span className="tag-usages">({ tag.usages })</span> }
