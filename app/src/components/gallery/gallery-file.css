@@ -18,11 +18,8 @@
 	cursor: pointer;
 
 	/* Border */
-	border-radius: 15px;
 	border: 2px solid transparent;
-
-	/* Animation */
-	transition: 0.25s;
+	border-radius: 15px;
 }
 
 /* Responsive */
@@ -45,6 +42,12 @@
 
 	/* Border */
 	border-radius: 15px;
+	transition: 0.25s;
+	z-index: -2;
+}
+
+.gallery-file:hover .file-container {
+	transform: scale(1.1);
 }
 
 .gallery-file .file-container .file {
@@ -57,6 +60,7 @@
 	/* Style */
 	border-radius: 15px;
 	transition: 0.35s;
+	z-index: -2;
 }
 
 .gallery-file.blur .file {
@@ -64,7 +68,7 @@
 	filter: blur(2vmin);
 }
 
-.gallery-file.blur .file:hover {
+.gallery-file.blur:hover .file {
 	/* Style */
 	filter: blur(0vmin);
 }
@@ -74,10 +78,10 @@
 	position: absolute;
 	align-self: flex-start;
 	justify-self: flex-end;
-	z-index: 1;
+	z-index: -1;
 	
 	/* Layout */
-	max-width: 15%;
+	max-width: 4em;
 	margin: -5px;
 
 	/* Color */
@@ -86,4 +90,5 @@
 	/* Border */
 	border: 6px solid var(--background);
 	border-radius: 12px;
+	transition: 0.25s;
 }

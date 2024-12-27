@@ -37,7 +37,8 @@
 
 .astronav-dropdown {
 	/* Display */
-	z-index: 99;
+	z-index: 100;
+	isolation: isolate;
 
 	/* Layout */
 	padding: 0;
