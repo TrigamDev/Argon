@@ -17,6 +17,7 @@ import Tags from "@argon/components/tag/TagInput.tsx"
 import "react-tabs/style/react-tabs.css"
 import "@argon/components/upload/post-upload.css"
 import "@argon/globals.css"
+import { getBlueskyPost } from "@argon/util/apis/bluesky"
 
 enum SourceType {
 	None,
@@ -105,6 +106,12 @@ export default function PostUpload() {
 							<button className="button focusable text accent" id="timestamp-discord"
 							onClick={ () => { setTimestamp( getTimestampFromDiscordUrl( sourceUrl ) ) } }>
 								Get from Discord ID
+							</button>
+						}
+						{ sourceType === SourceType.BlueSky &&
+							<button className="button focusable text accent" id="timestamp-bluesky"
+							onClick={ async () => { setTimestamp( await getTimestampFromBluesky( sourceUrl ) ) } }>
+								Get from Bluesky Post
 							</button>
 						}
 					</div>
@@ -283,5 +290,12 @@ export default function PostUpload() {
 		}
 		let timestamp = parseInt( binarySnowflake.substring( 0, 42 ), 2 ) + 1420070400000
 		return timestamp
+	}
+
+	async function getTimestampFromBluesky( url: string ): Promise<number> {
+		const post = await getBlueskyPost( url )
+		const time = ( post?.thread?.post as any )?.record?.createdAt
+		if ( time ) return new Date( time ).getTime()
+		else return 0
 	}
 }
