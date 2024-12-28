@@ -4,6 +4,15 @@
 - Reporting
 - Bookmarking
 
+## Tweaks
+- Make many more general use components
+- Update code styles to be more up-to-date (with my preferred style, anyway)
+- Update CSS styles to have more up-to-date organization
+- Clean up components to be easier to read
+
+## Fixes
+- Make buttons shrink when pressed
+
 
 
 # Server
