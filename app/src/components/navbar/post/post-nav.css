@@ -1,6 +1,4 @@
-/*
-	Post Nav
-*/
+
 .post-nav {
 	/* Layout */
 	display: flex;
@@ -13,39 +11,6 @@
 	background-color: var(--primary);
 }
 
-/*
-	Nav Buttons
-*/
-.post-nav .nav-button {
-	/* Layout */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 40px;
-	height: 40px;
-	/* Style */
-	cursor: pointer;
-}
-
-.post-nav .nav-button .nav-icon {
-	/* Layout */
-	width: 35px;
-	height: 35px;
-	flex-shrink: 0;
-
-	user-select: none;
-	
-	/* Style */
-	transform: scale(0.85);
-	transition: 0.15s ease-in-out;
-}
-
-.post-nav .nav-button:hover .nav-icon {
-	/* Style */
-	transform: scale(1);
-}
-
-.post-nav .nav-button:active .nav-icon {
-	/* Style */
-	transform: scale(0.9);
+.post-nav .nav-buttons {
+	justify-content: flex-start;
 }

@@ -151,6 +151,10 @@ body {
 	height: fit-content;
 	padding: 8px 12px;
 	justify-content: flex-start;
+	transform: scale(0.9);
+}
+.button.text:hover {
+	transform: scale(1);
 }
 
 .button.text .button-icon {

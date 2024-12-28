@@ -1,7 +1,9 @@
 ---
 import type { Post } from "@argon/util/types"
 
+import "@argon/components/navbar/navbar.css"
 import "@argon/components/navbar/post/post-nav.css"
+import "@argon/components/button/nav-button.css"
 
 interface Props {
 	post: Post
@@ -10,23 +12,27 @@ const { post } = Astro.props
 ---
 
 <div class="post-nav">
-	<!-- Home -->
-	<a href="../../" id="home-button" class="button focusable">
-		<img class="button-icon" src="/icons/nav/home.svg" alt="Home" />
-	</a>
-
-	<!-- Bookmark -->
-	<a href="#" id="bookmark-button" class="button focusable">
-		<img class="button-icon" src="/icons/nav/bookmark.svg" alt="Bookmark" />
-	</a>
-
-	<!-- Report -->
-	<a href=`/post/${post.id}/report` id="report-button" class="button focusable">
-		<img class="button-icon" src="/icons/nav/report.svg" alt="Report" />
-	</a>
+	<ul class="nav-buttons">
+		<!-- Home -->
+		<li class="nav-button-container">
+			<a href="../../" id="home-button" class="button nav-button focusable">
+				<img class="button-icon" src="/icons/nav/home.svg" alt="Home" />
+			</a>
+		</li>
 	
-	<!-- Edit -->
-	<a href=`/post/${post.id}/edit` id="edit-button" class="button focusable">
-		<img class="button-icon" src="/icons/nav/edit.svg" alt="Edit" />
-	</a>
+		<!-- Bookmark -->
+		<a href="#" id="bookmark-button" class="button nav-button focusable">
+			<img class="button-icon" src="/icons/nav/bookmark.svg" alt="Bookmark" />
+		</a>
+	
+		<!-- Report -->
+		<a href=`/post/${post.id}/report` id="report-button" class="button nav-button focusable">
+			<img class="button-icon" src="/icons/nav/report.svg" alt="Report" />
+		</a>
+		
+		<!-- Edit -->
+		<a href=`/post/${post.id}/edit` id="edit-button" class="button nav-button focusable">
+			<img class="button-icon" src="/icons/nav/edit.svg" alt="Edit" />
+		</a>
+	</ul>
 </div>

@@ -22,7 +22,11 @@
 	background-color: transparent;
 
 	/* Animation */
-	transform: scale(0.85);
+	transform: scale(0.85) !important;
+}
+
+.nav-button:hover {
+	transform: scale(1) !important;
 }
 
 .more-dropdown .nav-dropdown-items-container .nav-button {

@@ -172,12 +172,12 @@ export default function PostUpload() {
 
 			<div className="upload-menu pop-up">
 				<button
-					className={ `button focusable ${ uploading && 'disabled' }` } id="upload-post"
+					className={ `button nav-button focusable ${ uploading && 'disabled' }` } id="upload-post"
 					onClick={ uploadPost } disabled={ uploading }
 				>
 					<img className="button-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
-				<button className="button focusable" id="cancel-post" onClick={() => window.location.href = "/"}>
+				<button className="button focusable nav-button" id="cancel-post" onClick={() => window.location.href = "/"}>
 					<img className="button-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
 				</button>
 			</div>

@@ -7,9 +7,10 @@ import NavToggle from "@argon/components/navbar/NavToggle.astro"
 import OptionsMenu from "@argon/components/navbar/options/OptionsMenu.tsx"
 import Tags from "@argon/components/tag/TagInput"
 import DropdownButton from "@argon/components/button/DropdownButton.astro"
+import NavButton from "../button/NavButton.astro"
 
 import "@argon/components/navbar/navbar.css"	
-import "@argon/components/navbar/nav-button.css"
+import "@argon/components/button/nav-button.css"
 import "@argon/globals.css"
 
 interface Props {
@@ -87,18 +88,16 @@ const alpha: boolean = isAlpha()
 					}
 
 					{ /* Upload */ }
-					<li class="nav-button-container">
-						<a id="upload-button" class="nav-button button focusable" href="upload">
-							<img src="/icons/nav/upload.svg" alt="Upload" class="button-icon"/>
-						</a>
-					</li>
+					<NavButton
+						id="upload-button" href="upload"
+						icon="/icons/nav/upload.svg" alt="Upload"
+					/>
 
 					{ /* Bookmarks */ }
-					<li class="nav-button-container">
-						<button id="bookmarks-button" class="nav-button button focusable" onclick="">
-							<img src="/icons/nav/bookmark.svg" alt="Bookmarks" class="button-icon"/>
-						</button>
-					</li>
+					<NavButton
+						id="bookmarks-button" href="#"
+						icon="/icons/nav/bookmark.svg" alt="Bookmarks"
+					/>
 
 					{ /* Settings dropdown */ }
 					<li class="nav-button-container">

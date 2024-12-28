@@ -109,7 +109,7 @@
 	flex-shrink: 1;
 }
 
-.navbar .nav-buttons {
+.nav-buttons {
 	/* Display */
 	display: flex;
 	flex-direction: row;
