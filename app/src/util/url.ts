@@ -6,3 +6,9 @@ export function isUrlValid( url: string | null ): boolean {
 
 	return true
 }
+
+export function getUrlDomain( url: string | null ): string | null {
+	if ( !url || !isUrlValid( url ) ) return null
+	const components = new URL( url ).host.split( '.' )
+	return components[ components.length - 2 ]
+}

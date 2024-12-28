@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import type { Value } from "node_modules/react-datetime-picker/dist/esm/shared/types"
 
@@ -19,6 +19,10 @@ interface Props {
 export default function Timestamp({ currentTimestamp = new Date().getTime(), resetButton = true, onChange }: Props) {
 
 	const [currentValue, setCurrentValue] = useState<Value>(new Date(currentTimestamp))
+
+	useEffect(() => {
+		setCurrentValue( new Date( currentTimestamp ) )
+	}, [ currentTimestamp ])
 
 	function onInputChange(value: Value) {
 		setCurrentValue(value)

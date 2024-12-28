@@ -2,8 +2,10 @@ import { useState } from "react"
 
 import type { Value } from "node_modules/react-datetime-picker/dist/cjs/shared/types"
 import { FileType, type Tag } from "@argon/util/types"
+
 import { upload } from "@argon/util/api"
 import { tagsToString } from "@argon/util/tag"
+import { getUrlDomain } from "@argon/util/url"
 
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import FileUpload from "@argon/components/upload/FileUpload.tsx"
@@ -14,6 +16,15 @@ import Tags from "@argon/components/tag/TagInput.tsx"
 import "react-tabs/style/react-tabs.css"
 import "@argon/components/upload/post-upload.css"
 import "@argon/globals.css"
+
+enum SourceType {
+	None,
+	Discord,
+	Twitter,
+	BlueSky,
+	Tumblr,
+	PixilArt
+}
 
 export default function PostUpload() {
 
@@ -32,6 +43,9 @@ export default function PostUpload() {
 	const [tags, setTags] = useState<Tag[]>([])
 
 	const [ uploading, setUploading ] = useState<boolean>( false )
+
+	const [ lastModified, setLastModified ] = useState<number>( 0 )
+	const [ sourceType, setSourceType ] = useState<SourceType>()
 
 	function uploadPost() {
 		if (!file && (!fileUrl || fileUrl == "")) return alert("You must provide a file")
@@ -77,11 +91,26 @@ export default function PostUpload() {
 					
 					{ /* Timestamp */ }
 					<h2>Created</h2>
-					<Timestamp resetButton={false} onChange={updateTimestamp}/>
+					<Timestamp currentTimestamp={ timestamp } resetButton={false} onChange={updateTimestamp}/>
+					
+					<div className="buttons" id="timestamp-buttons">
+						{ lastModified > 0 &&
+							<button className="button focusable text accent" id="timestamp-file"
+							onClick={() => { setTimestamp( lastModified ) }}>
+								Get from File
+							</button>
+						}
+						{ sourceType === SourceType.Discord &&
+							<button className="button focusable text accent" id="timestamp-discord"
+							onClick={() => { setTimestamp( getTimestampFromDiscordUrl( sourceUrl ) ) }}>
+								Get from Discord ID
+							</button>
+						}
+					</div>
 
 					{ /* Source URL */ }
 					<h2>Source URL</h2>
-					<Text resetButton={false} onChange={setSourceUrl}/>
+					<Text resetButton={false} onChange={ updateSourceUrl }/>
 
 					{ /* Tags */ }
 					<h2>Tags</h2>
@@ -141,27 +170,57 @@ export default function PostUpload() {
 				</div>
 			</div>
 
-			<div className="upload-menu">
+			<div className="upload-menu pop-up">
 				<button
 					className={ `button focusable ${ uploading && 'disabled' }` } id="upload-post"
 					onClick={ uploadPost } disabled={ uploading }
 				>
 					<img className="button-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
-				<button className="button focusable	" id="cancel-post" onClick={() => window.location.href = "/"}>
+				<button className="button focusable" id="cancel-post" onClick={() => window.location.href = "/"}>
 					<img className="button-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
 				</button>
 			</div>
 		</div>
 	)
 
+	// Timestamp
 	function updateTimestamp(value: Value) { if (value) setTimestamp(value.getTime()) }
+
+	function getTimestampFromDiscordUrl( url: string ): number {
+		let id = url.split( '/' ).pop()?.split( '?' )[0]
+		let binarySnowflake = parseInt( id || '0', 10 ).toString( 2 )
+		if ( binarySnowflake.length < 64 ) {
+			let diff = 64 - binarySnowflake.length
+			for ( let i = 0; i < diff; i++ ) {
+				binarySnowflake = '0' + binarySnowflake
+			}
+		}
+		let timestamp = parseInt( binarySnowflake.substring( 0, 42 ), 2 ) + 1420070400000
+		return timestamp
+	}
+
+	// Source URL
+	function updateSourceUrl( url: string | null ) {
+		setSourceUrl( url || "" )
+		let host = getUrlDomain( url )
+		switch ( host ) {
+			case 'discord': setSourceType( SourceType.Discord ); break;
+			case 'twitter':
+			case 'x': setSourceType( SourceType.Twitter ); break;
+			case 'bsky': setSourceType( SourceType.BlueSky ); break;
+			case 'tumblr': setSourceType( SourceType.Tumblr ); break;
+			case 'pixilart': setSourceType( SourceType.PixilArt ); break;
+			default: setSourceType( SourceType.None ); break;
+		}
+	}
 
 	function updateTags(tags: Tag[]) { setTags(tags) }
 
 	// Files
 	function updateFile(file: File | null) {
 		setFile(file)
+		setLastModified( file?.lastModified ?? 0 )
 	}
 	function updateThumbnail(file: File | null) {
 		setThumbnailFile(file)

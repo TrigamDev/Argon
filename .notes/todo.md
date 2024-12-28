@@ -2,7 +2,6 @@
 
 ## Features
 - Allow dragging files onto upload page
-- Fetch the timestamp from possible sources
 - Reporting
 - Bookmarking
 
