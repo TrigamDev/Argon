@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { DragEvent } from "react"
+import type { DragEvent, ClipboardEvent } from "react"
 
 import type { Value } from "node_modules/react-datetime-picker/dist/cjs/shared/types"
 import { FileType, type Tag } from "@argon/util/types"
@@ -136,7 +136,12 @@ export default function PostUpload() {
 						<TabPanel
 							forceRender={true}
 							onDragOver={ ( event ) => { event.preventDefault() } }
-							onDrop={ onFileDrop }
+							onDrop={ ( event ) => onFileDrop( event, ( draggedFile: File | null ) => {
+								if ( draggedFile ) setFile( draggedFile )
+							})}
+							onPaste={ ( event ) => onFilePaste( event, ( pastedFile: File | null ) => {
+								if ( pastedFile ) setFile( pastedFile )
+							})}
 						>
 							<FileUpload
 								name='File'
@@ -152,7 +157,12 @@ export default function PostUpload() {
 						<TabPanel
 							forceRender={true}
 							onDragOver={ ( event ) => { event.preventDefault() } }
-							onDrop={ onThumbnailDrop }
+							onDrop={ ( event ) => onFileDrop( event, ( draggedFile: File | null ) => {
+								if ( draggedFile ) setThumbnailFile( draggedFile )
+							})}
+							onPaste={ ( event ) => onFilePaste( event, ( pastedFile: File | null ) => {
+								if ( pastedFile ) setThumbnailFile( pastedFile )
+							})}
 						>
 							<FileUpload
 								name='Thumbnail'
@@ -168,7 +178,12 @@ export default function PostUpload() {
 						<TabPanel
 							forceRender={true}
 							onDragOver={ ( event ) => { event.preventDefault() } }
-							onDrop={ onProjectDrop }
+							onDrop={ ( event ) => onFileDrop( event, ( draggedFile: File | null ) => {
+								if ( draggedFile ) setProjectFile( draggedFile )
+							})}
+							onPaste={ ( event ) => onFilePaste( event, ( pastedFile: File | null ) => {
+								if ( pastedFile ) setProjectFile( pastedFile )
+							})}
 						>
 							<FileUpload
 								name='Project File'
@@ -242,11 +257,13 @@ export default function PostUpload() {
 		setProjectFile(file)
 	}
 
-	function onFileDrop( event: DragEvent<HTMLDivElement> ) {
+	function onFileDrop( event: DragEvent<HTMLDivElement>, callback: ( draggedFile: File | null ) => void ) {
 		event.preventDefault()
+		// Get dragged file
 		const files = event.dataTransfer?.files
 		const draggedFile = files?.item( 0 )
-		if ( draggedFile ) updateFile( draggedFile )
+		// Callback
+		callback( draggedFile )
 	}
 	function onThumbnailDrop( event: DragEvent<HTMLDivElement> ) {
 		event.preventDefault()
@@ -259,6 +276,17 @@ export default function PostUpload() {
 		const files = event.dataTransfer?.files
 		const draggedFile = files?.item( 0 )
 		if ( draggedFile ) updateProjectFile( draggedFile )
+	}
+
+	function onFilePaste( event: ClipboardEvent<HTMLDivElement>, callback: ( pastedFile: File | null ) => void ) {
+		const items = event.clipboardData.items
+		let pastedFile = null
+		// Search for image in clipboard
+		for ( let item of items ) {
+			if ( item.kind === 'file' ) { pastedFile = item.getAsFile(); break }
+		}
+		// Callback
+		callback( pastedFile )
 	}
 
 	// File Urls
