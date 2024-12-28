@@ -24,7 +24,6 @@
     "@wavesurfer/react": "^1.0.8",
     "animejs": "^3.2.2",
     "astro": "5.1.0",
-    "astro-navbar": "^2.3.9",
     "fuse.js": "^7.0.0",
     "http-proxy-middleware": "^3.0.3",
     "moment": "^2.30.1",
