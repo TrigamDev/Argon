@@ -33,23 +33,33 @@ export default function Visualizer({ post, bars }: { post: any, bars: boolean })
 
 	// Load settings from local storage
 	useEffect(() => {
-		localStorage.getItem('volume') && volume.set(Number(localStorage.getItem('volume')))
-		localStorage.getItem('muted') && muted.set(localStorage.getItem('muted') === 'true')
+		if ( localStorage.getItem('audio.volume') ) {
+			const loadedVolume = Number( localStorage.getItem( 'audio.volume' ) )
+			volume.set( loadedVolume )
+			wavesurfer?.setVolume( loadedVolume / 100 )
+		}
+		if ( localStorage.getItem('audio.volume') ) {
+			const loadedMuted = localStorage.getItem( 'audio.muted' ) === 'true'
+			muted.set( loadedMuted )
+			wavesurfer?.setMuted( loadedMuted )
+		}
 	}, [])
 
 	// Apply settings on change
 	useEffect(() => {
-		wavesurfer?.setVolume($volume / 100)
-		wavesurfer?.setMuted($muted)
+		wavesurfer?.setVolume( $volume / 100 )
+		wavesurfer?.setMuted( $muted )
 
-		localStorage.setItem('volume', $volume.toString())
-		localStorage.setItem('muted', $muted.toString())
-	}, [$volume, $muted])
+		localStorage.setItem( 'audio.volume', $volume.toString() )
+		localStorage.setItem( 'audio.muted', $muted.toString() )
+	}, [ $volume, $muted ])
 
 	// Load data on ready
-	wavesurfer?.on('ready', () => {
-		duration.set(wavesurfer?.getDuration())
-	})
+	wavesurfer?.on( 'ready', () => {
+		duration.set( wavesurfer?.getDuration() )
+		wavesurfer?.setVolume( $volume / 100 )
+		wavesurfer?.setMuted( $muted )
+	} )
 
 	// Play/Pause
 	const onPlayPause = useCallback(() => {
