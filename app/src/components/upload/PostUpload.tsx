@@ -29,19 +29,19 @@ enum SourceType {
 
 export default function PostUpload() {
 
-	const [title, setTitle] = useState<string>("")
-	const [timestamp, setTimestamp] = useState<number>(new Date().getTime())
-	const [sourceUrl, setSourceUrl] = useState<string>("")
+	const [ title, setTitle ] = useState<string>( "" )
+	const [ timestamp, setTimestamp ] = useState<number>( new Date().getTime() )
+	const [ sourceUrl, setSourceUrl ] = useState<string>( "" )
 
-	const [fileUrl, setFileUrl] = useState<string>("")
-	const [thumbnailUrl, setThumbnailUrl] = useState<string>("")
-	const [projectUrl, setProjectUrl] = useState<string>("")
+	const [ fileUrl, setFileUrl ] = useState<string>( "" )
+	const [ thumbnailUrl, setThumbnailUrl ] = useState<string>( "" )
+	const [ projectUrl, setProjectUrl ] = useState<string>( "" )
 
-	const [file, setFile] = useState<File | null>()
-	const [thumbnailFile, setThumbnailFile] = useState<File | null>()
-	const [projectFile, setProjectFile] = useState<File | null>()
+	const [ file, setFile ] = useState<File | null>()
+	const [ thumbnailFile, setThumbnailFile ] = useState<File | null>()
+	const [ projectFile, setProjectFile ] = useState<File | null>()
 
-	const [tags, setTags] = useState<Tag[]>([])
+	const [ tags, setTags ] = useState<Tag[]>( [] )
 
 	const [ uploading, setUploading ] = useState<boolean>( false )
 
@@ -49,24 +49,24 @@ export default function PostUpload() {
 	const [ sourceType, setSourceType ] = useState<SourceType>()
 
 	function uploadPost() {
-		if (!file && (!fileUrl || fileUrl == "")) return alert("You must provide a file")
+		if ( !file && ( !fileUrl || fileUrl == "" ) ) return alert( "You must provide a file" )
 
 		setUploading( true )
 
 		let formdata = new FormData()
-		if (file) formdata.append('file', file)
-		if (fileUrl) formdata.append('fileUrl', fileUrl)
+		if (file) formdata.append( 'file', file )
+		if (fileUrl) formdata.append( 'fileUrl', fileUrl )
 			
-		if (thumbnailFile) formdata.append('thumbnailFile', thumbnailFile)
-		if (thumbnailUrl) formdata.append('thumbnailUrl', thumbnailUrl)
+		if (thumbnailFile) formdata.append( 'thumbnailFile', thumbnailFile )
+		if (thumbnailUrl) formdata.append( 'thumbnailUrl', thumbnailUrl )
 			
-		if (projectFile) formdata.append('projectFile', projectFile)
-		if (projectUrl) formdata.append('projectUrl', projectUrl)
+		if (projectFile) formdata.append( 'projectFile', projectFile )
+		if (projectUrl) formdata.append( 'projectUrl', projectUrl )
 		
-		if (title) formdata.append('title', title)
-		if (timestamp) formdata.append('timestamp', timestamp.toString())
-		if (sourceUrl) formdata.append('sourceUrl', sourceUrl)
-		if (tags) formdata.append('tags', tagsToString(tags))
+		if (title) formdata.append( 'title', title )
+		if (timestamp) formdata.append( 'timestamp', timestamp.toString() )
+		if (sourceUrl) formdata.append( 'sourceUrl', sourceUrl )
+		if (tags) formdata.append( 'tags', tagsToString(tags) )
 
 		upload(null, `post/upload`, formdata, async ( response: Response, status: number ) => {
 			setUploading( false )
@@ -88,22 +88,22 @@ export default function PostUpload() {
 				<div className="upload-field section" id="post-details">
 					{ /* Title */ }
 					<h2>Title</h2>
-					<Text resetButton={false} onChange={setTitle}/>
+					<Text resetButton={ false } onChange={ setTitle }/>
 					
 					{ /* Timestamp */ }
 					<h2>Created</h2>
-					<Timestamp currentTimestamp={ timestamp } resetButton={false} onChange={updateTimestamp}/>
+					<Timestamp currentTimestamp={ timestamp } resetButton={ false } onChange={ updateTimestamp }/>
 					
 					<div className="buttons" id="timestamp-buttons">
 						{ lastModified > 0 &&
 							<button className="button focusable text accent" id="timestamp-file"
-							onClick={() => { setTimestamp( lastModified ) }}>
+							onClick={ () => { setTimestamp( lastModified ) } }>
 								Get from File
 							</button>
 						}
 						{ sourceType === SourceType.Discord &&
 							<button className="button focusable text accent" id="timestamp-discord"
-							onClick={() => { setTimestamp( getTimestampFromDiscordUrl( sourceUrl ) ) }}>
+							onClick={ () => { setTimestamp( getTimestampFromDiscordUrl( sourceUrl ) ) } }>
 								Get from Discord ID
 							</button>
 						}
@@ -111,13 +111,13 @@ export default function PostUpload() {
 
 					{ /* Source URL */ }
 					<h2>Source URL</h2>
-					<Text resetButton={false} onChange={ updateSourceUrl }/>
+					<Text resetButton={ false } onChange={ updateSourceUrl }/>
 
 					{ /* Tags */ }
 					<h2>Tags</h2>
 					<Tags
-						search={false}
-						multiline={true}
+						search={ false }
+						multiline={ true }
 						onChange={ updateTags }
 					/>
 				</div>
@@ -134,7 +134,7 @@ export default function PostUpload() {
 
 						{ /* File */ }
 						<TabPanel
-							forceRender={true}
+							forceRender={ true }
 							onDragOver={ ( event ) => { event.preventDefault() } }
 							onDrop={ ( event ) => onFileDrop( event, ( draggedFile: File | null ) => {
 								if ( draggedFile ) setFile( draggedFile )
@@ -145,17 +145,17 @@ export default function PostUpload() {
 						>
 							<FileUpload
 								name='File'
-								limitTo={FileType.unknown}
-								currentFile={file}
-								updateFile={updateFile}
-								currentUrl={fileUrl}
-								updateUrl={updateFileUrl}
+								limitTo={ FileType.unknown }
+								currentFile={ file }
+								updateFile={ updateFile }
+								currentUrl={ fileUrl }
+								updateUrl={ updateFileUrl }
 							/>
 						</TabPanel>
 						
 						{ /* Thumbnail */ }
 						<TabPanel
-							forceRender={true}
+							forceRender={ true }
 							onDragOver={ ( event ) => { event.preventDefault() } }
 							onDrop={ ( event ) => onFileDrop( event, ( draggedFile: File | null ) => {
 								if ( draggedFile ) setThumbnailFile( draggedFile )
@@ -166,17 +166,17 @@ export default function PostUpload() {
 						>
 							<FileUpload
 								name='Thumbnail'
-								limitTo={FileType.image}
-								currentFile={thumbnailFile}
-								updateFile={updateThumbnail}
-								currentUrl={thumbnailUrl}
-								updateUrl={updateThumbnailUrl}
+								limitTo={ FileType.image }
+								currentFile={ thumbnailFile }
+								updateFile={ updateThumbnail }
+								currentUrl={ thumbnailUrl }
+								updateUrl={ updateThumbnailUrl }
 							/>
 						</TabPanel>
 						
 						{ /* Project File */ }
 						<TabPanel
-							forceRender={true}
+							forceRender={ true }
 							onDragOver={ ( event ) => { event.preventDefault() } }
 							onDrop={ ( event ) => onFileDrop( event, ( draggedFile: File | null ) => {
 								if ( draggedFile ) setProjectFile( draggedFile )
@@ -187,11 +187,11 @@ export default function PostUpload() {
 						>
 							<FileUpload
 								name='Project File'
-								limitTo={FileType.project}
-								currentFile={projectFile}
-								updateFile={updateProjectFile}
-								currentUrl={projectUrl}
-								updateUrl={updateProjectUrl}
+								limitTo={ FileType.project }
+								currentFile={ projectFile }
+								updateFile={ updateProjectFile }
+								currentUrl={ projectUrl }
+								updateUrl={ updateProjectUrl }
 							/>
 						</TabPanel>
 					</Tabs>
@@ -205,45 +205,14 @@ export default function PostUpload() {
 				>
 					<img className="button-icon" src="/icons/nav/save.svg" title='Upload'/>
 				</button>
-				<button className="button focusable nav-button" id="cancel-post" onClick={() => window.location.href = "/"}>
+				<button className="button focusable nav-button" id="cancel-post"
+					onClick={ () => window.location.href = "/" }
+				>
 					<img className="button-icon" src="/icons/nav/cancel.svg" title='Cancel'/>
 				</button>
 			</div>
 		</div>
 	)
-
-	// Timestamp
-	function updateTimestamp(value: Value) { if (value) setTimestamp(value.getTime()) }
-
-	function getTimestampFromDiscordUrl( url: string ): number {
-		let id = url.split( '/' ).pop()?.split( '?' )[0]
-		let binarySnowflake = parseInt( id || '0', 10 ).toString( 2 )
-		if ( binarySnowflake.length < 64 ) {
-			let diff = 64 - binarySnowflake.length
-			for ( let i = 0; i < diff; i++ ) {
-				binarySnowflake = '0' + binarySnowflake
-			}
-		}
-		let timestamp = parseInt( binarySnowflake.substring( 0, 42 ), 2 ) + 1420070400000
-		return timestamp
-	}
-
-	// Source URL
-	function updateSourceUrl( url: string | null ) {
-		setSourceUrl( url || "" )
-		let host = getUrlDomain( url )
-		switch ( host ) {
-			case 'discord': setSourceType( SourceType.Discord ); break;
-			case 'twitter':
-			case 'x': setSourceType( SourceType.Twitter ); break;
-			case 'bsky': setSourceType( SourceType.BlueSky ); break;
-			case 'tumblr': setSourceType( SourceType.Tumblr ); break;
-			case 'pixilart': setSourceType( SourceType.PixilArt ); break;
-			default: setSourceType( SourceType.None ); break;
-		}
-	}
-
-	function updateTags(tags: Tag[]) { setTags(tags) }
 
 	// Files
 	function updateFile(file: File | null) {
@@ -265,18 +234,6 @@ export default function PostUpload() {
 		// Callback
 		callback( draggedFile )
 	}
-	function onThumbnailDrop( event: DragEvent<HTMLDivElement> ) {
-		event.preventDefault()
-		const files = event.dataTransfer?.files
-		const draggedFile = files?.item( 0 )
-		if ( draggedFile ) updateThumbnail( draggedFile )
-	}
-	function onProjectDrop( event: DragEvent<HTMLDivElement> ) {
-		event.preventDefault()
-		const files = event.dataTransfer?.files
-		const draggedFile = files?.item( 0 )
-		if ( draggedFile ) updateProjectFile( draggedFile )
-	}
 
 	function onFilePaste( event: ClipboardEvent<HTMLDivElement>, callback: ( pastedFile: File | null ) => void ) {
 		const items = event.clipboardData.items
@@ -290,13 +247,41 @@ export default function PostUpload() {
 	}
 
 	// File Urls
-	function updateFileUrl(url: string | null) {
-		setFileUrl(url || "")
+	function updateFileUrl( url: string | null ) { setFileUrl( url || "" ) }
+	function updateThumbnailUrl( url: string | null ) { setThumbnailUrl( url || "" ) }
+	function updateProjectUrl( url: string | null ) { setProjectUrl( url || "" ) }
+
+	// Source URL
+	function updateSourceUrl( url: string | null ) {
+		setSourceUrl( url || "" )
+		let host = getUrlDomain( url )
+		switch ( host ) {
+			case 'discord': setSourceType( SourceType.Discord ); break;
+			case 'twitter':
+			case 'x': setSourceType( SourceType.Twitter ); break;
+			case 'bsky': setSourceType( SourceType.BlueSky ); break;
+			case 'tumblr': setSourceType( SourceType.Tumblr ); break;
+			case 'pixilart': setSourceType( SourceType.PixilArt ); break;
+			default: setSourceType( SourceType.None ); break;
+		}
 	}
-	function updateThumbnailUrl(url: string | null) {
-		setThumbnailUrl(url || "")
-	}
-	function updateProjectUrl(url: string | null) {
-		setProjectUrl(url || "")
+
+	// Tags
+	function updateTags( tags: Tag[] ) { setTags( tags ) }
+
+	// Timestamp
+	function updateTimestamp( value: Value ) { if ( value ) setTimestamp( value.getTime() ) }
+
+	function getTimestampFromDiscordUrl( url: string ): number {
+		let id = url.split( '/' ).pop()?.split( '?' )[0]
+		let binarySnowflake = parseInt( id || '0', 10 ).toString( 2 )
+		if ( binarySnowflake.length < 64 ) {
+			let diff = 64 - binarySnowflake.length
+			for ( let i = 0; i < diff; i++ ) {
+				binarySnowflake = '0' + binarySnowflake
+			}
+		}
+		let timestamp = parseInt( binarySnowflake.substring( 0, 42 ), 2 ) + 1420070400000
+		return timestamp
 	}
 }
