@@ -1,3 +1,4 @@
+import { SortDirection } from "@argon/stores/options"
 import type { Post, Tag } from "@argon/util/types"
 
 // Get client IP address (used for verification)
@@ -16,9 +17,11 @@ export async function getPostById(request: Request, id: number): Promise<Post | 
 		return post
 	})
 }
-export async function getPosts(request: Request, tags: Tag[]): Promise<Post[] | null> {
+export async function getPosts(request: Request, tags: Tag[], sort?: SortDirection): Promise<Post[] | null> {
+	console.log(sort)
 	return post<Post[]>(request, 'search', {
-		tags: tags ?? []
+		tags: tags ?? [],
+		sort: sort ?? SortDirection.timestamp
 	}, async (response: Response) => {
 		const posts: Post[] = await response.json()
 		return posts

@@ -1,13 +1,15 @@
 import Database from "bun:sqlite"
 import { Context } from "elysia"
-import { Sorts, searchPostsByTag } from "../util/database"
+import { SortDirection, searchPostsByTag } from "../util/database"
 
 export default function search(context: Context, db: Database) {
 	let query = context.body as any
 	if (!query.tags) query.tags = []
-	
+
+	const sort = SortDirection[ query?.sort as keyof typeof SortDirection ] ?? SortDirection.timestamp
+	console.log(sort)
 	let posts = searchPostsByTag(
-		parseTags(query.tags), Sorts.timestamp,
+		parseTags(query.tags), sort,
 		query.page?.size ?? 60, query.page?.number ?? 1,
 	db)
 

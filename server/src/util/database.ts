@@ -8,7 +8,7 @@ import type ArgonFile from "../data/file"
 import { notifError, notifPostEdit } from "./webhook"
 import { getTagDifference, removeDuplicates } from "./tags"
 
-export enum Sorts {
+export enum SortDirection {
 	postId = "postId",
 	postIdReverse = "postIdReverse",
 	timestamp = "timestamp",
@@ -323,13 +323,13 @@ export function getRandomPostFromDB(db: Database): Post | null {
 /**
  * Searches for posts by tags
  * @param { Tag[] } tags A list of tags to search for 
- * @param { Sorts } sort How to sort the results 
+ * @param { SortDirection } sort How to sort the results 
  * @param { number } pageSize How large each page should be 
  * @param { number } pageNumber Which page to get 
  * @param { Database } db The database to search in 
  * @returns { Post[] } A list of posts that match the search criteria
  */
-export function searchPostsByTag(tags: Tag[], sort: Sorts, pageSize: number, pageNumber: number, db: Database): Post[] {
+export function searchPostsByTag(tags: Tag[], sort: SortDirection, pageSize: number, pageNumber: number, db: Database): Post[] {
 	// Get tag IDs
 	let searchTagIds: number[] = []
 	let excludeTagIds: number[] = []
@@ -370,22 +370,22 @@ export function searchPostsByTag(tags: Tag[], sort: Sorts, pageSize: number, pag
 
 	// Sort posts
 	switch (sort) {
-		case Sorts.postId:
+		case SortDirection.postId:
 			posts.sort((a, b) => a.id - b.id)
 			break
-		case Sorts.postIdReverse:
+		case SortDirection.postIdReverse:
 			posts.sort((a, b) => b.id - a.id)
 			break
-		case Sorts.timestamp:
+		case SortDirection.timestamp:
 			posts.sort((a, b) => a.timestamp - b.timestamp)
 			break
-		case Sorts.timestampReverse:
+		case SortDirection.timestampReverse:
 			posts.sort((a, b) => b.timestamp - a.timestamp)
 			break
-		case Sorts.tagCount:
+		case SortDirection.tagCount:
 			posts.sort((a, b) => a.tags.length - b.tags.length)
 			break
-		case Sorts.tagCountReverse:
+		case SortDirection.tagCountReverse:
 			posts.sort((a, b) => b.tags.length - a.tags.length)
 			break
 	}

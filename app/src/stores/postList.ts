@@ -1,7 +1,7 @@
 import { atom } from "nanostores"
 
 import type { Post, Tag } from "@argon/util/types"
-import { Sorts } from "@argon/util/types"
+import { SortDirection } from "./options"
 
 export const postList = atom<Post[]>([])
 
@@ -11,4 +11,4 @@ export const currentPage = atom<number>(1)
 
 // Filter + Sort
 export const filterTags = atom<string>("")
-export const sort = atom<Sorts>(Sorts.timestamp)
+export const sort = atom<SortDirection>(SortDirection.timestamp)

@@ -31,12 +31,3 @@ export interface Tag {
 	usages?: number
 	exclude?: boolean
 }
-
-export enum Sorts {
-	postId = "postId",
-	postIdReverse = "postIdReverse",
-	timestamp = "timestamp",
-	timestampReverse = "timestampReverse",
-	tagCount = "tagCount",
-	tagCountReverse = "tagCountReverse"
-}
