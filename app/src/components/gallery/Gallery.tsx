@@ -7,7 +7,7 @@ import { handleNSFW, handleSuggestive, handleUntagged, animations, PostHandleTyp
 import type { Post } from "@argon/util/types"
 
 import { getPosts } from "@argon/util/api"
-import { hasTag, parseTagString, tagsToTagString } from "@argon/util/tag"
+import { parseTagString, tagsToTagString } from "@argon/util/tag"
 
 import GalleryFile from "@argon/components/gallery/GalleryFile.tsx"
 
@@ -16,15 +16,15 @@ import "@argon/components/gallery/gallery.css"
 export default function Gallery() {
 
 	// Search
-	const $postList = useStore(postList)
+	const $postList = useStore( postList )
 
 	// Page
-	const $pageSize = useStore(pageSize)
-	const $currentPage = useStore(currentPage)
+	const $pageSize = useStore( pageSize )
+	const $currentPage = useStore( currentPage )
 
 	// Filter + Sort
-	const $filterTags = useStore(filterTags)
-	const $sort = useStore(sort)
+	const $filterTags = useStore( filterTags )
+	const $sort = useStore( sort )
 
 	// Handle post types
 	const $handleNSFW = useStore( handleNSFW )
@@ -44,8 +44,8 @@ export default function Gallery() {
 		if ( $handleUntagged === PostHandleType.Hide )
 			searchTags.push({ name: 'untagged', type: 'meta', exclude: true })
 
-		let posts = await getPosts( new Request('/api/search'), searchTags, $sort )
-		if (posts) postList.set(posts)
+		let posts = await getPosts( new Request( '/api/search' ), searchTags, $sort )
+		if ( posts ) postList.set( posts )
 	}
 
 	useEffect(() => { loadPosts() }, [
@@ -54,11 +54,11 @@ export default function Gallery() {
 	])
 
 	function loadUrlSearch() {
-		let params = new URLSearchParams(window.location.search)
-		let query = params.get('q')
+		let params = new URLSearchParams( window.location.search )
+		let query = params.get( 'q' )
 
-		if (!query) return
-		let urlTags = parseTagString(query)
+		if ( !query ) return
+		let urlTags = parseTagString( query )
 
 		if (urlTags.length != 0 && $filterTags.length === 0)
 			filterTags.set( tagsToTagString( urlTags ) )
@@ -66,9 +66,9 @@ export default function Gallery() {
 
 	return (
 		<div className="gallery">
-			{ $postList?.length > 0 && $postList.map((post: Post) => {
-				if (post.id) return (
-					<GalleryFile key={post.id} post={post} />
+			{ $postList?.length > 0 && $postList.map( ( post: Post ) => {
+				if ( post.id ) return (
+					<GalleryFile key={ post.id } post={ post } />
 				)
 			})}
 		</div>

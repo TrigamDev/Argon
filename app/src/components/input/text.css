@@ -18,15 +18,15 @@
 	color: var(--text);
 	background-color: var(--secondary);
 
-	/* Border */
-	border: none;
-	outline: none;
-	border-radius: 12px;
-
-	/* Text */
+	/* Typography */
 	font-family: var(--font);
 	font-size: 1.1rem;
 	font-weight: 600;
+
+	/* Border */
+	border: none;
+	border-radius: 12px;
+	outline: none;
 }
 
 .text-input .text-box:disabled {

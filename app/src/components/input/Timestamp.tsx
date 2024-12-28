@@ -18,28 +18,28 @@ interface Props {
 }
 export default function Timestamp({ currentTimestamp = new Date().getTime(), resetButton = true, onChange }: Props) {
 
-	const [currentValue, setCurrentValue] = useState<Value>(new Date(currentTimestamp))
+	const [ currentValue, setCurrentValue ] = useState<Value>( new Date( currentTimestamp ) )
 
 	useEffect(() => {
 		setCurrentValue( new Date( currentTimestamp ) )
 	}, [ currentTimestamp ])
 
-	function onInputChange(value: Value) {
-		setCurrentValue(value)
-		onChange(value)
+	function onInputChange( value: Value ) {
+		setCurrentValue( value )
+		onChange( value )
 	}
 
 	function revert() {
-		setCurrentValue(new Date(currentTimestamp))
+		setCurrentValue( new Date( currentTimestamp ) )
 	}
 
 	return (
 		<div className="timestamp-input input-field">
 			<DateTimePicker className="time-picker" value={ currentValue } onChange={ onInputChange }
-				disableClock={true}
+				disableClock={ true }
 			/>
 			{ currentTimestamp != currentValue?.getTime() && resetButton &&
-				<button className='revert-change' onClick={revert}>
+				<button className='revert-change' onClick={ revert }>
 					<img className='revert-icon' src="/icons/actions/revert.svg"/>
 				</button>
 			}

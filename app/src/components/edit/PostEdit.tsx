@@ -17,27 +17,27 @@ interface Props { post: Post }
 export default function PostEdit({ post }: Props) {
 
 	// Updating
-	const [newTitle, setNewTitle] = useState(post.file.title)
-	const [newTimestamp, setNewTimestamp] = useState(post.file.timestamp)
-	const [newSourceUrl, setNewSourceUrl] = useState(post.file.sourceUrl)
-	const [newTags, setNewTags] = useState(post.tags)
+	const [ newTitle, setNewTitle ] = useState( post.file.title )
+	const [ newTimestamp, setNewTimestamp ] = useState( post.file.timestamp )
+	const [ newSourceUrl, setNewSourceUrl ] = useState( post.file.sourceUrl )
+	const [ newTags, setNewTags ] = useState( post.tags )
 
-	function updateTimestamp(value: Value) {
-		if (value) setNewTimestamp(value.getTime())
+	function updateTimestamp( value: Value ) {
+		if ( value ) setNewTimestamp( value.getTime() )
 	}
-	function updateTitle(value: string) { setNewTitle(value) }
-	function updateSourceUrl(value: string) { setNewSourceUrl(value) }
-	function updateTags(tags: Tag[]) { setNewTags( tags ) }
+	function updateTitle( value: string ) { setNewTitle( value ) }
+	function updateSourceUrl( value: string ) { setNewSourceUrl( value ) }
+	function updateTags( tags: Tag[] ) { setNewTags( tags ) }
 
 	// Saving
 	function savePost() {
 		let formdata = new FormData()
-		formdata.append('title', newTitle)
-		formdata.append('timestamp', newTimestamp.toString())
-		formdata.append('sourceUrl', newSourceUrl || "")
-		formdata.append('tags', JSON.stringify(newTags))
+		formdata.append( 'title', newTitle )
+		formdata.append( 'timestamp', newTimestamp.toString() )
+		formdata.append( 'sourceUrl', newSourceUrl || "" )
+		formdata.append( 'tags', JSON.stringify( newTags ) )
 
-		upload(null, `post/edit/${post.id}`, formdata, async (response: Response) => {
+		upload( null, `post/edit/${ post.id }`, formdata, async ( response: Response ) => {
 			let res = await response.json()
 			if ( res?.error ) alert( res?.error )
 			else window.location.href = `.`
@@ -45,7 +45,7 @@ export default function PostEdit({ post }: Props) {
 	}
 	
 	function deletePost() {
-		apiPost(null, `post/delete/${post.id}`, {}, async (response: Response) => {
+		apiPost( null, `post/delete/${ post.id }`, {}, async ( response: Response ) => {
 			let res = await response.json()
 			if ( res?.error ) alert( res?.error )
 			else window.location.href = `/`
@@ -65,23 +65,23 @@ export default function PostEdit({ post }: Props) {
 					<ul className="post-edit-fields">
 						<li className="post-edit-title">
 							<h2>Title</h2>
-							<Text currentText={post.file.title} onChange={updateTitle} />
+							<Text currentText={ post.file.title } onChange={ updateTitle } />
 						</li>
 						<li className="post-edit-timestamp">
 							<h2>Created</h2>
-							<Timestamp currentTimestamp={ post.file.timestamp } onChange={updateTimestamp} />
+							<Timestamp currentTimestamp={ post.file.timestamp } onChange={ updateTimestamp } />
 						</li>
 						<li className="post-edit-source-url">
 							<h2>Source URL</h2>
-							<Text currentText={post.file.sourceUrl} onChange={updateSourceUrl} />
+							<Text currentText={ post.file.sourceUrl } onChange={ updateSourceUrl } />
 						</li>
 						<li className="post-edit-tags">
 							<h2>Tags</h2>
 							<Tags
-								search={false}
-								multiline={true}
+								search={ false }
+								multiline={ true }
 								defaultValue={ post.tags }
-								onChange={updateTags}
+								onChange={ updateTags }
 							/>
 						</li>
 					</ul>

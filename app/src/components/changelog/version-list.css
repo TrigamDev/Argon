@@ -6,26 +6,31 @@
 }
 
 .versions {
-	/* Style */
-	list-style-type: none;
-
 	/* Layout */
 	padding: 0;
 	margin: 0;
+
+	/* Miscellaneous */
+	list-style-type: none;
 }
 
 .versions a {
 	/* Color */
 	color: var(--text);
 
-	/* Text */
-	text-decoration: underline;
-	font-weight: 600;
+	/* Typography */
 	font-size: 18px;
+	font-weight: 600;
+	text-decoration: underline;
 }
 
 .version {
+	/* Display */
 	display: flex;
+
+	/* Alignment */
 	justify-content: space-between;
+
+	/* Grid */
 	gap: 8px;
 }

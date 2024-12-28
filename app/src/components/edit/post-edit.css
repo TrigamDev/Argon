@@ -2,59 +2,69 @@
 	/* Display */
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	gap: 2.5vh;
+	overflow: hidden;
 
 	/* Layout */
 	width: 100%;
 	height: 100%;
 	padding-bottom: 32px;
-	overflow: hidden;
+
+	/* Alignment */
+	align-items: center;
+
+	/* Grid */
+	gap: 2.5vh;
 }
 
 .post-edit-area .post-edit-content {
 	/* Display */
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-start;
+	overflow-x: hidden;
+	overflow-y: scroll;
 
 	/* Layout */
 	width: 90%;
 	height: 100%;
 	padding: 0 15px;
-	overflow-x: hidden;
-	overflow-y: scroll;
+
+	/* Alignment */
+	justify-content: flex-start;
 }
 
 .post-edit-area .post-title {
-	/* Layout */
+	/* Display */
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+
+	/* Alignment */
 	align-items: center;
 	align-self: stretch;
+	justify-content: center;
 }
 
 .post-edit-fields {
 	/* Display */
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 
 	/* Layout */
-	margin: 0;
-	padding: 0;
 	width: 100%;
+	padding: 0;
+	margin: 0;
 
-	/* Style */
-	list-style: none;
+	/* Alignment */
+	justify-content: center;
 
-	/* Text */
+	/* Typography */
 	text-align: center;
+
+	/* List */
+	list-style: none;
 }
 
 .post-edit-field-name {
-	/* Text */
+	/* Typography */
 	font-size: 1.2em;
 	font-weight: 700;
 }
@@ -63,69 +73,75 @@
 	/* Display */
 	display: flex;
 	flex-direction: row;
+
+	/* Alignment */
+	align-items: center;
 	justify-content: center;
+
+	/* Grid */
 	gap: 8px;
 }
 
 .input-field .revert-change {
 	/* Display */
 	display: flex;
-	justify-content: center;
-	align-items: center;
 
 	/* Layout */
 	width: 56px;
 	height: 56px;
-	scale: 0.95;
 	padding: 12px;
 
-	/* Style */
-	cursor: pointer;
+	/* Alignment */
+	align-items: center;
+	justify-content: center;
+
+	/* Transformations */
 	transform: scale(0.8);
+	transform: scale(0.9);
+
+	/* Cursor */
+	cursor: pointer;
 
 	/* Color */
 	color: white;
 	background-color: transparent;
 
-	/* Border */
-	outline: none;
-	border: none;
-	border-radius: 12px;
-
-	/* Text */
+	/* Typography */
 	font-family: var(--font);
 	font-size: 20px;
 	font-weight: 600;
 	text-decoration: none;
+
+	/* Border */
+	border: none;
+	border-radius: 12px;
+	outline: none;
 
 	/* Animation */
 	transition: 0.15s;
 }
 
 .input-field .revert-change:hover {
-	/* Color */
-	background-color: var(--accent);
-
-	/* Layout */
+	/* Transformations */
 	transform: scale(1);
 
-	/* Style */
-	scale: 1;
+	/* Color */
+	background-color: var(--accent);
 }
 
 .input-field .revert-change:focus {
+	/* Transformations */
+	transform: scale(1);
+
 	/* Color */
 	background-color: var(--accent);
-
-	/* Layout */
-	transform: scale(1);
 
 	/* Border */
 	border: var(--text) solid 2px;
 }
 
 .input-field .revert-change:active {
-	/* Layout */
+	/* Transformations */
 	transform: scale(0.9);
 }
 

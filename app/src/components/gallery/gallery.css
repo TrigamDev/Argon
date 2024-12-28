@@ -1,17 +1,22 @@
 .gallery {
-	/* Layout */
+	/* Display */
 	display: flex;
 	flex: 1 1 auto;
-	justify-content: space-evenly;
-	align-self: stretch;
 	flex-wrap: wrap;
-	gap: 1vmax;
+	overflow: visible;
 
+	/* Layout */
 	height: auto;
 	min-height: 0;
 	margin: 20px 0;
-	overflow: visible;
 
-	/* Style */
+	/* Alignment */
+	align-self: stretch;
+	justify-content: space-evenly;
+
+	/* Grid */
+	gap: 1vmax;
+
+	/* Border */
 	border-radius: 15px;
 }
