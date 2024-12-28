@@ -1,7 +1,6 @@
 # Client
 
 ## Features
-- Allow dragging files onto upload page
 - Reporting
 - Bookmarking
 

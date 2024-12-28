@@ -35,7 +35,9 @@ export default function FileUpload({ name, limitTo = null, currentFile, currentU
 
 	const [hasFile, setHasFile] = useState<boolean>(false)
 	const [hasUrl, setHasUrl] = useState<boolean>(false)
+
 	useEffect(() => {
+		if ( currentFile ) getFileInfo( currentFile )
 		setHasFile(currentFile != null)
 		setHasUrl(currentUrl != null && currentUrl != "")
 	}, [currentFile, currentUrl])
@@ -89,20 +91,22 @@ export default function FileUpload({ name, limitTo = null, currentFile, currentU
 	)
 
 	function handleFileUpdate(event: ChangeEvent<HTMLInputElement>) {
-		let userFile = event.target.files?.item(0) || currentFile
-		if (userFile) {
-			// Preview file
-			let type = getTypeFromMime(userFile.type)
-			setFileType(type)
-			setFileName(userFile.name)
+		let newFile = event.target.files?.item(0) || currentFile
+		if (newFile) getFileInfo( newFile )
+	}
 
-			loadFile(userFile, (url: string) => {
-				setPreviewUrl(url)
-			})
+	function getFileInfo( newFile: File ) {
+		// Preview file
+		let type = getTypeFromMime(newFile.type)
+		setFileType(type)
+		setFileName(newFile.name)
 
-			// Callback
-			updateFile(userFile)
-		}
+		loadFile(newFile, (url: string) => {
+			setPreviewUrl(url)
+		})
+
+		// Callback
+		updateFile(newFile)
 	}
 
 	function handleUrlUpdate(url: string) {

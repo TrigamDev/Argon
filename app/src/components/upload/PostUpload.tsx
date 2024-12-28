@@ -1,4 +1,5 @@
 import { useState } from "react"
+import type { DragEvent } from "react"
 
 import type { Value } from "node_modules/react-datetime-picker/dist/cjs/shared/types"
 import { FileType, type Tag } from "@argon/util/types"
@@ -132,7 +133,11 @@ export default function PostUpload() {
 						</TabList>
 
 						{ /* File */ }
-						<TabPanel forceRender={true}>
+						<TabPanel
+							forceRender={true}
+							onDragOver={ ( event ) => { event.preventDefault() } }
+							onDrop={ onFileDrop }
+						>
 							<FileUpload
 								name='File'
 								limitTo={FileType.unknown}
@@ -144,7 +149,11 @@ export default function PostUpload() {
 						</TabPanel>
 						
 						{ /* Thumbnail */ }
-						<TabPanel forceRender={true}>
+						<TabPanel
+							forceRender={true}
+							onDragOver={ ( event ) => { event.preventDefault() } }
+							onDrop={ onThumbnailDrop }
+						>
 							<FileUpload
 								name='Thumbnail'
 								limitTo={FileType.image}
@@ -156,7 +165,11 @@ export default function PostUpload() {
 						</TabPanel>
 						
 						{ /* Project File */ }
-						<TabPanel forceRender={true}>
+						<TabPanel
+							forceRender={true}
+							onDragOver={ ( event ) => { event.preventDefault() } }
+							onDrop={ onProjectDrop }
+						>
 							<FileUpload
 								name='Project File'
 								limitTo={FileType.project}
@@ -227,6 +240,25 @@ export default function PostUpload() {
 	}
 	function updateProjectFile(file: File | null) {
 		setProjectFile(file)
+	}
+
+	function onFileDrop( event: DragEvent<HTMLDivElement> ) {
+		event.preventDefault()
+		const files = event.dataTransfer?.files
+		const draggedFile = files?.item( 0 )
+		if ( draggedFile ) updateFile( draggedFile )
+	}
+	function onThumbnailDrop( event: DragEvent<HTMLDivElement> ) {
+		event.preventDefault()
+		const files = event.dataTransfer?.files
+		const draggedFile = files?.item( 0 )
+		if ( draggedFile ) updateThumbnail( draggedFile )
+	}
+	function onProjectDrop( event: DragEvent<HTMLDivElement> ) {
+		event.preventDefault()
+		const files = event.dataTransfer?.files
+		const draggedFile = files?.item( 0 )
+		if ( draggedFile ) updateProjectFile( draggedFile )
 	}
 
 	// File Urls
