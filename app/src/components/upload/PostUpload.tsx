@@ -7,6 +7,7 @@ import { FileType, type Tag } from "@argon/util/types"
 import { upload } from "@argon/util/api"
 import { tagsToString } from "@argon/util/tag"
 import { getUrlDomain } from "@argon/util/url"
+import { getBlueskyPost } from "@argon/util/apis/bluesky"
 
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import FileUpload from "@argon/components/upload/FileUpload.tsx"
@@ -17,15 +18,12 @@ import Tags from "@argon/components/tag/TagInput.tsx"
 import "react-tabs/style/react-tabs.css"
 import "@argon/components/upload/post-upload.css"
 import "@argon/globals.css"
-import { getBlueskyPost } from "@argon/util/apis/bluesky"
 
 enum SourceType {
 	None,
 	Discord,
 	Twitter,
-	BlueSky,
-	Tumblr,
-	PixilArt
+	BlueSky
 }
 
 export default function PostUpload() {
@@ -106,6 +104,12 @@ export default function PostUpload() {
 							<button className="button focusable text accent" id="timestamp-discord"
 							onClick={ () => { setTimestamp( getTimestampFromDiscordUrl( sourceUrl ) ) } }>
 								Get from Discord ID
+							</button>
+						}
+						{ sourceType === SourceType.Twitter &&
+							<button className="button focusable text accent" id="timestamp-twitter"
+							onClick={ () => { setTimestamp( getTimestampFromTwitterId( sourceUrl ) ) } }>
+								Get from Twitter ID
 							</button>
 						}
 						{ sourceType === SourceType.BlueSky &&
@@ -267,8 +271,6 @@ export default function PostUpload() {
 			case 'twitter':
 			case 'x': setSourceType( SourceType.Twitter ); break;
 			case 'bsky': setSourceType( SourceType.BlueSky ); break;
-			case 'tumblr': setSourceType( SourceType.Tumblr ); break;
-			case 'pixilart': setSourceType( SourceType.PixilArt ); break;
 			default: setSourceType( SourceType.None ); break;
 		}
 	}
@@ -297,5 +299,11 @@ export default function PostUpload() {
 		const time = ( post?.thread?.post as any )?.record?.createdAt
 		if ( time ) return new Date( time ).getTime()
 		else return 0
+	}
+
+	function getTimestampFromTwitterId( url: string ): number {
+		let id = Number( url.split( '/' ).pop()?.split( '?' )[0] )
+		const offset = 1288834974657
+		return new Date ( ( id / 2 ** 22 ) + offset ).getTime()
 	}
 }
