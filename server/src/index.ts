@@ -5,7 +5,7 @@ import { cors } from "@elysiajs/cors"
 import logger from "./logger"
 
 import { Database } from "bun:sqlite"
-import { clearDatabase, createTables, getSQLiteVersion } from "./util/database"
+import { clearDatabase, createTables, getSQLiteVersion, SortDirection } from "./util/database"
 
 import { log, Category, Status } from "./util/debug"
 import { clearFiles } from "./util/files"
@@ -107,6 +107,7 @@ const app = new Elysia()
 				type: t.String(),
 				exclude: t.Boolean()
 			}) ) ),
+			sort: t.Enum( SortDirection ),
 			page: t.Partial ( t.Object({
 				number: t.Numeric(),
 				size: t.Numeric()

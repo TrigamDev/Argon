@@ -1,11 +1,14 @@
 import type { WritableAtom } from "nanostores"
 
+import { SortDirection } from "@argon/stores/postList"
+import { PostHandleType } from "@argon/stores/options"
+
 import {
 	handleNSFW, handleSuggestive, handleUntagged,
-	animations, tagSuggestions, sortPosts,
+	animations, tagSuggestions,
 	bumpscuous
 } from "@argon/stores/options"
-import { PostHandleType, SortDirection } from "@argon/stores/options"
+import { sort } from "@argon/stores/postList"
 
 export enum OptionType {
 	Toggle,
@@ -140,41 +143,31 @@ export default [
 		label: "Sort Posts",
 		description: "The method used to sort posts",
 		set: ( value: SortDirection ) => {
-			sortPosts.set( value )
+			sort.set( value )
 			localStorage.setItem( 'settings.sortPosts', value.toString() )
 		},
 		type: OptionType.Dropdown,
-		store: sortPosts,
+		store: sort,
 		options: [{
 			label: "Newest to Oldest",
 			description: "Sort posts with the newest being first",
 			value: SortDirection.timestamp,
-			store: sortPosts
+			store: sort
 		}, {
 			label: "Oldest to Newest",
 			description: "Sort posts with the oldest being first",
 			value: SortDirection.timestampReverse,
-			store: sortPosts
-		}, {
-			label: "Highest Tag Count",
-			description: "Sort posts with the posts with the most tags being first",
-			value: SortDirection.tagCount,
-			store: sortPosts
-		}, {
-			label: "Lowest Tag Count",
-			description: "Sort posts with the posts with the least tags being first",
-			value: SortDirection.tagCountReverse,
-			store: sortPosts
+			store: sort
 		}, {
 			label: "Highest ID to Lowest",
 			description: "Sort posts with the posts with the highest ID being first",
 			value: SortDirection.postId,
-			store: sortPosts
+			store: sort
 		}, {
 			label: "Lowest ID to Highest",
 			description: "Sort posts with the posts with the lowest ID being first",
 			value: SortDirection.postIdReverse,
-			store: sortPosts
+			store: sort
 		}]
 	} as DropdownOption<SortDirection>,
 
@@ -239,7 +232,7 @@ export function loadSettingsFromStorage() {
 		handleUntagged.set( PostHandleType[ stored.handleUntaggedPosts as keyof typeof PostHandleType ] )
 
 	if ( stored.sortPosts )
-		sortPosts.set( SortDirection[stored.sortPosts as keyof typeof SortDirection] )
+		sort.set( SortDirection[stored.sortPosts as keyof typeof SortDirection] )
 
 	if ( stored.animations ) animations.set( stored.animations === 'true' )
 	if ( stored.tagSuggestions ) tagSuggestions.set( stored.tagSuggestions === 'true' )

@@ -4,12 +4,11 @@ import { SortDirection, searchPostsByTag } from "../util/database"
 
 export default function search(context: Context, db: Database) {
 	let query = context.body as any
-	if (!query.tags) query.tags = []
+	
+	const sort = query?.sort ?? SortDirection.timestamp
 
-	const sort = SortDirection[ query?.sort as keyof typeof SortDirection ] ?? SortDirection.timestamp
-	console.log(sort)
 	let posts = searchPostsByTag(
-		parseTags(query.tags), sort,
+		parseTags( query.tags ?? [] ), sort,
 		query.page?.size ?? 60, query.page?.number ?? 1,
 	db)
 

@@ -44,7 +44,10 @@ export default function Gallery() {
 		if ( $handleUntagged === PostHandleType.Hide )
 			searchTags.push({ name: 'untagged', type: 'meta', exclude: true })
 
-		let posts = await getPosts( new Request( '/api/search' ), searchTags, $sort )
+		let posts = await getPosts(
+			new Request( '/api/search' ),
+			{ tags: searchTags, sort: $sort }
+		)
 		if ( posts ) postList.set( posts )
 	}
 

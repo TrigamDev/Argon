@@ -12,9 +12,7 @@ export enum SortDirection {
 	postId = "postId",
 	postIdReverse = "postIdReverse",
 	timestamp = "timestamp",
-	timestampReverse = "timestampReverse",
-	tagCount = "tagCount",
-	tagCountReverse = "tagCountReverse"
+	timestampReverse = "timestampReverse"
 }
 
 
@@ -331,66 +329,71 @@ export function getRandomPostFromDB(db: Database): Post | null {
  */
 export function searchPostsByTag(tags: Tag[], sort: SortDirection, pageSize: number, pageNumber: number, db: Database): Post[] {
 	// Get tag IDs
-	let searchTagIds: number[] = []
-	let excludeTagIds: number[] = []
+	const searchTagIds = tags
+		.filter( tag => !tag.exclude )
+		.map( tag => getTag( { name: tag.name, type: tag.type }, db )?.id )
+		.filter(Boolean)
+	const excludeTagIds = tags
+		.filter( tag => tag.exclude )
+		.map( tag => getTag( { name: tag.name, type: tag.type }, db )?.id )
+		.filter(Boolean)
 
-	tags.map(tag => {
-		let real = getTag({ name: tag.name, type: tag.type }, db)
-		if (!tag.exclude && real && real.id) searchTagIds.push(real.id)
-		else if (tag.exclude && real && real.id) excludeTagIds.push(real.id)
-	})
-	let searching = searchTagIds.length > 0
-	let excluding = excludeTagIds.length > 0
+	const searching = searchTagIds.length > 0
+	const excluding = excludeTagIds.length > 0
 
-	// Get posts
-	let posts: Post[] = []
-	let results: any[] = []
+	// Construct query
+	const baseQuery = `
+		SELECT p.*, f.timestamp AS fileTimestamp
+		FROM posts p
+		INNER JOIN files f ON p.id = f.postId
+	`
+	console.log( db.query( baseQuery ).all() )
+	let conditions: string[] = []
+	let clauses: string[] = []
 
-	let searchQuery = `SELECT * FROM posts`
+	// Tags
+	if ( searching )
+		conditions.push( `p.tags LIKE %:${ searchTagIds.join( ':' ) }:%` )
 
-	// Construct search query (god that was hell)
-	if (searching) searchQuery += ` WHERE tags LIKE '%:${searchTagIds[0]}:%' ${searchTagIds.slice(1).map(id => `AND tags LIKE '%:${id}:%'`).join(" ")}`
-	if (excluding && !searching) searchQuery += ` WHERE tags NOT LIKE '%:${excludeTagIds[0]}:%' ${excludeTagIds.slice(1).map(id => `AND tags NOT LIKE '%:${id}:%'`).join(" ")}`
-	if (excluding && searching) searchQuery += ` AND tags NOT LIKE '%:${excludeTagIds[0]}:%' ${excludeTagIds.slice(1).map(id => `AND tags NOT LIKE '%:${id}:%'`).join(" ")}`
-	searchQuery += ` LIMIT ${pageNumber - 1},${pageSize}`
+	if ( excluding )
+		conditions.push( `p.tags NOT LIKE %:${ excludeTagIds.join( ':' ) }:%` )
 
-	results = db.query(searchQuery).all()
-	
-	// Parse results
-	results.map(result => {
-		let file = getFileById(result.id, db)
-		if (!file) return
-		posts.push({
-			id: result.id,
-			timestamp: result.timestamp,
-			tags: decodeTags(result.tags, db),
-			file: file
-		})
-	})
-
-	// Sort posts
-	switch (sort) {
+	// Sorting
+	switch ( sort ) {
+		// Post ID
 		case SortDirection.postId:
-			posts.sort((a, b) => a.id - b.id)
+			clauses.push( `ORDER by id DESC` )
 			break
 		case SortDirection.postIdReverse:
-			posts.sort((a, b) => b.id - a.id)
+			clauses.push( `ORDER by id ASC` )
 			break
+		// Timestamp
 		case SortDirection.timestamp:
-			posts.sort((a, b) => a.timestamp - b.timestamp)
+			clauses.push( `ORDER by fileTimestamp DESC` )
 			break
 		case SortDirection.timestampReverse:
-			posts.sort((a, b) => b.timestamp - a.timestamp)
-			break
-		case SortDirection.tagCount:
-			posts.sort((a, b) => a.tags.length - b.tags.length)
-			break
-		case SortDirection.tagCountReverse:
-			posts.sort((a, b) => b.tags.length - a.tags.length)
+			clauses.push( `ORDER by fileTimestamp ASC` )
 			break
 	}
 
-	return posts
+	// Pagination
+	const pageOffset = ( pageNumber - 1 ) * pageSize
+	clauses.push( `LIMIT ${ pageSize } OFFSET ${ pageOffset }` )
+
+	// Construct final query
+	let searchQuery = baseQuery
+	if ( conditions.length > 0 ) searchQuery += ` WHERE ${ conditions.join( ` AND ` ) }`
+	if ( clauses.length > 0 ) searchQuery += ` ${ clauses.join( ` ` ) }`
+
+	const results = db.query( searchQuery ).all() as any[]
+	
+	// Parse results
+	return results.map( result => ({
+		id: result?.id,
+		timestamp: result?.timestamp,
+		tags: decodeTags( result?.tags, db ),
+		file: getFileById( result?.id, db )
+	})) as Post[]
 }
 
 
