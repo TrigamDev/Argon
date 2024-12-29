@@ -26,7 +26,9 @@ export default function GalleryImage({ post }: Props) {
 		|| ( $handleUntagged == PostHandleType.Blur && isUntagged )
 
 	return (
-		<a className={ `gallery-file ${ blur ? 'blur' : '' }` } href={ `./post/${ post.id }` }>
+		<a className={ `gallery-file ${ blur ? 'blur' : '' }` } href={ `./post/${ post.id }` }
+			title={ post.file.title }
+		>
 			{ post.file &&
 				<div className="file-container">
 					{ post.file.type !== "image" &&
