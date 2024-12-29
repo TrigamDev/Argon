@@ -3,6 +3,7 @@
 ## Features
 - Reporting
 - Bookmarking
+- Mobile support
 
 ## Tweaks
 - Make many more general use components
