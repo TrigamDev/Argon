@@ -10,14 +10,6 @@ jobs:
 
         steps:
         - uses: actions/checkout@v2
-
-        - name: Install Bun
-          uses: oven-sh/setup-bun@v2
-          with:
-            bun-version: latest
-        
-        - name: Install Dependencies
-          run: bun install
         
         - name: Deploy to Remote Server
           uses: appleboy/ssh-action@v1.2.0
