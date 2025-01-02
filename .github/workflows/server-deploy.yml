@@ -24,4 +24,4 @@ jobs:
                 git pull origin main
                 cd ./server
                 bun install
-                pm2 reloadOrRestart ecosystem.config.cjs
+                pm2 start ecosystem.config.cjs
