@@ -20,6 +20,7 @@ jobs:
             passphrase: ${{ secrets.PASSPHRASE }}
             script: |
                 cd /var/www/html/argon
+                git reset -hard origin/main
                 git pull origin main
                 cd ./server
                 bun install
