@@ -1,11 +1,9 @@
-import Database from "bun:sqlite"
 import { Context } from "elysia"
 
-import { getWebPath } from "../../util/dir"
-
-import { parseInput } from "./upload"
-import { validateUrl } from "../../util/url"
-import { editPostByID } from "../../util/database"
+import { parseInput } from "@argon/endpoints/post/upload"
+import { validateUrl } from "@argon/util/url"
+import { editPostByID } from "@argon/database/posts"
+import { Category, log, Status } from "@argon/util/debug"
 
 /* Fields
 	timestamp: Number
@@ -13,7 +11,7 @@ import { editPostByID } from "../../util/database"
 	sourceUrl: String
 	title: String
 */
-export default function editPost(context: Context, db: Database) {
+export default function editPost( context: Context ) {
 	// Input
 	let id: number = parseInt((context.params as any).id)
 	let input = parseInput(context.body as FormData)
@@ -22,15 +20,18 @@ export default function editPost(context: Context, db: Database) {
 		return { error: "Invalid post ID" }
 	}
 
-	const assetsPath = `${getWebPath(context)}/assets`
-
-	let editedPost = editPostByID(id, db, {
+	let editedPost = editPostByID( id, {
 		tags: input.tags ?? undefined,
 		file: {
 			timestamp: Number(input.timestamp),
 			title: input.title ?? undefined,
 			sourceUrl: validateUrl(input.sourceUrl)?.toString() ?? undefined
 		}
+	})
+
+	log({
+		category: Category.database, status: Status.success,
+		message: `Edited Post #${ id }!`
 	})
 
 	return editedPost

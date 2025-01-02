@@ -1,7 +1,5 @@
-import { Context } from "elysia"
-import Database from "bun:sqlite"
-import { getTags } from "../../util/database"
+import { getTags } from "@argon/database/tag"
 
-export default function getTagList(context: Context, db: Database) {
-	return getTags(db)
+export default function getTagList() {
+	return getTags()
 }

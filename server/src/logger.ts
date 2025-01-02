@@ -10,17 +10,17 @@ export default (options?: LogesticOptions) => new Logestic({
 })
 	.use([ 'ip', 'time', 'method', 'path', 'duration' ])
 	.format({
-			onSuccess({ ip, time, method, path, duration }) {
-				const ipAddr = chalk.gray(ip)
-				const dateTime = chalk.gray(getDateTimeString(time!!))
-				const methodPath = chalk.cyan(`${method} ${path}`)
-				return `${ipAddr} ${dateTime} ${methodPath} ${duration}μs`
-			},
-			onFailure({ request, datetime }) {
-				const dateTime = getDateTimeString(datetime!!)
-				return chalk.red(`${dateTime} ${request.method} ${request.url}`)
-			}
-	  })
+		onSuccess({ ip, time, method, path, duration }) {
+			const ipAddr = chalk.gray(ip)
+			const dateTime = chalk.gray(getDateTimeString(time!!))
+			const methodPath = chalk.cyan(`${method} ${path}`)
+			return `${ipAddr} ${dateTime} ${methodPath} ${duration}μs`
+		},
+		onFailure({ request, datetime }) {
+			const dateTime = getDateTimeString(datetime!!)
+			return chalk.red(`${dateTime} ${request.method} ${request.url}`)
+		}
+	})
 
 const getDateTimeString = (date: Date) => {
 	const year = date.getFullYear()

@@ -1,6 +1,6 @@
 /**
  * Returns whether the URL is a valid URL
- * @param { string } url The Url to get validate
+ * @param { string | null | undefined } url The Url to get validate
  * @returns { URL | null } Either the Url or null
  */
 export function validateUrl(url: string | null | undefined): URL | null {

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { getFileExtension } from "../src/util/files"
+import { getFileExtension } from "@argon/files/data"
 
 test.each([
 	[ "file.png", "png" ],

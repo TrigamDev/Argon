@@ -34,8 +34,8 @@ export function log({
 	category, status, message,
 	newLine = false, group
 }: LogSettings) {
-	if (group === Group.start) console.group(`${newLine ? '\n' : ''}${category} ${status}ㅤ${message}`)
-	else console.log(`${newLine ? '\n' : ''}${category} ${status}ㅤ${message}`)
+	if ( group === Group.start ) console.group(`${ newLine ? '\n' : '' }${ category } ${ status }ㅤ${ message }`)
+	else console.log(`${ newLine ? '\n' : '' }${ category } ${ status }ㅤ${ message }`)
 
-	if (group === Group.end) console.groupEnd()
+	if ( group === Group.end ) console.groupEnd()
 }

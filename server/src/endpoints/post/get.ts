@@ -1,10 +1,9 @@
-import Database from "bun:sqlite"
 import { Context } from "elysia"
-import { getPostById } from "../../util/database"
+import { getPostById } from "@argon/database/posts"
 
-export default function getPost(context: Context, db: Database) {
-	let id: number = parseInt((context.params as any).id)
-	let post = getPostById(id, db)
+export default function getPost( context: Context ) {
+	let id: number = parseInt( ( context.params as any ).id )
+	let post = getPostById( id )
 
 	if (!post) {
 		context.set.status = 404

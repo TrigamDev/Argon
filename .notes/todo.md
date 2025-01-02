@@ -30,6 +30,9 @@
 - Log grouping?
 - Clean up post editing (move more logic into the endpoint file)
 - Code documentation of endpoints
+- Change thumbnail.ts#compressImage into thumbnail.ts#compressBuffer
+- Create general use functions for cleaning up post and tag names
+- Update and make more function docs
 
 ## Fixes
 - Fix up files.ts#writeFile

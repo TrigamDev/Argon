@@ -1,3 +1,4 @@
+# Client
 - React/Astro imports
 - Other lib imports (moment, etc)
 ---
@@ -14,3 +15,19 @@
 ---
 - CSS
 - Global CSS
+
+# Server
+- Elysia
+- Endpoints
+---
+- Database
+- Database Utils
+---
+- Types
+- Enums
+---
+- Notifs
+- Errors
+- Debug
+---
+- Utils

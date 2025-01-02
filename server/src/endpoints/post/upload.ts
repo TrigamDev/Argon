@@ -1,21 +1,21 @@
 import { Context } from "elysia"
 
-import Database from "bun:sqlite"
-import { getLastPostId, insertPost } from "../../util/database"
+import { getLastPostId } from "@argon/database/posts"
 
-import { readFile } from "fs/promises"
+import type Post from "@argon/data/post"
+import type ArgonFile from "@argon/data/file"
+import { FileType } from "@argon/data/file"
+import type Tag from "@argon/data/tag"
 
-import type Post from "../../data/post"
-import type ArgonFile from "../../data/file"
-import { FileType } from "../../data/file"
-import type Tag from "../../data/tag"
-import { BunFile } from "bun"
-
-import { getWebPath } from "../../util/dir"
-import { FileData, compressImage, downloadFile, fetchFileUrl, getFileExtension, getFileFromBlob, getFileName, getFilePath, getFileType } from "../../util/files"
-import { validateUrl } from "../../util/url"
-import { notifPostUpload } from "../../util/webhook"
-import { Category, Group, log, Status } from "../../util/debug"
+import { getWebPath } from "@argon/util/dir"
+import { validateUrl } from "@argon/util/url"
+import { notifPostUpload } from "@argon/notifs/webhook"
+import { Category, Group, log, Status } from "@argon/util/debug"
+import { insertPost } from "@argon/database/posts"
+import { compressImage } from "@argon/files/thumbnail"
+import { downloadFile } from "@argon/files/fileSystem"
+import { fetchFileUrl, FileData, getFileExtension, getFileName, getFilePath, getFileType } from "@argon/files/data"
+import { getFileFromBlob } from "@argon/files/conversion"
 
 export interface PostInput {
 	title?: string
@@ -30,7 +30,7 @@ export interface PostInput {
 	projectUrl?: string
 	projectFile?: Blob
 }
-export default async function uploadPost(context: Context, db: Database) {
+export default async function uploadPost( context: Context ) {
 	// Input
 	let input = parseInput(context.body as FormData)
 	if (!input.file && !input.fileUrl) {
@@ -40,7 +40,7 @@ export default async function uploadPost(context: Context, db: Database) {
 
 	// Get precursory info
 	const assetsPath = `${getWebPath(context)}/assets`
-	let postId = getLastPostId(db) + 1
+	let postId = getLastPostId() + 1
 
 	log({
 		category: Category.database, status: Status.loading,
@@ -130,23 +130,20 @@ export default async function uploadPost(context: Context, db: Database) {
 	} as Post
 
 	// Save to database
-	insertPost(post, db)
-	notifPostUpload(post)
+	insertPost( post )
+	notifPostUpload( post )
 
 	log({
 		category: Category.database, status: Status.success,
 		newLine: true, group: Group.end,
-		message: `Posted Post #${postId}!`
+		message: `Posted Post #${ postId }!`
 	})
 
 	return post
 }
 
-/**
- * Parses the request body into a PostInput object
- * @param { FormData } input
- * @returns { PostInput }
- */
+
+
 export function parseInput(input: FormData): PostInput {
 	// Parse tags
 	let tags = input.get("tags") as string | Tag[] | undefined
@@ -180,12 +177,6 @@ export function parseInput(input: FormData): PostInput {
 	}
 }
 
-/**
- * Finds the name of the file
- * @param { PostInput } input 
- * @param { string | undefined } path 
- * @returns { string }
- */
 function getTitle(input: PostInput, path: string | undefined): string {
 	let name = input.title ?? ''
 	if ((!name || name === '') && path) name = getFileName(path)
@@ -197,14 +188,6 @@ function getTitle(input: PostInput, path: string | undefined): string {
 //
 //	File Downloads
 //
-/**
- * Downloads the main file
- * @param { number } postId The ID of the post
- * @param { Blob | undefined } file The file to download
- * @param { string } url The Url the file is located at
- * @param { boolean } makethumbnail Whether to make a thumbnail of the file
- * @returns { Promise<string | null> } The path of the downloaded file
- */
 export async function downloadMainFile(postId: number, file: File, url?: string): Promise<string | null> {
 	if (!file) return null
 	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
@@ -212,18 +195,10 @@ export async function downloadMainFile(postId: number, file: File, url?: string)
 	let type = getFileType(`${name}.${extension}`)
 	if ( type === FileType.unknown ) return null
 
-	await downloadFile(postId, file, { name, extension, type } as FileData)
+	await downloadFile(file, { name, extension, type } as FileData)
 	return `${type}/${name}.${extension}`
 }
 
-/**
- * Downloads the thumbnail file
- * @param { number } postId The ID of the post
- * @param { Blob | undefined } file The thumbnail file to download
- * @param { Blob | undefined } nameFile The main file to get the name from
- * @param { Blob | undefined } nameUrl The Url of the main file, to get the name from (fallback)
- * @returns { Promise<string | null> } The path of the downloaded thumbnail
- */
 export async function downloadThumbnail(postId: number, file: File | null, nameFile: File | null, nameUrl?: string): Promise<string | null> {
 	if (!file || !nameFile) return null
 
@@ -237,23 +212,16 @@ export async function downloadThumbnail(postId: number, file: File | null, nameF
 	let thumbnail = await compressImage(postId, file, getFileType(`${realName}.${realExtension}`))
 	if (!thumbnail) return null
 
-	await downloadFile(postId, thumbnail, { name, extension, type: 'thumbnail' } as FileData)
+	await downloadFile(thumbnail, { name, extension, type: 'thumbnail' } as FileData)
 	return `thumbnail/${name}.webp`
 }
 
-/**
- * Downloads the project file
- * @param { number } postId The ID of the post
- * @param { Blob | undefined } file The project file to download
- * @param { string } url The Url the project file is located at
- * @returns { Promise<string | null> } The path of the downloaded project file
- */
 export async function downloadProjectFile(postId: number, file: File | null, url?: string): Promise<string | null> {
 	if (!file) return null
 	let name = getFileName(file.name ?? url).replace(/[^a-zA-Z\d]/g, '_')
 	let extension = getFileExtension(file.name ?? url)
 
-	await downloadFile(postId, file, { name, extension, type: 'project' } as FileData)
+	await downloadFile(file, { name, extension, type: 'project' } as FileData)
 	return `project/${name}.${extension}`
 }
 
@@ -276,6 +244,6 @@ export async function copyDefaultThumbnail(postId: number, file: File | null, as
 	let thumbnail = await compressImage(postId, filed, FileType.image, 100)
 	if (!thumbnail) return null
 	
-	await downloadFile(postId, thumbnail, { name, extension: 'webp', type: 'thumbnail' } as FileData)
+	await downloadFile(thumbnail, { name, extension: 'webp', type: 'thumbnail' } as FileData)
 	return `thumbnail/${name}.webp`
 }
