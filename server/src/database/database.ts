@@ -2,7 +2,6 @@ import { database } from "@argon/index"
 
 import { Category, Status, log } from "@argon/util/debug"
 
-
 export function createTables() {
 	log({
 		category: Category.database, status: Status.loading,

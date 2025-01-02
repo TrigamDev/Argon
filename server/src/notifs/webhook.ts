@@ -1,7 +1,9 @@
 import Post from "@argon/data/post"
+
 import { Category, log, Status } from "@argon/util/debug"
-import config from "@argon/argonConfig"
 import { errorPayload, uploadPayload } from "@argon/notifs/payloads"
+
+import config from "@argon/argonConfig"
 
 export async function notifPostUpload(post: Post) {
 	for (let webhookConfig of [config.publicWebhook, config.privateWebhook]) {

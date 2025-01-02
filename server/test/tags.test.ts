@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test"
-import Tag from "@argon/data/tag"
-import { getTagDifference, removeDuplicates } from "@argon/data/tag"
+
+import Tag, { getTagDifference, removeDuplicates } from "@argon/data/tag"
 
 // Test tags
 const trigamArtist: Tag = { id: 0, name: 'trigam', type: 'artist' }

@@ -1,21 +1,21 @@
 import { Context } from "elysia"
 
-import { getLastPostId } from "@argon/database/posts"
+import { getLastPostId, insertPost } from "@argon/database/posts"
 
 import type Post from "@argon/data/post"
+import type Tag from "@argon/data/tag"
 import type ArgonFile from "@argon/data/file"
 import { FileType } from "@argon/data/file"
-import type Tag from "@argon/data/tag"
 
 import { getWebPath } from "@argon/util/dir"
 import { validateUrl } from "@argon/util/url"
-import { notifPostUpload } from "@argon/notifs/webhook"
-import { Category, Group, log, Status } from "@argon/util/debug"
-import { insertPost } from "@argon/database/posts"
 import { compressImage } from "@argon/files/thumbnail"
 import { downloadFile } from "@argon/files/fileSystem"
-import { fetchFileUrl, FileData, getFileExtension, getFileName, getFilePath, getFileType } from "@argon/files/data"
 import { getFileFromBlob } from "@argon/files/conversion"
+import { fetchFileUrl, FileData, getFileExtension, getFileName, getFilePath, getFileType } from "@argon/files/data"
+
+import { Category, Group, log, Status } from "@argon/util/debug"
+import { notifPostUpload } from "@argon/notifs/webhook"
 
 export interface PostInput {
 	title?: string

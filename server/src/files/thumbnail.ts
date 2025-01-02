@@ -1,14 +1,17 @@
-import { FileType } from "@argon/data/file"
-import { notifError } from "@argon/notifs/webhook"
-import { Category, log, Status } from "@argon/util/debug"
-import { baseDir } from "@argon/util/dir"
 import sharp from "sharp"
-import { unlink, readFile, exists, mkdir } from "fs/promises"
-import FileNotFoundError from "@argon/errors/FileNotFoundError"
 import FfmpegCommand from "fluent-ffmpeg"
-import { getBufferFromBlob } from "./conversion"
-import { getFileExtension, getFileName } from "./data"
-import { doesFileExist } from "./fileSystem"
+import { unlink, readFile, exists, mkdir } from "fs/promises"
+
+import { FileType } from "@argon/data/file"
+
+import { baseDir } from "@argon/util/dir"
+import { getFileExtension, getFileName } from "@argon/files/data"
+import { getBufferFromBlob } from "@argon/files/conversion"
+import { doesFileExist } from "@argon/files/fileSystem"
+
+import { Category, log, Status } from "@argon/util/debug"
+import { notifError } from "@argon/notifs/webhook"
+import FileNotFoundError from "@argon/errors/FileNotFoundError"
 
 export async function compressImage(
 	postId: number, file: File, fileType: FileType,

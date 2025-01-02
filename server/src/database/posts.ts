@@ -5,11 +5,10 @@ import { deleteFileById } from "@argon/database/file"
 import Post from "@argon/data/post"
 import Tag from "@argon/data/tag"
 
-import { notifError, notifPostEdit } from "@argon/notifs/webhook"
-import { Category, log, Status } from "@argon/util/debug"
-
 import { getTagDifference, removeDuplicates } from "@argon/data/tag"
 
+import { notifError, notifPostEdit } from "@argon/notifs/webhook"
+import { Category, log, Status } from "@argon/util/debug"
 
 export function getPostById( id: number ): Post | null {
 	const post: any = database.query(`

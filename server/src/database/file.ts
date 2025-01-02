@@ -1,5 +1,6 @@
-import ArgonFile from "@argon/data/file"
 import { database } from "@argon/index"
+
+import ArgonFile from "@argon/data/file"
 
 export function getFileById( id: number ): ArgonFile | null {
 	let result: any = database.query("SELECT * FROM files WHERE postId = ?").get(id)

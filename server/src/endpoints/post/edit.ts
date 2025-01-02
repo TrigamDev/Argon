@@ -1,8 +1,10 @@
 import { Context } from "elysia"
-
 import { parseInput } from "@argon/endpoints/post/upload"
-import { validateUrl } from "@argon/util/url"
+
 import { editPostByID } from "@argon/database/posts"
+
+import { validateUrl } from "@argon/util/url"
+
 import { Category, log, Status } from "@argon/util/debug"
 
 /* Fields

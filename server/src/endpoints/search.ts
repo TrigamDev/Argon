@@ -1,7 +1,9 @@
-import { SortDirection } from "@argon/data/post"
-import { searchPostsByTag } from "@argon/database/search"
-import Database from "bun:sqlite"
 import { Context } from "elysia"
+
+import Database from "bun:sqlite"
+import { searchPostsByTag } from "@argon/database/search"
+
+import { SortDirection } from "@argon/data/post"
 
 export default function search(context: Context, db: Database) {
 	let query = context.body as any

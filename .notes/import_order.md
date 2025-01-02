@@ -26,8 +26,8 @@
 - Types
 - Enums
 ---
+- Utils
+---
 - Notifs
 - Errors
 - Debug
----
-- Utils

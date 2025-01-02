@@ -1,12 +1,12 @@
-import { Category, Status } from "@argon/util/debug"
-import { baseDir } from "@argon/util/dir"
-import { FileData } from "@argon/files/data"
-import { log } from "@argon/util/debug"
-import { unlink, lstat, rm, readFile, exists, mkdir } from "fs/promises"
 import { existsSync } from "fs"
+import { unlink, lstat, rm } from "fs/promises"
+
+import { baseDir } from "@argon/util/dir"
+import { FileData, getFileType } from "@argon/files/data"
+import { getBlobFromBuffer } from "@argon/files/conversion"
+
+import { log, Category, Status } from "@argon/util/debug"
 import { notifError } from "@argon/notifs/webhook"
-import { getFileType } from "./data"
-import { getBlobFromBuffer } from "./conversion"
 
 export async function doesFileExist(path: string): Promise<boolean> {
 	return await lstat(path).then(() => true).catch(() => false)

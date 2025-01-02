@@ -1,4 +1,5 @@
 import { Context } from "elysia"
+
 import { getRandomPostFromDB } from "@argon/database/posts"
 
 export default function getRandomPost( context: Context ) {

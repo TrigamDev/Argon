@@ -1,5 +1,4 @@
 import Database from "bun:sqlite"
-
 import { decodeTags, getTag } from "@argon/database/tag"
 import { getFileById } from "@argon/database/file"
 

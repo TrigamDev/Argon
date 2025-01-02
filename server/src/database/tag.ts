@@ -1,5 +1,7 @@
-import Tag from "@argon/data/tag"
 import { database } from "@argon/index"
+
+import Tag from "@argon/data/tag"
+
 import { Category, log, Status } from "@argon/util/debug"
 import { notifError } from "@argon/notifs/webhook"
 

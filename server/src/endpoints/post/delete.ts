@@ -1,9 +1,12 @@
 import { Context } from "elysia"
+
+import { deletePostById, getPostById } from "@argon/database/posts"
 import { decreaseTagUsages } from "@argon/database/tag"
+
+import { deleteFile } from "@argon/files/fileSystem"
+
 import { Category, Status, log } from "@argon/util/debug"
 import { getFileExtension, getFileName } from "@argon/files/data"
-import { deletePostById, getPostById } from "@argon/database/posts"
-import { deleteFile } from "@argon/files/fileSystem"
 
 export default function deletePost( context: Context ) {
 	// Input

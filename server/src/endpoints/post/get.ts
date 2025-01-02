@@ -1,4 +1,5 @@
 import { Context } from "elysia"
+
 import { getPostById } from "@argon/database/posts"
 
 export default function getPost( context: Context ) {

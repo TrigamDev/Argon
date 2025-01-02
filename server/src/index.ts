@@ -4,19 +4,20 @@ import { cors } from "@elysiajs/cors"
 
 import logger from "@argon/logger"
 
+import uploadPost from "@argon/endpoints/post/upload"
+import editPost from "@argon/endpoints/post/edit"
+import deletePost from "@argon/endpoints/post/delete"
+import getPost from "@argon/endpoints/post/get"
+import getRandomPost from "@argon/endpoints/post/random"
+import search from "@argon/endpoints/search"
+import getTagList from "@argon/endpoints/tag/list"
+
 import { Database } from "bun:sqlite"
 import { createTables, getSQLiteVersion } from "@argon/database/database"
 
-import { log, Category, Status } from "@argon/util/debug"
-
-import uploadPost from "@argon/endpoints/post/upload"
-import getPost from "@argon/endpoints/post/get"
-import search from "@argon/endpoints/search"
-import deletePost from "@argon/endpoints/post/delete"
-import getTagList from "@argon/endpoints/tag/list"
-import editPost from "@argon/endpoints/post/edit"
-import getRandomPost from "@argon/endpoints/post/random"
 import { SortDirection } from "@argon/data/post"
+
+import { log, Category, Status } from "@argon/util/debug"
 
 // Database shit
 export const database = new Database( "argon.db" )
