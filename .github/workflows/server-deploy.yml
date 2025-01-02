@@ -19,9 +19,8 @@ jobs:
             key: ${{ secrets.KEY }}
             passphrase: ${{ secrets.PASSPHRASE }}
             script: |
-                cd /var/www/html/argon
+                cd /var/www/html/argon/server
                 git reset --hard origin/main
                 git pull origin main
-                cd ./server
                 bun install
                 pm2 start ecosystem.config.cjs
