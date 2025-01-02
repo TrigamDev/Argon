@@ -6,21 +6,19 @@ on:
 
 jobs:
     deploy:
+        name: Deploy to Remote Server
         runs-on: ubuntu-latest
 
         steps:
-        - name: Deploy to Remote Server
+        - name: SSH
           uses: appleboy/ssh-action@v1.2.0
           with:
             host: ${{ secrets.HOST }}
             username: ${{ secrets.USERNAME }}
             key: ${{ secrets.KEY }}
             passphrase: ${{ secrets.PASSPHRASE }}
+
             request_pty: true
             debug: true
-            script: |
-                cd /var/www/html/argon/server
-                git reset --hard origin/main
-                git pull origin main
-                bun install
-                pm2 start ecosystem.config.cjs
+
+            script_path: .github/workflows/deploy.sh
