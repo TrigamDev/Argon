@@ -19,6 +19,8 @@ import { SortDirection } from "@argon/data/post"
 
 import { log, Category, Status } from "@argon/util/debug"
 
+// TEST
+
 // Database shit
 export const database = new Database( "argon.db" )
 
