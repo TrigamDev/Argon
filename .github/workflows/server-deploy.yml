@@ -1,0 +1,34 @@
+name: Deploy Server
+
+on:
+    push:
+        branches: [ main ]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v2
+
+        - name: Install Bun
+          uses: oven-sh/setup-bun@v2
+          with:
+            bun-version: latest
+        
+        - name: Install Dependencies
+          run: bun install
+        
+        - name: Deploy to Remote Server
+          uses: appleboy/ssh-action@v1.2.0
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            key: ${{ secrets.KEY }}
+            passphrase: ${{ secrets.PASSPHRASE }}
+            script: |
+                cd /var/www/html/argon
+                git pull origin main
+                cd ./server
+                bun install
+                pm2 reloadOrRestart ecosystem.config.cjs
